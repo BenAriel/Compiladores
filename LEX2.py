@@ -24,6 +24,7 @@ tokens = (
    'Individuals',
    'SubClassOf',
    'DisjointClasses',
+   'IndividualNames',
 )
 
 reserved = {
@@ -46,8 +47,9 @@ reserved = {
 }
 
 
-reserved_geral = r'\b([Nn][Oo][Tt]|[Aa][Nn][Dd]|[Oo][Rr]|[Ss][Oo][Mm][Ee]|[Aa][Ll][Ll]|[Vv][Aa][Ll][Uu][Ee]|[Mm][Ii][Nn]|[Mm][Aa][Xx]|[Ee][Xx][Aa][Cc][Tt][Ll][Yy]|[Tt][Hh][Aa][Tt])\b'
-reserved_others = r'(EquivalenteTo|Individuals|SubClassOf|DisjointClasses)'
+RESERVED_GERAL = r'\b([Nn][Oo][Tt]|[Aa][Nn][Dd]|[Oo][Rr]|[Ss][Oo][Mm][Ee]|[Aa][Ll][Ll]|[Vv][Aa][Ll][Uu][Ee]|[Mm][Ii][Nn]|[Mm][Aa][Xx]|[Ee][Xx][Aa][Cc][Tt][Ll][Yy]|[Tt][Hh][Aa][Tt])\b'
+RESERVED_OTHERS = r'\b(EquivalenteTo|Individuals|SubClassOf|DisjointClasses)\b'
+INDIVIDUALS_NAMES = r'\b[A-Z][a-z].*\d\b'
 
 t_PLUS    = r'\+'
 t_MINUS   = r'-'
@@ -58,16 +60,22 @@ t_RPAREN  = r'\)'
 
 
 #FUNÇÕES DAS PALAVRAS RESERVADAS
-@TOKEN(reserved_geral)
+@TOKEN(RESERVED_GERAL)
 def t_RESERVED_GERAL(t):
     t.type = reserved[t.value.lower()] 
     t.lexer.num_reserved += 1
     return t
 
-@TOKEN(reserved_others)
+@TOKEN(RESERVED_OTHERS)
 def t_RESERVED_OTHERS(t):
     t.type = reserved[t.value.lower()] 
     t.lexer.num_reserved += 1
+    return t
+
+@TOKEN(INDIVIDUALS_NAMES)
+def t_INDIVIDUAL_NAMES(t):
+    t.lexer.num_individual_names += 1
+    t.type="IndividualNames"
     return t
 
 
@@ -92,10 +100,12 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex(debug=True)
 lexer.num_reserved = 0
+lexer.num_individual_names=0
 
 
-data = data = '''
-EquivalenteTo EQUIVALENTE individuals Individuals
+data = '''
+AAAAAAAAAAAriel12FDFDFDFD     12ARIEL
+BenAriel12
 '''
 
 # Give the lexer some input
@@ -109,3 +119,4 @@ while True:
     print(tok)
 
 print(lexer.num_reserved)
+print(lexer.num_individual_names)
