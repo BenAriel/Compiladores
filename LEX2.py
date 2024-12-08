@@ -25,6 +25,39 @@ tokens = (
     'DisjointClasses',
     'IndividualNames',
     'SpecialCharacters',
+    'PROPERTY_IDENTIFIER',
+    'PROPERTY_IDENTIFIER_has',
+    'PROPERTY_IDENTIFIER_is_Of',
+    'CLASS_IDENTIFIER',
+    'owl',
+    'rdf',
+    'rdfs',
+    'xsd',
+    'rational',
+    'real',
+    'langString',
+    'PlainLiteral',
+    'XMLLiteral',
+    'Literal',
+    'anyURI',
+    'base64Binary',
+    'boolean',
+    'byte',
+    'dateTime',
+    'dateTimeStamp',
+    'decimal',
+    'double',
+    'float',
+    'hexBinary',
+    'int',
+    'integer',
+    'languague',
+    'long',
+    'Name',
+    'NCName',
+    'negativeInteger',
+    'NMTOKEN',
+    'nonNegativeInteger',
 )
 
 reserved = {
@@ -42,12 +75,44 @@ reserved = {
     'individuals:': 'Individuals',
     'subclassof:': 'SubClassOf',
     'disjointclasses:': 'DisjointClasses',
+    'owl:' : 'owl',
+    'rdf:' : 'rdf',
+    'rdfs:' : 'rdfs',
+    'xsd:' : 'xsd',
+    'rational' : 'rational',
+    'real' : 'real',
+    'langString' : 'langString',
+    'PlainLiteral' : 'PlainLiteral',
+    'XMLLiteral' : 'XMLLiteral',
+    'Literal' : 'Literal',
+    'anyURI' : 'anyURI',
+    'base64Binary' : 'base64Binary',
+    'boolean' : 'boolean',
+    'byte' : 'byte',
+    'dateTime' : 'dateTime',
+    'dateTimeStamp' : 'dateTimeStamp',
+    'decimal' : 'decimal',
+    'double' : 'double',
+    'float' : 'float',
+    'hexBinary' : 'hexBinary',
+    'int' : 'int',
+    'integer' : 'integer',
+    'languague' : 'languague',
+    'long' : 'long',
+    'Name' : 'Name',
+    'NCName' : 'NCName',
+    'negativeInteger' : 'negativeInteger',
+    'NMTOKEN' : 'NMTOKEN',
+    'nonNegativeInteger' : 'nonNegativeInteger',
 }
 
 RESERVED_GERAL = r'\b([Nn][Oo][Tt]|[Aa][Nn][Dd]|[Oo][Rr]|[Ss][Oo][Mm][Ee]|[Aa][Ll][Ll]|[Vv][Aa][Ll][Uu][Ee]|[Mm][Ii][Nn]|[Mm][Aa][Xx]|[Ee][Xx][Aa][Cc][Tt][Ll][Yy]|[Tt][Hh][Aa][Tt])\b'
 RESERVED_OTHERS = r'(EquivalentTo:|Individuals:|SubClassOf:|DisjointClasses:)'
 INDIVIDUALS_NAMES = r'\b[A-Z][a-zA-Z]*\d+\b'
 SPECIAL_CARACTERES = r'[\(\)\[\]\{\}\,\<\>\"]'
+class_identifier = r'\b[A-Z][a-zA-Z]*(\s[A-Z][a-zA-Z])*\b'
+property_identifier = r'\b([a-z][a-zA-Z]*|is[A-Z][a-zA-Z]*Of|has[A-Z][a-zA-Z])\b'
+data_type = r'\b(owl:|rfg:|rdfs:|xsd:|rational|real|langString|PlainLiteral|XMLLiteral|Literal|anyURI|base64Binary|boolean|byte|dateTime|dateTimeStamp|decimal|double|float|hexBinary|int|integer|language|long|Name|NCName|negativeInteger|NMTOKEN|nonNegativeInteger)\b'
 
 t_PLUS = r'\+'
 t_MINUS = r'-'
@@ -68,6 +133,32 @@ def t_RESERVED_GERAL(t):
 @TOKEN(RESERVED_OTHERS)
 def t_RESERVED_OTHERS(t):
     t.type = reserved[t.value.lower()]
+    t.lexer.num_reserved += 1
+    return t
+
+@TOKEN(data_type)
+def t_DATA_TYPE(t):
+    t.type = reserved[t.value.lower()] 
+    if t.value == 'owl:' or t.value == 'xsd:' or t.value == 'rdfs' or t.value == 'rdf':
+        t.value = 'NAMESPACEID'
+    else: 
+        t.value = 'DATA_TYPE'
+    t.lexer.num_reserved += 1
+    return t
+
+@TOKEN(property_identifier)
+def t_PROPERTY_IDENTIFIER(t):
+    if t.value.startswith("has"):
+        t.type = "PROPERTY_IDENTIFIER_has"
+    elif t.value.startswith("is") and t.value.endswith("Of"):
+        t.type = "PROPERTY_IDENTIFIER_is_Of"
+    else:
+        t.type = "PROPERTY_IDENTIFIER"
+    t.lexer.num_reserved += 1
+    return t
+
+@TOKEN(class_identifier)
+def t_CLASS_IDENTIFIER(t):
     t.lexer.num_reserved += 1
     return t
 
