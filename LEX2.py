@@ -19,7 +19,7 @@ tokens = (
     'MAX',
     'EXACTLY',
     'THAT',
-    'string',
+    'Class',
     'EquivalentTo',
     'Individuals',
     'SubClassOf',
@@ -34,6 +34,7 @@ tokens = (
     'rdf',
     'rdfs',
     'xsd',
+    'string',
     'rational',
     'real',
     'langString',
@@ -72,6 +73,7 @@ reserved = {
     'max': 'MAX',
     'exactly': 'EXACTLY',
     'that': 'THAT',
+    'class:': 'Class',
     'equivalentto:': 'EquivalentTo',
     'individuals:': 'Individuals',
     'subclassof:': 'SubClassOf',
@@ -111,7 +113,7 @@ namespacesAndTypes= {
 }
 
 RESERVED_GERAL = r'\b([Nn][Oo][Tt]|[Aa][Nn][Dd]|[Oo][Rr]|[Ss][Oo][Mm][Ee]|[Aa][Ll][Ll]|[Vv][Aa][Ll][Uu][Ee]|[Mm][Ii][Nn]|[Mm][Aa][Xx]|[Ee][Xx][Aa][Cc][Tt][Ll][Yy]|[Tt][Hh][Aa][Tt])\b'
-RESERVED_OTHERS = r'(EquivalentTo:|Individuals:|SubClassOf:|DisjointClasses:)'
+RESERVED_OTHERS = r'(Class:|EquivalentTo:|Individuals:|SubClassOf:|DisjointClasses:)'
 INDIVIDUALS_NAMES = r'\b[A-Z][a-zA-Z]*\d+\b'
 SPECIAL_CARACTERES = r'[\(\)\[\]\{\}\,\<\>\"\=]'
 class_identifier = r'\b[A-Z][a-zA-Z]*(\s[A-Z][a-zA-Z])*\b'
@@ -199,10 +201,13 @@ def t_error(t):
         illegal_sequence += t.value[i]
         i += 1
     
-    # Reporta a sequência inteira como um erro
-    print(f"Illegal sequence: '{illegal_sequence}' at line {t.lineno}")
     
-    # Avança o lexer pelo tamanho da sequência ilegal
+    if(t.value[0].isdigit()):
+        print("nenhum token reconhecido começa com um número. Erro na linha", t.lineno)
+    
+    else:
+     print(f"Sequencia ilegal: '{illegal_sequence}' na linha {t.lineno}")
+    
     t.lexer.skip(len(illegal_sequence))
 
 
@@ -223,12 +228,14 @@ with open(file_path, 'r') as file:
     data = file.read()
 
 lexer.input(data)
+simbol_table = set()
 
 # Tokenize
 while True:
     tok = lexer.token()
     if not tok:
         break
+    simbol_table.add(tok.type)
     print(tok)
 
 print("Number of Reserved Words:", lexer.num_reserved)
@@ -239,4 +246,8 @@ print("Number of Namespace IDs:", lexer.num_namespace_ids)
 print("Number of Data Types:", lexer.num_data_types)
 print("Number of Property Identifiers:", lexer.num_property_identifiers)
 print("Number of Class Identifiers:", lexer.num_class_identifiers)
+
+
+print("\nSymbol Table:" , simbol_table)
+
 
