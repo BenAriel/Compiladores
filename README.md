@@ -3,8 +3,7 @@
 1. [Descrição do Projeto](#Analisador-Léxico-com-ply)  
 2. [Objetivo](#objetivo)  
 3. [Instalação e Configuração](#instalação-e-configuração)  
-   3.1. [Pré-requisitos](#pré-requisitos)  
-   3.2. [Arquivo de Entrada](#arquivo-de-entrada)  
+   3.1. [Pré-requisitos](#pré-requisitos) 
 4. [Como Usar](#como-usar)  
 5. [Funcionamento do Programa](#funcionamento-do-programa)  
    5.1. [Tokens Reconhecidos](#tokens-reconhecidos)  
@@ -97,18 +96,17 @@ O analisador identifica os seguintes tokens:
 
 ---
 
-## **Exemplo de Saída**
+## Exemplo de Saída
 
-**Entrada (`input.txt`)**:
-```text
+Entrada (input.txt):
+text
 Class: Customer
  EquivalentTo:
  Person
  and (purchasedPizza some Pizza)
  and (hasPhone some xsd:string)
 
-**Saída**:
-```text
+Saída:
 === Sumário ===
 Número de palavras reservadas: 6
 Número de Nomes Individuais: 0
@@ -149,6 +147,7 @@ Data Types:
   - string
 
 Numbers:
+
 
 
 
