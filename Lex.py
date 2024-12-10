@@ -123,8 +123,11 @@ RESERVED_OTHERS = r'(Class:|EquivalentTo:|Individuals:|SubClassOf:|DisjointClass
 INDIVIDUALS_NAMES = r'\b[A-Z][a-zA-Z]*\d+\b'
 # expressão regular para identificar caracteres especiais
 SPECIAL_CARACTERES = r'[\(\)\[\]\{\}\,\<\>\"\=]'
+# expressão regular para identificar classes
 CLASS_IDENTIFIER = r'\b[A-Z][a-zA-Z]*(\s[A-Z][a-zA-Z])*\b'
+# expressão regular para identificar propriedades
 PROPERTY_IDENTIFIER = r'\b([a-z][a-zA-Z]*|is[A-Z][a-zA-Z]*Of|has[A-Z][a-zA-Z])\b'
+# expressão regular para identificar tipos de dados
 DATA_TYPE = r'\b(owl:|rfg:|rdfs:|xsd:|rational|real|langString|PlainLiteral|XMLLiteral|Literal|anyURI|base64Binary|boolean|byte|dateTime|dateTimeStamp|decimal|double|float|hexBinary|int|integer|language|long|Name|NCName|negativeInteger|NMTOKEN|nonNegativeInteger|string)\b'
 
 t_PLUS = r'\+'
