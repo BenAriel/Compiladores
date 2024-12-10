@@ -118,9 +118,9 @@ RESERVED_GERAL = r'\b([Nn][Oo][Tt]|[Aa][Nn][Dd]|[Oo][Rr]|[Ss][Oo][Mm][Ee]|[Aa][L
 RESERVED_OTHERS = r'(Class:|EquivalentTo:|Individuals:|SubClassOf:|DisjointClasses:)'
 INDIVIDUALS_NAMES = r'\b[A-Z][a-zA-Z]*\d+\b'
 SPECIAL_CARACTERES = r'[\(\)\[\]\{\}\,\<\>\"\=]'
-class_identifier = r'\b[A-Z][a-zA-Z]*(\s[A-Z][a-zA-Z])*\b'
-property_identifier = r'\b([a-z][a-zA-Z]*|is[A-Z][a-zA-Z]*Of|has[A-Z][a-zA-Z])\b'
-data_type = r'\b(owl:|rfg:|rdfs:|xsd:|rational|real|langString|PlainLiteral|XMLLiteral|Literal|anyURI|base64Binary|boolean|byte|dateTime|dateTimeStamp|decimal|double|float|hexBinary|int|integer|language|long|Name|NCName|negativeInteger|NMTOKEN|nonNegativeInteger|string)\b'
+CLASS_IDENTIFIER = r'\b[A-Z][a-zA-Z]*(\s[A-Z][a-zA-Z])*\b'
+PROPERTY_IDENTIFIER = r'\b([a-z][a-zA-Z]*|is[A-Z][a-zA-Z]*Of|has[A-Z][a-zA-Z])\b'
+DATA_TYPE = r'\b(owl:|rfg:|rdfs:|xsd:|rational|real|langString|PlainLiteral|XMLLiteral|Literal|anyURI|base64Binary|boolean|byte|dateTime|dateTimeStamp|decimal|double|float|hexBinary|int|integer|language|long|Name|NCName|negativeInteger|NMTOKEN|nonNegativeInteger|string)\b'
 
 t_PLUS = r'\+'
 t_MINUS = r'-'
@@ -144,18 +144,26 @@ def t_RESERVED_OTHERS(t):
     t.lexer.num_reserved += 1
     return t
 
-@TOKEN(data_type)
+# Função que varre o texto lendo e recebendo as letras que formaram o regex, se encontrar retorna true, se não, retornara false
+# Especificamente essa função irá varrer e buscar as palavras do regex de data_type
+# Se encontrar as palavras do regex (owl, xsd, rdfs, rdf) irá editar o tipo para NAMESPACEID
+# Caso seja qualquer outra palavra do regex, irá editar o tipo para DATA_TYPE
+@TOKEN(DATA_TYPE)
 def t_DATA_TYPE(t):
-    t.type = namespacesAndTypes[t.value.lower()] 
+    t.type = namespacesAndTypes[t.value.lower()]
     if t.value == 'owl:' or t.value == 'xsd:' or t.value == 'rdfs:' or t.value == 'rdf:':
         t.type = 'NAMESPACEID'
         t.lexer.num_namespace_ids += 1
-    else: 
+    else:
         t.type = 'DATA_TYPE'
         t.lexer.num_data_types += 1
     return t
 
-@TOKEN(property_identifier)
+# Função que varre o texto lendo e recebendo as letras que formaram o regex, se encontrar retorna true, se não, retornara false
+# Especificamente essa função irá varrer e buscar as palavras do regex de property_identifier
+# Se encontrar as palavras do regex (has, is_Of) irá editar o tipo para um property identifier especifico, sendo respectivamente PROPERTY_IDENTIFIER_has ou PROPERTY_IDENTIFIER_is_Of.
+# Caso seja qualquer outra palavra do regex, irá editar o tipo para PROPERTY_IDENTIFIER
+@TOKEN(PROPERTY_IDENTIFIER)
 def t_PROPERTY_IDENTIFIER(t):
     if t.value.startswith("has"):
         t.type = "PROPERTY_IDENTIFIER_has"
@@ -166,7 +174,9 @@ def t_PROPERTY_IDENTIFIER(t):
     t.lexer.num_property_identifiers += 1
     return t
 
-@TOKEN(class_identifier)
+# Função que varre o texto lendo e recebendo as letras que formaram o regex, se encontrar retorna true, se não, retornara false
+# Especificamente essa função irá varrer e buscar as palavras do regex de CLASS_IDENTIFIER
+@TOKEN(CLASS_IDENTIFIER)
 def t_CLASS_IDENTIFIER(t):
     t.lexer.num_class_identifiers += 1
     return t
@@ -208,7 +218,7 @@ def t_error(t):
         print("nenhum token reconhecido começa com um número. Erro na linha", t.lineno)
     
     else:
-     print(f"Sequencia ilegal: '{illegal_sequence}' na linha {t.lineno}")
+        print(f"Sequencia ilegal: '{illegal_sequence}' na linha {t.lineno}")
     
     t.lexer.skip(len(illegal_sequence))
 
