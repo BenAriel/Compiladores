@@ -60,6 +60,8 @@ tokens = (
     'negativeInteger',
     'NMTOKEN',
     'nonNegativeInteger',
+    'NAMESPACEID',
+    'DATA_TYPE',
 )
 
 reserved = {
@@ -146,10 +148,10 @@ def t_RESERVED_OTHERS(t):
 def t_DATA_TYPE(t):
     t.type = namespacesAndTypes[t.value.lower()] 
     if t.value == 'owl:' or t.value == 'xsd:' or t.value == 'rdfs:' or t.value == 'rdf:':
-        t.value = 'NAMESPACEID'
+        t.type = 'NAMESPACEID'
         t.lexer.num_namespace_ids += 1
     else: 
-        t.value = 'DATA_TYPE'
+        t.type = 'DATA_TYPE'
         t.lexer.num_data_types += 1
     return t
 
@@ -192,7 +194,7 @@ def t_COMMENT(t):
     pass
 
 def t_error(t):
-    # Captura o início da sequência ilegal
+
     illegal_sequence = t.value[0]
     i = 1
     
@@ -230,24 +232,51 @@ with open(file_path, 'r') as file:
 lexer.input(data)
 simbol_table = set()
 
-# Tokenize
+identified_tokens = {
+    "Reserved Words": set(),
+    "Namespaces": set(),
+    "Individual Names": set(),
+    "Special Characters": set(),
+    "Property Identifiers": set(),
+    "Class Identifiers": set(),
+    "Data Types": set(),
+}
+
+
 while True:
     tok = lexer.token()
     if not tok:
         break
     simbol_table.add(tok.type)
-    print(tok)
+    if tok.type in reserved.values():
+        identified_tokens["Reserved Words"].add(tok.value)
+    elif tok.type == "NAMESPACEID":
+        identified_tokens["Namespaces"].add(tok.value)
+    elif tok.type == "IndividualNames":
+        identified_tokens["Individual Names"].add(tok.value)
+    elif tok.type == "SpecialCharacters":
+        identified_tokens["Special Characters"].add(tok.value)
+    elif tok.type.startswith("PROPERTY_IDENTIFIER"):
+        identified_tokens["Property Identifiers"].add(tok.value)
+    elif tok.type == "CLASS_IDENTIFIER":
+        identified_tokens["Class Identifiers"].add(tok.value)
+    elif tok.type == "DATA_TYPE":
+        identified_tokens["Data Types"].add(tok.value)
 
-print("Number of Reserved Words:", lexer.num_reserved)
-print("Number of Individual Names:", lexer.num_individual_names)
-print("Number of Special Characters:", lexer.num_special_characters)
-print("Number of Numbers:", lexer.num_numbers)
-print("Number of Namespace IDs:", lexer.num_namespace_ids)
-print("Number of Data Types:", lexer.num_data_types)
-print("Number of Property Identifiers:", lexer.num_property_identifiers)
-print("Number of Class Identifiers:", lexer.num_class_identifiers)
+print("=== Sumário ===")
+print(f"Número de palavras reservadas: {lexer.num_reserved}")
+print(f"Número de Nomes Individuais: {lexer.num_individual_names}")
+print(f"Número de Caracteres Especiais: {lexer.num_special_characters}")
+print(f"Número de Números: {lexer.num_numbers}")
+print(f"Número de IDs de Namespace: {lexer.num_namespace_ids}")
+print(f"Número de Tipos de Dados: {lexer.num_data_types}")
+print(f"Número de Identificadores de Propriedades: {lexer.num_property_identifiers}")
+print(f"Número de Identificadores de Classes: {lexer.num_class_identifiers}")
 
-
-print("\nSymbol Table:" , simbol_table)
+print("\n=== Tokens Detalhados ===")
+for category, items in identified_tokens.items():
+    print(f"\n{category}:")
+    for item in sorted(items):
+        print(f"  - {item}")
 
 
