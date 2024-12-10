@@ -98,24 +98,25 @@ O analisador identifica os seguintes tokens:
 
 ## Exemplo de Saída
 
-Entrada (input.txt):
-text
-Class: Customer
- EquivalentTo:
- Person
- and (purchasedPizza some Pizza)
- and (hasPhone some xsd:string)
+Entrada (input.txt): text  
+  
+Class: Customer  
+  
+ EquivalentTo:  
+ Person  
+ and (purchasedPizza some Pizza)  
+ and (hasPhone some xsd:string)  
 
-Saída:
-=== Sumário ===
-Número de palavras reservadas: 6
-Número de Nomes Individuais: 0
-Número de Caracteres Especiais: 4
-Número de Números: 0
-Número de IDs de Namespace: 1
-Número de Tipos de Dados: 1
-Número de Identificadores de Propriedades: 2
-Número de Identificadores de Classes: 3
+Saída:  
+=== Sumário ===  
+• Número de palavras reservadas: 6  
+• Número de Nomes Individuais: 0  
+• Número de Caracteres Especiais: 4  
+• Número de Números: 0  
+• Número de IDs de Namespace: 1  
+• Número de Tipos de Dados: 1  
+• Número de Identificadores de Propriedades: 2  
+• Número de Identificadores de Classes: 3  
 
 === Tokens Detalhados ===
 
