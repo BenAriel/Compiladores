@@ -1,6 +1,7 @@
 import ply.lex as lex
 from ply.lex import TOKEN
 
+# lista de tokens
 tokens = (
     'NUMBER',
     'PLUS',
@@ -63,7 +64,7 @@ tokens = (
     'NAMESPACEID',
     'DATA_TYPE',
 )
-
+#dicionário de palavras reservadas
 reserved = {
     'not': 'NOT',
     'and': 'AND',
@@ -81,6 +82,7 @@ reserved = {
     'subclassof:': 'SubClassOf',
     'disjointclasses:': 'DisjointClasses',
 }
+#dicionário de namespaces e tipos de dados
 namespacesAndTypes= {
     'owl:' : 'owl',
     'rdf:' : 'rdf',
@@ -113,10 +115,13 @@ namespacesAndTypes= {
     'NMTOKEN' : 'NMTOKEN',
     'nonNegativeInteger' : 'nonNegativeInteger',
 }
-
+# expressçao regular para palavras reservadas que podem ter variações de maiusculas e minusculas,como por exemplo: not, Not, NOT, nOt.
 RESERVED_GERAL = r'\b([Nn][Oo][Tt]|[Aa][Nn][Dd]|[Oo][Rr]|[Ss][Oo][Mm][Ee]|[Aa][Ll][Ll]|[Vv][Aa][Ll][Uu][Ee]|[Mm][Ii][Nn]|[Mm][Aa][Xx]|[Ee][Xx][Aa][Cc][Tt][Ll][Yy]|[Tt][Hh][Aa][Tt])\b'
+# expressão regular para palavras reservadas que não tem variacão,tem apenas uma forma de escrever.
 RESERVED_OTHERS = r'(Class:|EquivalentTo:|Individuals:|SubClassOf:|DisjointClasses:)'
+# expressão regular para identificar nomes de individuos
 INDIVIDUALS_NAMES = r'\b[A-Z][a-zA-Z]*\d+\b'
+# expressão regular para identificar caracteres especiais
 SPECIAL_CARACTERES = r'[\(\)\[\]\{\}\,\<\>\"\=]'
 CLASS_IDENTIFIER = r'\b[A-Z][a-zA-Z]*(\s[A-Z][a-zA-Z])*\b'
 PROPERTY_IDENTIFIER = r'\b([a-z][a-zA-Z]*|is[A-Z][a-zA-Z]*Of|has[A-Z][a-zA-Z])\b'
@@ -126,6 +131,12 @@ t_PLUS = r'\+'
 t_MINUS = r'-'
 t_TIMES = r'\*'
 t_DIVIDE = r'/'
+
+#funções para identificar os tokens. cada função tem uma expressão regular que identifica o token e retorna o token identificado.
+
+
+
+
 def t_NUMBER(t):
     r'\b(\d+)\b'
     t.value = int(t.value)
@@ -203,6 +214,7 @@ def t_COMMENT(t):
     r'\#.*'
     pass
 
+#se o bloco de caracteres não se encaixar em nenhum dos tokens acima, a função de erro é chamada.
 def t_error(t):
 
     illegal_sequence = t.value[0]
@@ -223,7 +235,7 @@ def t_error(t):
     t.lexer.skip(len(illegal_sequence))
 
 
-# Build the lexer
+# constroi  o lexer e inicializa as variáveis(cria atributos no lexer) de contagem
 lexer = lex.lex()
 lexer.num_reserved = 0
 lexer.num_individual_names = 0
@@ -234,14 +246,16 @@ lexer.num_data_types = 0
 lexer.num_property_identifiers = 0
 lexer.num_class_identifiers = 0
 
-# Reading data from a file
+# lendo o arquivo de entrada
 file_path = 'input.txt'
 with open(file_path, 'r') as file:
     data = file.read()
 
 lexer.input(data)
+#inicializa a tabela de símbolos(como é uma estrutura de dados do tipo set, não permite repetições)
 simbol_table = set()
 
+# Dicionário para armazenar os tokens identificados
 identified_tokens = {
     "Reserved Words": set(),
     "Namespaces": set(),
@@ -253,7 +267,7 @@ identified_tokens = {
     "Numbers": set(),
 }
 
-
+#para cada token, adiciona o token ao seu rescpetivo conjunto no dicionário de tokens identificados e adiciona o tipo do token à tabela de símbolos
 while True:
     tok = lexer.token()
     if not tok:
@@ -276,6 +290,7 @@ while True:
     elif tok.type == "NUMBER":
         identified_tokens["Numbers"].add(tok.value)
 
+#imprime a quantidade de tokens identificados de cada tipo
 print("=== Sumário ===")
 print(f"Número de palavras reservadas: {lexer.num_reserved}")
 print(f"Número de Nomes Individuais: {lexer.num_individual_names}")
@@ -286,6 +301,7 @@ print(f"Número de Tipos de Dados: {lexer.num_data_types}")
 print(f"Número de Identificadores de Propriedades: {lexer.num_property_identifiers}")
 print(f"Número de Identificadores de Classes: {lexer.num_class_identifiers}")
 
+#imprime cada token único identificado de cada tipo
 print("\n=== Tokens Detalhados ===")
 for category, items in identified_tokens.items():
     print(f"\n{category}:")
@@ -296,7 +312,7 @@ for category, items in identified_tokens.items():
 
 print('\n deseja ver todos os tokens encontrados em ordem no arquivo? \n formato de exibição: (TOKEN,valor,linha,posição na linha). s/n')
 
-
+# imprime todos os tokens encontrados no arquivo no formato (TOKEN, valor, linha, posição na linha)
 if(input().lower() == 's'):
     lexer.input(data)
     while True:
