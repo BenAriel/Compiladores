@@ -13,14 +13,14 @@
 
 # Analisador Léxico com PLY
 
-Este projeto implementa um analisador léxico para uma linguagem baseada em OWL (Web Ontology Language) utilizando a biblioteca [PLY](https://www.dabeaz.com/ply/), que fornece ferramentas para análise léxica e sintática em Python.
+Este projeto implementa um analisador léxico para uma linguagem baseada em OWL2 (Web Ontology Language) utilizando a biblioteca [PLY](https://www.dabeaz.com/ply/), que fornece ferramentas para análise léxica e sintática em Python.
 
 
 ---
 
 ## **Objetivo**
 
-O objetivo principal do programa é realizar a análise léxica de um arquivo de entrada, identificando tokens específicos relacionados a palavras reservadas, identificadores de propriedades, classes, namespaces, tipos de dados e caracteres especiais. Além disso, ele gera um relatório detalhado do número e tipos de tokens encontrados no arquivo.
+O objetivo principal do programa é realizar a análise léxica de um arquivo de entrada, identificando tokens específicos relacionados a palavras reservadas, identificadores de propriedades, classes, namespaces, tipos de dados,cardinalidades(números) e caracteres especiais,além de guardar esses tokens em uma tabela de símbolos,para uso posterior na análise sintática. Além disso, ele gera um relatório detalhado do número e tipos de tokens encontrados no arquivo.
 
 ---
 
@@ -32,7 +32,7 @@ O objetivo principal do programa é realizar a análise léxica de um arquivo de
    - Baixe e instale o Python a partir do [site oficial](https://www.python.org/downloads/).
 
 2. **Bibliotecas Necessárias**:
-   - A biblioteca `ply` é requerida. Para instalá-la, utilize o comando:
+   - A biblioteca `ply` é requerida. Para instalá-la, utilize o comando abaixo no diretório em que o script python está:
      ```bash
      pip install ply
      ```
@@ -50,8 +50,10 @@ O objetivo principal do programa é realizar a análise léxica de um arquivo de
 2. **Execute o programa**:
    - No terminal, execute o script:
      ```bash
-     python nome_do_arquivo.py
+     python Lex.py
      ```
+
+   - Ou utilize alguma IDE para rodar o programa.
 
 3. **Interação no Terminal**:
    - O programa exibirá um resumo dos tokens encontrados.
@@ -65,6 +67,7 @@ O objetivo principal do programa é realizar a análise léxica de um arquivo de
 
 O analisador identifica os seguintes tokens:
 - **Operadores Aritméticos**: `+`, `-`, `*`, `/`.
+- **Cardinalidades**: números.
 - **Palavras Reservadas**: como `not`, `and`, `or`, `some`, `class:`, etc.
 - **Identificadores**:
   - Propriedades (`hasX`, `isXOf`).
