@@ -98,7 +98,7 @@ O analisador identifica os seguintes tokens:
 
 ## Exemplo de Saída
 
-Entrada (input.txt): text  
+### Entrada (input.txt):  
   
 Class: Customer  
   
@@ -107,7 +107,7 @@ Class: Customer
  and (purchasedPizza some Pizza)  
  and (hasPhone some xsd:string)  
 
-Saída:  
+### Saída:  
 === Sumário ===  
 • Número de palavras reservadas: 6  
 • Número de Nomes Individuais: 0  
