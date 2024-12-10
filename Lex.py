@@ -240,6 +240,7 @@ identified_tokens = {
     "Property Identifiers": set(),
     "Class Identifiers": set(),
     "Data Types": set(),
+    "Numbers": set(),
 }
 
 
@@ -262,6 +263,8 @@ while True:
         identified_tokens["Class Identifiers"].add(tok.value)
     elif tok.type == "DATA_TYPE":
         identified_tokens["Data Types"].add(tok.value)
+    elif tok.type == "NUMBER":
+        identified_tokens["Numbers"].add(tok.value)
 
 print("=== Sumário ===")
 print(f"Número de palavras reservadas: {lexer.num_reserved}")
@@ -280,3 +283,16 @@ for category, items in identified_tokens.items():
         print(f"  - {item}")
 
 
+
+print('\n deseja ver todos os tokens encontrados em ordem no arquivo? \n formato de exibição: (TOKEN,valor,linha,posição na linha). s/n')
+
+
+if(input().lower() == 's'):
+    lexer.input(data)
+    while True:
+        tok = lexer.token()
+        if not tok:
+            break
+        print(tok)
+else :
+    print('fim do programa')
