@@ -128,10 +128,10 @@ INDIVIDUALS_NAMES = r'\b[A-Z][a-zA-Z]*\d+\b'
 SPECIAL_CARACTERES = r'[\(\)\[\]\{\}\,\<\>\"\=]'
 
 # expressão regular para identificar classes
-CLASS_IDENTIFIER = r'\b[A-Z][a-zA-Z]*(\s[A-Z][a-zA-Z])*\b'
+CLASS_IDENTIFIER = r'\b[A-Z][a-zA-Z]*(\s[A-Z][a-zA-Z]*)*\b(?!:)'
 
 # expressão regular para identificar propriedades
-PROPERTY_IDENTIFIER = r'\b([a-z][a-zA-Z]*|is[A-Z][a-zA-Z]*Of|has[A-Z][a-zA-Z])\b'
+PROPERTY_IDENTIFIER = r'\b([a-z][a-zA-Z]*|is[A-Z][a-zA-Z]*Of|has[A-Z][a-zA-Z])\b(?!:)'
 
 # expressão regular para identificar tipos de dados
 DATA_TYPE = r'\b(owl:|rfg:|rdfs:|xsd:|rational|real|langString|PlainLiteral|XMLLiteral|Literal|anyURI|base64Binary|boolean|byte|dateTime|dateTimeStamp|decimal|double|float|hexBinary|int|integer|language|long|Name|NCName|negativeInteger|NMTOKEN|nonNegativeInteger|string)\b'
@@ -178,20 +178,19 @@ def t_DATA_TYPE(t):
 #função para reconhecer nome de propriedades. Se encontrar as palavras do regex começando com "has" ou começando com "is" e terminando com "Of", irá editar o tipo para um property identifier especifico, sendo respectivamente PROPERTY_IDENTIFIER_has ou PROPERTY_IDENTIFIER_is_Of. Caso seja qualquer outra palavra do regex, irá editar o tipo para PROPERTY_IDENTIFIER
 @TOKEN(PROPERTY_IDENTIFIER)
 def t_PROPERTY_IDENTIFIER(t):
-    if not t.value + ":":
-        if t.value.startswith("has"):
-            t.type = "PROPERTY_IDENTIFIER_has"
-        elif t.value.startswith("is") and t.value.endswith("Of"):
-            t.type = "PROPERTY_IDENTIFIER_is_Of"
-        else:
-            t.type = "PROPERTY_IDENTIFIER"
-        t.lexer.num_property_identifiers += 1
-        return t
+    if t.value.startswith("has"):
+        t.type = "PROPERTY_IDENTIFIER_has"
+    elif t.value.startswith("is") and t.value.endswith("Of"):
+        t.type = "PROPERTY_IDENTIFIER_is_Of"
+    else:
+        t.type = "PROPERTY_IDENTIFIER"
+    t.lexer.num_property_identifiers += 1
+    return t
 
 #função para reconhecer identificadores de classes
 @TOKEN(CLASS_IDENTIFIER)
 def t_CLASS_IDENTIFIER(t):
-    if not t.value+ ":":
+    if not t.value.endswith(":"):
         t.lexer.num_class_identifiers += 1
         return t
 
