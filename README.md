@@ -94,7 +94,10 @@ O analisador identifica os seguintes tokens:
 4. **Exibição Detalhada**:
    - Caso solicitado, o programa lista cada token encontrado no formato `(TOKEN, valor, linha, posição)`.
 
-5. **Tratamento de Erros**:
+5. **Armazenamento na tabela de símbolos**:
+   - Os tokens são armazenados em uma estrutura de dados do tipo Set(ou seja,não permite repetições) que servirá como tabela de símbolos na análise sintática.
+
+6. **Tratamento de Erros**:
    - Sequências não reconhecidas são tratadas e exibidas com mensagens informativas.
 
 ---
