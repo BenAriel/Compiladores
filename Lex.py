@@ -178,20 +178,22 @@ def t_DATA_TYPE(t):
 #função para reconhecer nome de propriedades. Se encontrar as palavras do regex começando com "has" ou começando com "is" e terminando com "Of", irá editar o tipo para um property identifier especifico, sendo respectivamente PROPERTY_IDENTIFIER_has ou PROPERTY_IDENTIFIER_is_Of. Caso seja qualquer outra palavra do regex, irá editar o tipo para PROPERTY_IDENTIFIER
 @TOKEN(PROPERTY_IDENTIFIER)
 def t_PROPERTY_IDENTIFIER(t):
-    if t.value.startswith("has"):
-        t.type = "PROPERTY_IDENTIFIER_has"
-    elif t.value.startswith("is") and t.value.endswith("Of"):
-        t.type = "PROPERTY_IDENTIFIER_is_Of"
-    else:
-        t.type = "PROPERTY_IDENTIFIER"
-    t.lexer.num_property_identifiers += 1
-    return t
+    if not t.value + ":":
+        if t.value.startswith("has"):
+            t.type = "PROPERTY_IDENTIFIER_has"
+        elif t.value.startswith("is") and t.value.endswith("Of"):
+            t.type = "PROPERTY_IDENTIFIER_is_Of"
+        else:
+            t.type = "PROPERTY_IDENTIFIER"
+        t.lexer.num_property_identifiers += 1
+        return t
 
 #função para reconhecer identificadores de classes
 @TOKEN(CLASS_IDENTIFIER)
 def t_CLASS_IDENTIFIER(t):
-    t.lexer.num_class_identifiers += 1
-    return t
+    if not t.value+ ":":
+        t.lexer.num_class_identifiers += 1
+        return t
 
 #função para reconhecer nomes de individuos
 @TOKEN(INDIVIDUALS_NAMES)
