@@ -63,6 +63,7 @@ tokens = (
     'nonNegativeInteger',
     'NAMESPACEID',
     'DATA_TYPE',
+    'DisjointWith',
 )
 #dicionário de palavras reservadas
 reserved = {
@@ -81,6 +82,7 @@ reserved = {
     'individuals:': 'Individuals',
     'subclassof:': 'SubClassOf',
     'disjointclasses:': 'DisjointClasses',
+    'disjointwith:' : 'DisjointWith',
 }
 #dicionário de namespaces e tipos de dados
 namespacesAndTypes= {
@@ -119,7 +121,7 @@ namespacesAndTypes= {
 RESERVED_GERAL = r'\b([Nn][Oo][Tt]|[Aa][Nn][Dd]|[Oo][Rr]|[Ss][Oo][Mm][Ee]|[Aa][Ll][Ll]|[Vv][Aa][Ll][Uu][Ee]|[Mm][Ii][Nn]|[Mm][Aa][Xx]|[Ee][Xx][Aa][Cc][Tt][Ll][Yy]|[Tt][Hh][Aa][Tt])\b'
 
 # expressão regular para palavras reservadas que não tem variacão,tem apenas uma forma de escrever.
-RESERVED_OTHERS = r'(Class:|EquivalentTo:|Individuals:|SubClassOf:|DisjointClasses:)'
+RESERVED_OTHERS = r'(Class:|EquivalentTo:|Individuals:|SubClassOf:|DisjointClasses:|DisjointWith:)'
 
 # expressão regular para identificar nomes de individuos
 INDIVIDUALS_NAMES = r'\b[A-Z][a-zA-Z]*\d+\b'
