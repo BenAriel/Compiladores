@@ -190,9 +190,8 @@ def t_PROPERTY_IDENTIFIER(t):
 #função para reconhecer identificadores de classes
 @TOKEN(CLASS_IDENTIFIER)
 def t_CLASS_IDENTIFIER(t):
-    if not t.value.endswith(":"):
-        t.lexer.num_class_identifiers += 1
-        return t
+    t.lexer.num_class_identifiers += 1
+    return t
 
 #função para reconhecer nomes de individuos
 @TOKEN(INDIVIDUALS_NAMES)
