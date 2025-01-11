@@ -1,0 +1,606 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ALL
+    Class
+    DIVIDE
+    DisjointClasses
+    EquivalentTo
+    Individuals
+    MINUS
+    PLUS
+    PROPERTY_IDENTIFIER_has
+    PROPERTY_IDENTIFIER_is_Of
+    SOME
+    SpecialCharacters
+    SubClassOf
+    THAT
+    TIMES
+
+Grammar
+
+Rule 0     S' -> expression
+Rule 1     expression -> expression AND expression
+Rule 2     expression -> expression OR expression
+Rule 3     expression -> NOT expression
+Rule 4     expression -> VALUE
+Rule 5     expression -> NUMBER
+Rule 6     expression -> CLASS_IDENTIFIER MIN expression
+Rule 7     expression -> CLASS_IDENTIFIER MAX expression
+Rule 8     expression -> CLASS_IDENTIFIER EXACTLY expression
+Rule 9     expression -> CLASS_IDENTIFIER VALUE
+Rule 10    expression -> CLASS_IDENTIFIER
+Rule 11    expression -> PROPERTY_IDENTIFIER
+Rule 12    expression -> NAMESPACEID
+Rule 13    expression -> IndividualNames
+Rule 14    expression -> PROPERTY_IDENTIFIER MIN NUMBER
+Rule 15    expression -> PROPERTY_IDENTIFIER MAX NUMBER
+Rule 16    expression -> PROPERTY_IDENTIFIER EXACTLY NUMBER
+Rule 17    expression -> LPAREN expression RPAREN
+
+Terminals, with rules where they appear
+
+ALL                  : 
+AND                  : 1
+CLASS_IDENTIFIER     : 6 7 8 9 10
+Class                : 
+DIVIDE               : 
+DisjointClasses      : 
+EXACTLY              : 8 16
+EquivalentTo         : 
+IndividualNames      : 13
+Individuals          : 
+LPAREN               : 17
+MAX                  : 7 15
+MIN                  : 6 14
+MINUS                : 
+NAMESPACEID          : 12
+NOT                  : 3
+NUMBER               : 5 14 15 16
+OR                   : 2
+PLUS                 : 
+PROPERTY_IDENTIFIER  : 11 14 15 16
+PROPERTY_IDENTIFIER_has : 
+PROPERTY_IDENTIFIER_is_Of : 
+RPAREN               : 17
+SOME                 : 
+SpecialCharacters    : 
+SubClassOf           : 
+THAT                 : 
+TIMES                : 
+VALUE                : 4 9
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 1 2 2 3 6 7 8 17 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . NOT expression
+    (4) expression -> . VALUE
+    (5) expression -> . NUMBER
+    (6) expression -> . CLASS_IDENTIFIER MIN expression
+    (7) expression -> . CLASS_IDENTIFIER MAX expression
+    (8) expression -> . CLASS_IDENTIFIER EXACTLY expression
+    (9) expression -> . CLASS_IDENTIFIER VALUE
+    (10) expression -> . CLASS_IDENTIFIER
+    (11) expression -> . PROPERTY_IDENTIFIER
+    (12) expression -> . NAMESPACEID
+    (13) expression -> . IndividualNames
+    (14) expression -> . PROPERTY_IDENTIFIER MIN NUMBER
+    (15) expression -> . PROPERTY_IDENTIFIER MAX NUMBER
+    (16) expression -> . PROPERTY_IDENTIFIER EXACTLY NUMBER
+    (17) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 2
+    VALUE           shift and go to state 3
+    NUMBER          shift and go to state 4
+    CLASS_IDENTIFIER shift and go to state 5
+    PROPERTY_IDENTIFIER shift and go to state 6
+    NAMESPACEID     shift and go to state 7
+    IndividualNames shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 1
+
+state 1
+
+    (0) S' -> expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+
+    AND             shift and go to state 10
+    OR              shift and go to state 11
+
+
+state 2
+
+    (3) expression -> NOT . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . NOT expression
+    (4) expression -> . VALUE
+    (5) expression -> . NUMBER
+    (6) expression -> . CLASS_IDENTIFIER MIN expression
+    (7) expression -> . CLASS_IDENTIFIER MAX expression
+    (8) expression -> . CLASS_IDENTIFIER EXACTLY expression
+    (9) expression -> . CLASS_IDENTIFIER VALUE
+    (10) expression -> . CLASS_IDENTIFIER
+    (11) expression -> . PROPERTY_IDENTIFIER
+    (12) expression -> . NAMESPACEID
+    (13) expression -> . IndividualNames
+    (14) expression -> . PROPERTY_IDENTIFIER MIN NUMBER
+    (15) expression -> . PROPERTY_IDENTIFIER MAX NUMBER
+    (16) expression -> . PROPERTY_IDENTIFIER EXACTLY NUMBER
+    (17) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 2
+    VALUE           shift and go to state 3
+    NUMBER          shift and go to state 4
+    CLASS_IDENTIFIER shift and go to state 5
+    PROPERTY_IDENTIFIER shift and go to state 6
+    NAMESPACEID     shift and go to state 7
+    IndividualNames shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 12
+
+state 3
+
+    (4) expression -> VALUE .
+
+    AND             reduce using rule 4 (expression -> VALUE .)
+    OR              reduce using rule 4 (expression -> VALUE .)
+    $end            reduce using rule 4 (expression -> VALUE .)
+    RPAREN          reduce using rule 4 (expression -> VALUE .)
+
+
+state 4
+
+    (5) expression -> NUMBER .
+
+    AND             reduce using rule 5 (expression -> NUMBER .)
+    OR              reduce using rule 5 (expression -> NUMBER .)
+    $end            reduce using rule 5 (expression -> NUMBER .)
+    RPAREN          reduce using rule 5 (expression -> NUMBER .)
+
+
+state 5
+
+    (6) expression -> CLASS_IDENTIFIER . MIN expression
+    (7) expression -> CLASS_IDENTIFIER . MAX expression
+    (8) expression -> CLASS_IDENTIFIER . EXACTLY expression
+    (9) expression -> CLASS_IDENTIFIER . VALUE
+    (10) expression -> CLASS_IDENTIFIER .
+
+    MIN             shift and go to state 13
+    MAX             shift and go to state 14
+    EXACTLY         shift and go to state 15
+    VALUE           shift and go to state 16
+    AND             reduce using rule 10 (expression -> CLASS_IDENTIFIER .)
+    OR              reduce using rule 10 (expression -> CLASS_IDENTIFIER .)
+    $end            reduce using rule 10 (expression -> CLASS_IDENTIFIER .)
+    RPAREN          reduce using rule 10 (expression -> CLASS_IDENTIFIER .)
+
+
+state 6
+
+    (11) expression -> PROPERTY_IDENTIFIER .
+    (14) expression -> PROPERTY_IDENTIFIER . MIN NUMBER
+    (15) expression -> PROPERTY_IDENTIFIER . MAX NUMBER
+    (16) expression -> PROPERTY_IDENTIFIER . EXACTLY NUMBER
+
+    AND             reduce using rule 11 (expression -> PROPERTY_IDENTIFIER .)
+    OR              reduce using rule 11 (expression -> PROPERTY_IDENTIFIER .)
+    $end            reduce using rule 11 (expression -> PROPERTY_IDENTIFIER .)
+    RPAREN          reduce using rule 11 (expression -> PROPERTY_IDENTIFIER .)
+    MIN             shift and go to state 17
+    MAX             shift and go to state 18
+    EXACTLY         shift and go to state 19
+
+
+state 7
+
+    (12) expression -> NAMESPACEID .
+
+    AND             reduce using rule 12 (expression -> NAMESPACEID .)
+    OR              reduce using rule 12 (expression -> NAMESPACEID .)
+    $end            reduce using rule 12 (expression -> NAMESPACEID .)
+    RPAREN          reduce using rule 12 (expression -> NAMESPACEID .)
+
+
+state 8
+
+    (13) expression -> IndividualNames .
+
+    AND             reduce using rule 13 (expression -> IndividualNames .)
+    OR              reduce using rule 13 (expression -> IndividualNames .)
+    $end            reduce using rule 13 (expression -> IndividualNames .)
+    RPAREN          reduce using rule 13 (expression -> IndividualNames .)
+
+
+state 9
+
+    (17) expression -> LPAREN . expression RPAREN
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . NOT expression
+    (4) expression -> . VALUE
+    (5) expression -> . NUMBER
+    (6) expression -> . CLASS_IDENTIFIER MIN expression
+    (7) expression -> . CLASS_IDENTIFIER MAX expression
+    (8) expression -> . CLASS_IDENTIFIER EXACTLY expression
+    (9) expression -> . CLASS_IDENTIFIER VALUE
+    (10) expression -> . CLASS_IDENTIFIER
+    (11) expression -> . PROPERTY_IDENTIFIER
+    (12) expression -> . NAMESPACEID
+    (13) expression -> . IndividualNames
+    (14) expression -> . PROPERTY_IDENTIFIER MIN NUMBER
+    (15) expression -> . PROPERTY_IDENTIFIER MAX NUMBER
+    (16) expression -> . PROPERTY_IDENTIFIER EXACTLY NUMBER
+    (17) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 2
+    VALUE           shift and go to state 3
+    NUMBER          shift and go to state 4
+    CLASS_IDENTIFIER shift and go to state 5
+    PROPERTY_IDENTIFIER shift and go to state 6
+    NAMESPACEID     shift and go to state 7
+    IndividualNames shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 20
+
+state 10
+
+    (1) expression -> expression AND . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . NOT expression
+    (4) expression -> . VALUE
+    (5) expression -> . NUMBER
+    (6) expression -> . CLASS_IDENTIFIER MIN expression
+    (7) expression -> . CLASS_IDENTIFIER MAX expression
+    (8) expression -> . CLASS_IDENTIFIER EXACTLY expression
+    (9) expression -> . CLASS_IDENTIFIER VALUE
+    (10) expression -> . CLASS_IDENTIFIER
+    (11) expression -> . PROPERTY_IDENTIFIER
+    (12) expression -> . NAMESPACEID
+    (13) expression -> . IndividualNames
+    (14) expression -> . PROPERTY_IDENTIFIER MIN NUMBER
+    (15) expression -> . PROPERTY_IDENTIFIER MAX NUMBER
+    (16) expression -> . PROPERTY_IDENTIFIER EXACTLY NUMBER
+    (17) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 2
+    VALUE           shift and go to state 3
+    NUMBER          shift and go to state 4
+    CLASS_IDENTIFIER shift and go to state 5
+    PROPERTY_IDENTIFIER shift and go to state 6
+    NAMESPACEID     shift and go to state 7
+    IndividualNames shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 21
+
+state 11
+
+    (2) expression -> expression OR . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . NOT expression
+    (4) expression -> . VALUE
+    (5) expression -> . NUMBER
+    (6) expression -> . CLASS_IDENTIFIER MIN expression
+    (7) expression -> . CLASS_IDENTIFIER MAX expression
+    (8) expression -> . CLASS_IDENTIFIER EXACTLY expression
+    (9) expression -> . CLASS_IDENTIFIER VALUE
+    (10) expression -> . CLASS_IDENTIFIER
+    (11) expression -> . PROPERTY_IDENTIFIER
+    (12) expression -> . NAMESPACEID
+    (13) expression -> . IndividualNames
+    (14) expression -> . PROPERTY_IDENTIFIER MIN NUMBER
+    (15) expression -> . PROPERTY_IDENTIFIER MAX NUMBER
+    (16) expression -> . PROPERTY_IDENTIFIER EXACTLY NUMBER
+    (17) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 2
+    VALUE           shift and go to state 3
+    NUMBER          shift and go to state 4
+    CLASS_IDENTIFIER shift and go to state 5
+    PROPERTY_IDENTIFIER shift and go to state 6
+    NAMESPACEID     shift and go to state 7
+    IndividualNames shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 22
+
+state 12
+
+    (3) expression -> NOT expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+
+    AND             reduce using rule 3 (expression -> NOT expression .)
+    OR              reduce using rule 3 (expression -> NOT expression .)
+    $end            reduce using rule 3 (expression -> NOT expression .)
+    RPAREN          reduce using rule 3 (expression -> NOT expression .)
+
+  ! AND             [ shift and go to state 10 ]
+  ! OR              [ shift and go to state 11 ]
+
+
+state 13
+
+    (6) expression -> CLASS_IDENTIFIER MIN . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . NOT expression
+    (4) expression -> . VALUE
+    (5) expression -> . NUMBER
+    (6) expression -> . CLASS_IDENTIFIER MIN expression
+    (7) expression -> . CLASS_IDENTIFIER MAX expression
+    (8) expression -> . CLASS_IDENTIFIER EXACTLY expression
+    (9) expression -> . CLASS_IDENTIFIER VALUE
+    (10) expression -> . CLASS_IDENTIFIER
+    (11) expression -> . PROPERTY_IDENTIFIER
+    (12) expression -> . NAMESPACEID
+    (13) expression -> . IndividualNames
+    (14) expression -> . PROPERTY_IDENTIFIER MIN NUMBER
+    (15) expression -> . PROPERTY_IDENTIFIER MAX NUMBER
+    (16) expression -> . PROPERTY_IDENTIFIER EXACTLY NUMBER
+    (17) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 2
+    VALUE           shift and go to state 3
+    NUMBER          shift and go to state 4
+    CLASS_IDENTIFIER shift and go to state 5
+    PROPERTY_IDENTIFIER shift and go to state 6
+    NAMESPACEID     shift and go to state 7
+    IndividualNames shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 23
+
+state 14
+
+    (7) expression -> CLASS_IDENTIFIER MAX . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . NOT expression
+    (4) expression -> . VALUE
+    (5) expression -> . NUMBER
+    (6) expression -> . CLASS_IDENTIFIER MIN expression
+    (7) expression -> . CLASS_IDENTIFIER MAX expression
+    (8) expression -> . CLASS_IDENTIFIER EXACTLY expression
+    (9) expression -> . CLASS_IDENTIFIER VALUE
+    (10) expression -> . CLASS_IDENTIFIER
+    (11) expression -> . PROPERTY_IDENTIFIER
+    (12) expression -> . NAMESPACEID
+    (13) expression -> . IndividualNames
+    (14) expression -> . PROPERTY_IDENTIFIER MIN NUMBER
+    (15) expression -> . PROPERTY_IDENTIFIER MAX NUMBER
+    (16) expression -> . PROPERTY_IDENTIFIER EXACTLY NUMBER
+    (17) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 2
+    VALUE           shift and go to state 3
+    NUMBER          shift and go to state 4
+    CLASS_IDENTIFIER shift and go to state 5
+    PROPERTY_IDENTIFIER shift and go to state 6
+    NAMESPACEID     shift and go to state 7
+    IndividualNames shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 24
+
+state 15
+
+    (8) expression -> CLASS_IDENTIFIER EXACTLY . expression
+    (1) expression -> . expression AND expression
+    (2) expression -> . expression OR expression
+    (3) expression -> . NOT expression
+    (4) expression -> . VALUE
+    (5) expression -> . NUMBER
+    (6) expression -> . CLASS_IDENTIFIER MIN expression
+    (7) expression -> . CLASS_IDENTIFIER MAX expression
+    (8) expression -> . CLASS_IDENTIFIER EXACTLY expression
+    (9) expression -> . CLASS_IDENTIFIER VALUE
+    (10) expression -> . CLASS_IDENTIFIER
+    (11) expression -> . PROPERTY_IDENTIFIER
+    (12) expression -> . NAMESPACEID
+    (13) expression -> . IndividualNames
+    (14) expression -> . PROPERTY_IDENTIFIER MIN NUMBER
+    (15) expression -> . PROPERTY_IDENTIFIER MAX NUMBER
+    (16) expression -> . PROPERTY_IDENTIFIER EXACTLY NUMBER
+    (17) expression -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 2
+    VALUE           shift and go to state 3
+    NUMBER          shift and go to state 4
+    CLASS_IDENTIFIER shift and go to state 5
+    PROPERTY_IDENTIFIER shift and go to state 6
+    NAMESPACEID     shift and go to state 7
+    IndividualNames shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 25
+
+state 16
+
+    (9) expression -> CLASS_IDENTIFIER VALUE .
+
+    AND             reduce using rule 9 (expression -> CLASS_IDENTIFIER VALUE .)
+    OR              reduce using rule 9 (expression -> CLASS_IDENTIFIER VALUE .)
+    $end            reduce using rule 9 (expression -> CLASS_IDENTIFIER VALUE .)
+    RPAREN          reduce using rule 9 (expression -> CLASS_IDENTIFIER VALUE .)
+
+
+state 17
+
+    (14) expression -> PROPERTY_IDENTIFIER MIN . NUMBER
+
+    NUMBER          shift and go to state 26
+
+
+state 18
+
+    (15) expression -> PROPERTY_IDENTIFIER MAX . NUMBER
+
+    NUMBER          shift and go to state 27
+
+
+state 19
+
+    (16) expression -> PROPERTY_IDENTIFIER EXACTLY . NUMBER
+
+    NUMBER          shift and go to state 28
+
+
+state 20
+
+    (17) expression -> LPAREN expression . RPAREN
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+
+    RPAREN          shift and go to state 29
+    AND             shift and go to state 10
+    OR              shift and go to state 11
+
+
+state 21
+
+    (1) expression -> expression AND expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+
+    AND             reduce using rule 1 (expression -> expression AND expression .)
+    OR              reduce using rule 1 (expression -> expression AND expression .)
+    $end            reduce using rule 1 (expression -> expression AND expression .)
+    RPAREN          reduce using rule 1 (expression -> expression AND expression .)
+
+  ! AND             [ shift and go to state 10 ]
+  ! OR              [ shift and go to state 11 ]
+
+
+state 22
+
+    (2) expression -> expression OR expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+
+    AND             reduce using rule 2 (expression -> expression OR expression .)
+    OR              reduce using rule 2 (expression -> expression OR expression .)
+    $end            reduce using rule 2 (expression -> expression OR expression .)
+    RPAREN          reduce using rule 2 (expression -> expression OR expression .)
+
+  ! AND             [ shift and go to state 10 ]
+  ! OR              [ shift and go to state 11 ]
+
+
+state 23
+
+    (6) expression -> CLASS_IDENTIFIER MIN expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+    $end            reduce using rule 6 (expression -> CLASS_IDENTIFIER MIN expression .)
+    RPAREN          reduce using rule 6 (expression -> CLASS_IDENTIFIER MIN expression .)
+    AND             shift and go to state 10
+    OR              shift and go to state 11
+
+  ! AND             [ reduce using rule 6 (expression -> CLASS_IDENTIFIER MIN expression .) ]
+  ! OR              [ reduce using rule 6 (expression -> CLASS_IDENTIFIER MIN expression .) ]
+
+
+state 24
+
+    (7) expression -> CLASS_IDENTIFIER MAX expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+    $end            reduce using rule 7 (expression -> CLASS_IDENTIFIER MAX expression .)
+    RPAREN          reduce using rule 7 (expression -> CLASS_IDENTIFIER MAX expression .)
+    AND             shift and go to state 10
+    OR              shift and go to state 11
+
+  ! AND             [ reduce using rule 7 (expression -> CLASS_IDENTIFIER MAX expression .) ]
+  ! OR              [ reduce using rule 7 (expression -> CLASS_IDENTIFIER MAX expression .) ]
+
+
+state 25
+
+    (8) expression -> CLASS_IDENTIFIER EXACTLY expression .
+    (1) expression -> expression . AND expression
+    (2) expression -> expression . OR expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+    $end            reduce using rule 8 (expression -> CLASS_IDENTIFIER EXACTLY expression .)
+    RPAREN          reduce using rule 8 (expression -> CLASS_IDENTIFIER EXACTLY expression .)
+    AND             shift and go to state 10
+    OR              shift and go to state 11
+
+  ! AND             [ reduce using rule 8 (expression -> CLASS_IDENTIFIER EXACTLY expression .) ]
+  ! OR              [ reduce using rule 8 (expression -> CLASS_IDENTIFIER EXACTLY expression .) ]
+
+
+state 26
+
+    (14) expression -> PROPERTY_IDENTIFIER MIN NUMBER .
+
+    AND             reduce using rule 14 (expression -> PROPERTY_IDENTIFIER MIN NUMBER .)
+    OR              reduce using rule 14 (expression -> PROPERTY_IDENTIFIER MIN NUMBER .)
+    $end            reduce using rule 14 (expression -> PROPERTY_IDENTIFIER MIN NUMBER .)
+    RPAREN          reduce using rule 14 (expression -> PROPERTY_IDENTIFIER MIN NUMBER .)
+
+
+state 27
+
+    (15) expression -> PROPERTY_IDENTIFIER MAX NUMBER .
+
+    AND             reduce using rule 15 (expression -> PROPERTY_IDENTIFIER MAX NUMBER .)
+    OR              reduce using rule 15 (expression -> PROPERTY_IDENTIFIER MAX NUMBER .)
+    $end            reduce using rule 15 (expression -> PROPERTY_IDENTIFIER MAX NUMBER .)
+    RPAREN          reduce using rule 15 (expression -> PROPERTY_IDENTIFIER MAX NUMBER .)
+
+
+state 28
+
+    (16) expression -> PROPERTY_IDENTIFIER EXACTLY NUMBER .
+
+    AND             reduce using rule 16 (expression -> PROPERTY_IDENTIFIER EXACTLY NUMBER .)
+    OR              reduce using rule 16 (expression -> PROPERTY_IDENTIFIER EXACTLY NUMBER .)
+    $end            reduce using rule 16 (expression -> PROPERTY_IDENTIFIER EXACTLY NUMBER .)
+    RPAREN          reduce using rule 16 (expression -> PROPERTY_IDENTIFIER EXACTLY NUMBER .)
+
+
+state 29
+
+    (17) expression -> LPAREN expression RPAREN .
+
+    AND             reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    OR              reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for AND in state 23 resolved as shift
+WARNING: shift/reduce conflict for OR in state 23 resolved as shift
+WARNING: shift/reduce conflict for AND in state 24 resolved as shift
+WARNING: shift/reduce conflict for OR in state 24 resolved as shift
+WARNING: shift/reduce conflict for AND in state 25 resolved as shift
+WARNING: shift/reduce conflict for OR in state 25 resolved as shift

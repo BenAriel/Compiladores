@@ -260,6 +260,7 @@ with open(file_path, 'r') as file:
     data = file.read()
 
 lexer.input(data)
+
 #inicializa a tabela de símbolos(como é uma estrutura de dados do tipo set, não permite repetições)
 simbol_table = set()
 
@@ -309,19 +310,19 @@ print(f"Número de Tipos de Dados: {lexer.num_data_types}")
 print(f"Número de Identificadores de Propriedades: {lexer.num_property_identifiers}")
 print(f"Número de Identificadores de Classes: {lexer.num_class_identifiers}")
 
-#imprime cada token único identificado de cada tipo
-print("\n=== Tokens Detalhados ===")
-for category, items in identified_tokens.items():
-    print(f"\n{category}:")
-    for item in sorted(items):
-        print(f"  - {item}")
-
-
-
 print('\n deseja ver todos os tokens encontrados em ordem no arquivo? \n formato de exibição: (TOKEN,valor,linha,posição na linha). s/n')
 
+        
 # imprime todos os tokens encontrados no arquivo no formato (TOKEN, valor, linha, posição na linha)
 if(input().lower() == 's'):
+    
+    #imprime cada token único identificado de cada tipo
+    print("\n=== Tokens Detalhados ===")
+    for category, items in identified_tokens.items():
+        print(f"\n{category}:")
+        for item in sorted(items):
+            print(f"  - {item}")
+        
     lexer.input(data)
     while True:
         tok = lexer.token()
