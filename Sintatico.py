@@ -1,7 +1,39 @@
 import ply.yacc as yacc
 from Lex import tokens  # Importa os tokens definidos no léxico
 
-# Regras de produção
+# Regras de produção1
+
+
+def p_statement_primitive_class(p): #Apenas some ou todas palavras reservadas?
+    '''statement : Class CLASS_IDENTIFIER subClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals '''
+    print(f"Classe primitiva: {p[2]}")
+def primitive_class_mandatory(p):
+    '''primitive_class_alternatives : PROPERTY_IDENTIFIER_has  SOME CLASS_IDENTIFIER    
+    | PROPERTY_IDENTIFIER_has  SOME CLASS_IDENTIFIER SpecialCharacters primitive_class_alternatives
+    | PROPERTY_IDENTIFIER_has  SOME NAMESPACEID DATA_TYPE
+    | PROPERTY_IDENTIFIER_has  SOME NAMESPACEID DATA_TYPE SpecialCharacters primitive_class_alternatives
+
+    ''' 
+
+def statement_class_disjoin(p):
+    '''
+    statement_class_disjoin : empty
+    | DisjointClasses statement_class_disjoin_check''' 
+
+
+def p_statement_class_disjoin_check(p):
+    '''statement_class_disjoin_check : CLASS_IDENTIFIER
+    | CLASS_IDENTIFIER SpecialCharacters statement_class_disjoin_check'''
+
+def statement_class_individuals(p):
+    '''
+    statement_class_individuals : empty
+    | Individuals statement_class_individuals_check''' 
+
+
+def p_statement_class_individuals_check(p):
+    '''statement_class_individuals_check : IndividualNames
+    | IndividualNames SpecialCharacters statement_class_disjoin_check'''
 
 def p_statement_property(p):
     '''statement : PROPERTY_IDENTIFIER CLASS_IDENTIFIER'''
