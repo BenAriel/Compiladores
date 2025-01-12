@@ -56,6 +56,14 @@ def p_statement_enumerated_class(p):
 def p_statement_enumerated_class_check(p):
     '''statement_enumerated_class_check:  CLASS_IDENTIFIER 
     | CLASS_IDENTIFIER SpecialCharacters statement_enumerated_class_check'''
+
+#classe coberta
+def p_statement_covered_class(p):
+    '''statement : Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check'''
+
+def p_statement_covered_class_check(p):
+    '''statement_covered_class_check : CLASS_IDENTIFIER
+    | CLASS_IDENTIFIER OR statement_covered_class_check'''
 def p_statement_property(p):
     '''statement : PROPERTY_IDENTIFIER CLASS_IDENTIFIER'''
     print(f"Propriedade: {p[1]} para classe {p[2]}")
