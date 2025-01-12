@@ -43,6 +43,19 @@ def p_statement_defined_class_equivalent(p): #precisa de 2 versções,um com 3 c
     '''statement_defined_class_equivalent : EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME CLASS_IDENTIFIER SpecialCharacters
     | EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME NAMESPACEID DATA_TYPE SpecialCharacters SpecialCharacters SpecialCharacters NUMBER SpecialCharacters SpecialCharacters
     |EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME NAMESPACEID DATA_TYPE SpecialCharacters SpecialCharacters NUMBER SpecialCharacters SpecialCharacters'''
+#classe anxioma fechada
+def p_statement_closing_anxioma(p): #perguntar se é apenas some e only ou todas as outras palavras reservadas
+    '''
+    statement : '''
+
+#classe enumerada
+def p_statement_enumerated_class(p):
+    '''statement : Class CLASS_IDENTIFIER SpecialCharacters  statement_enumerated_class_check'''
+
+
+def p_statement_enumerated_class_check(p):
+    '''statement_enumerated_class_check:  CLASS_IDENTIFIER 
+    | CLASS_IDENTIFIER SpecialCharacters statement_enumerated_class_check'''
 def p_statement_property(p):
     '''statement : PROPERTY_IDENTIFIER CLASS_IDENTIFIER'''
     print(f"Propriedade: {p[1]} para classe {p[2]}")
