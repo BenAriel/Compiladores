@@ -26,6 +26,7 @@ if __name__ == "__main__":
 
         # Faz o parsing do conteúdo do arquivo
         print("\nIniciando parsing do arquivo...")
+        lexer.lineno = 1
         result = parser.parse(data, lexer=lexer)
 
         # Exibe a árvore sintática resultante

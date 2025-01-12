@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ALL AND CLASS_IDENTIFIER Class DATA_TYPE DIVIDE DisjointClasses DisjointWith EXACTLY EquivalentTo IndividualNames Individuals LPAREN Literal MAX MIN MINUS NAMESPACEID NCName NMTOKEN NOT NUMBER Name OR PLUS PROPERTY_IDENTIFIER PROPERTY_IDENTIFIER_has PROPERTY_IDENTIFIER_is_Of PlainLiteral RPAREN SOME SpecialCharacters SubClassOf THAT TIMES VALUE XMLLiteral anyURI base64Binary boolean byte dateTime dateTimeStamp decimal double float hexBinary int integer langString languague long negativeInteger nonNegativeInteger owl rational rdf rdfs real string xsdstatement : PROPERTY_IDENTIFIER CLASS_IDENTIFIERstatement : SubClassOf PROPERTY_IDENTIFIER CLASS_IDENTIFIERstatement : CLASS_IDENTIFIER AND CLASS_IDENTIFIERstatement : CLASS_IDENTIFIER SpecialCharacters CLASS_IDENTIFIER'
+_lr_signature = 'ALL AND CLASS_IDENTIFIER Class DATA_TYPE DIVIDE DisjointClasses DisjointWith EXACTLY EquivalentTo IndividualNames Individuals LPAREN Literal MAX MIN MINUS NAMESPACEID NCName NMTOKEN NOT NUMBER Name OR PLUS PROPERTY_IDENTIFIER PROPERTY_IDENTIFIER_has PROPERTY_IDENTIFIER_is_Of PlainLiteral RPAREN SOME SpecialCharacters SubClassOf THAT TIMES VALUE XMLLiteral anyURI base64Binary boolean byte dateTime dateTimeStamp decimal double float hexBinary int integer langString languague long negativeInteger nonNegativeInteger owl rational rdf rdfs real string xsdstatement : Class CLASS_IDENTIFIER SubClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals primitive_class_mandatory : PROPERTY_IDENTIFIER_has  SOME CLASS_IDENTIFIER    \n    | PROPERTY_IDENTIFIER_has  SOME CLASS_IDENTIFIER SpecialCharacters primitive_class_mandatory\n    | PROPERTY_IDENTIFIER_has  SOME NAMESPACEID DATA_TYPE\n    | PROPERTY_IDENTIFIER_has  SOME NAMESPACEID DATA_TYPE SpecialCharacters primitive_class_mandatory\n\n    \n    statement_class_disjoin : empty\n    | DisjointClasses statement_class_disjoin_checkstatement_class_disjoin_check : CLASS_IDENTIFIER\n    | CLASS_IDENTIFIER SpecialCharacters statement_class_disjoin_check\n    statement_class_individuals : empty\n    | Individuals statement_class_individuals_check\n    statement_class_individuals_check : IndividualNames\n    | IndividualNames SpecialCharacters statement_class_individuals_checkstatement : Class CLASS_IDENTIFIER statement_defined_class_equivalent statement_class_individualsstatement_defined_class_equivalent : EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME CLASS_IDENTIFIER SpecialCharacters\n    | EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME NAMESPACEID DATA_TYPE SpecialCharacters SpecialCharacters SpecialCharacters NUMBER SpecialCharacters SpecialCharacters\n    | EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME NAMESPACEID DATA_TYPE SpecialCharacters SpecialCharacters NUMBER SpecialCharacters SpecialCharactersstatement : Class CLASS_IDENTIFIER SpecialCharacters  statement_enumerated_class_checkstatement_enumerated_class_check :  CLASS_IDENTIFIER \n    | CLASS_IDENTIFIER SpecialCharacters statement_enumerated_class_checkstatement : Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_checkstatement_covered_class_check : CLASS_IDENTIFIER\n    | CLASS_IDENTIFIER OR statement_covered_class_checkempty :'
     
-_lr_action_items = {'PROPERTY_IDENTIFIER':([0,4,],[2,8,]),'SubClassOf':([0,],[4,]),'CLASS_IDENTIFIER':([0,2,6,7,8,],[3,5,9,10,11,]),'$end':([1,5,9,10,11,],[0,-1,-3,-4,-2,]),'AND':([3,],[6,]),'SpecialCharacters':([3,],[7,]),}
+_lr_action_items = {'Class':([0,],[2,]),'$end':([1,5,8,10,11,13,14,15,16,17,18,21,22,26,27,28,29,32,34,35,38,39,41,42,45,48,57,58,],[0,-24,-24,-14,-10,-19,-18,-22,-21,-24,-6,-11,-12,-1,-7,-8,-2,-20,-22,-23,-4,-13,-9,-3,-5,-15,-17,-16,]),'CLASS_IDENTIFIER':([2,6,7,19,20,23,25,33,36,44,],[3,13,15,28,29,13,34,40,28,46,]),'SubClassOf':([3,],[4,]),'SpecialCharacters':([3,13,22,24,28,29,38,46,49,50,51,53,54,55,56,],[6,23,31,33,36,37,43,48,50,51,52,55,56,57,58,]),'EquivalentTo':([3,],[7,]),'PROPERTY_IDENTIFIER_has':([4,37,43,],[9,9,9,]),'Individuals':([5,8,17,18,27,28,29,38,41,42,45,48,57,58,],[12,-24,12,-6,-7,-8,-2,-4,-9,-3,-5,-15,-17,-16,]),'DisjointClasses':([8,29,38,42,45,],[19,-2,-4,-3,-5,]),'SOME':([9,40,],[20,44,]),'IndividualNames':([12,31,],[22,22,]),'AND':([15,],[24,]),'OR':([15,34,],[25,25,]),'NAMESPACEID':([20,44,],[30,47,]),'DATA_TYPE':([30,47,],[38,49,]),'NUMBER':([51,52,],[53,54,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statement':([0,],[1,]),}
+_lr_goto_items = {'statement':([0,],[1,]),'statement_defined_class_equivalent':([3,],[5,]),'primitive_class_mandatory':([4,37,43,],[8,42,45,]),'statement_class_individuals':([5,17,],[10,26,]),'empty':([5,8,17,],[11,18,11,]),'statement_enumerated_class_check':([6,23,],[14,32,]),'statement_covered_class_check':([7,25,],[16,35,]),'statement_class_disjoin':([8,],[17,]),'statement_class_individuals_check':([12,31,],[21,39,]),'statement_class_disjoin_check':([19,36,],[27,41,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,8 +27,28 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statement","S'",1,None,None,None),
-  ('statement -> PROPERTY_IDENTIFIER CLASS_IDENTIFIER','statement',2,'p_statement_property','Sintatico.py',7),
-  ('statement -> SubClassOf PROPERTY_IDENTIFIER CLASS_IDENTIFIER','statement',3,'p_statement_subclass_property','Sintatico.py',11),
-  ('statement -> CLASS_IDENTIFIER AND CLASS_IDENTIFIER','statement',3,'p_statement_and','Sintatico.py',15),
-  ('statement -> CLASS_IDENTIFIER SpecialCharacters CLASS_IDENTIFIER','statement',3,'p_statement_with_comma','Sintatico.py',19),
+  ('statement -> Class CLASS_IDENTIFIER SubClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals','statement',6,'p_statement_primitive_class','Sintatico.py',8),
+  ('primitive_class_mandatory -> PROPERTY_IDENTIFIER_has SOME CLASS_IDENTIFIER','primitive_class_mandatory',3,'p_primitive_class_mandatory','Sintatico.py',11),
+  ('primitive_class_mandatory -> PROPERTY_IDENTIFIER_has SOME CLASS_IDENTIFIER SpecialCharacters primitive_class_mandatory','primitive_class_mandatory',5,'p_primitive_class_mandatory','Sintatico.py',12),
+  ('primitive_class_mandatory -> PROPERTY_IDENTIFIER_has SOME NAMESPACEID DATA_TYPE','primitive_class_mandatory',4,'p_primitive_class_mandatory','Sintatico.py',13),
+  ('primitive_class_mandatory -> PROPERTY_IDENTIFIER_has SOME NAMESPACEID DATA_TYPE SpecialCharacters primitive_class_mandatory','primitive_class_mandatory',6,'p_primitive_class_mandatory','Sintatico.py',14),
+  ('statement_class_disjoin -> empty','statement_class_disjoin',1,'p_statement_class_disjoin','Sintatico.py',20),
+  ('statement_class_disjoin -> DisjointClasses statement_class_disjoin_check','statement_class_disjoin',2,'p_statement_class_disjoin','Sintatico.py',21),
+  ('statement_class_disjoin_check -> CLASS_IDENTIFIER','statement_class_disjoin_check',1,'p_statement_class_disjoin_check','Sintatico.py',25),
+  ('statement_class_disjoin_check -> CLASS_IDENTIFIER SpecialCharacters statement_class_disjoin_check','statement_class_disjoin_check',3,'p_statement_class_disjoin_check','Sintatico.py',26),
+  ('statement_class_individuals -> empty','statement_class_individuals',1,'p_statement_class_individuals','Sintatico.py',30),
+  ('statement_class_individuals -> Individuals statement_class_individuals_check','statement_class_individuals',2,'p_statement_class_individuals','Sintatico.py',31),
+  ('statement_class_individuals_check -> IndividualNames','statement_class_individuals_check',1,'p_statement_class_individuals_check','Sintatico.py',37),
+  ('statement_class_individuals_check -> IndividualNames SpecialCharacters statement_class_individuals_check','statement_class_individuals_check',3,'p_statement_class_individuals_check','Sintatico.py',38),
+  ('statement -> Class CLASS_IDENTIFIER statement_defined_class_equivalent statement_class_individuals','statement',4,'p_statement_defined_class','Sintatico.py',42),
+  ('statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME CLASS_IDENTIFIER SpecialCharacters','statement_defined_class_equivalent',8,'p_statement_defined_class_equivalent','Sintatico.py',45),
+  ('statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME NAMESPACEID DATA_TYPE SpecialCharacters SpecialCharacters SpecialCharacters NUMBER SpecialCharacters SpecialCharacters','statement_defined_class_equivalent',14,'p_statement_defined_class_equivalent','Sintatico.py',46),
+  ('statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME NAMESPACEID DATA_TYPE SpecialCharacters SpecialCharacters NUMBER SpecialCharacters SpecialCharacters','statement_defined_class_equivalent',13,'p_statement_defined_class_equivalent','Sintatico.py',47),
+  ('statement -> Class CLASS_IDENTIFIER SpecialCharacters statement_enumerated_class_check','statement',4,'p_statement_enumerated_class','Sintatico.py',52),
+  ('statement_enumerated_class_check -> CLASS_IDENTIFIER','statement_enumerated_class_check',1,'p_statement_enumerated_class_check','Sintatico.py',56),
+  ('statement_enumerated_class_check -> CLASS_IDENTIFIER SpecialCharacters statement_enumerated_class_check','statement_enumerated_class_check',3,'p_statement_enumerated_class_check','Sintatico.py',57),
+  ('statement -> Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check','statement',4,'p_statement_covered_class','Sintatico.py',61),
+  ('statement_covered_class_check -> CLASS_IDENTIFIER','statement_covered_class_check',1,'p_statement_covered_class_check','Sintatico.py',64),
+  ('statement_covered_class_check -> CLASS_IDENTIFIER OR statement_covered_class_check','statement_covered_class_check',3,'p_statement_covered_class_check','Sintatico.py',65),
+  ('empty -> <empty>','empty',0,'p_empty','Sintatico.py',69),
 ]

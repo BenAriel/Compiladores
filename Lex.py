@@ -254,5 +254,6 @@ def init_lexer(lexer):
     lexer.num_class_identifiers = 0
     lexer.num_individual_names = 0
     lexer.num_special_characters = 0
+    lexer.num_numbers = 0
     
 init_lexer(lexer)
