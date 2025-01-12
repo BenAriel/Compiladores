@@ -3,7 +3,7 @@ from Lex import tokens  # Importa os tokens definidos no léxico
 
 # Regras de produção1
 
-
+# funções para classe primitiva
 def p_statement_primitive_class(p): #Apenas some ou todas palavras reservadas?
     '''statement : Class CLASS_IDENTIFIER subClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals '''
     print(f"Classe primitiva: {p[2]}")
@@ -35,6 +35,14 @@ def p_statement_class_individuals_check(p):
     '''statement_class_individuals_check : IndividualNames
     | IndividualNames SpecialCharacters statement_class_disjoin_check'''
 
+# funções para classe definida
+def p_statement_defined_class(p): #todas precisam de individuos? ou é opcional?
+    '''statement : Class CLASS_IDENTIFIER statement_defined_class_equivalent statement_class_individuals'''
+
+def p_statement_defined_class_equivalent(p): #precisa de 2 versções,um com 3 caracteres especiais e outro com 2, pois pode ser por exemplo <= ou = 
+    '''statement_defined_class_equivalent : EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME CLASS_IDENTIFIER SpecialCharacters
+    | EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME NAMESPACEID DATA_TYPE SpecialCharacters SpecialCharacters SpecialCharacters NUMBER SpecialCharacters SpecialCharacters
+    |EquivalentTo CLASS_IDENTIFIER AND SpecialCharacters CLASS_IDENTIFIER SOME NAMESPACEID DATA_TYPE SpecialCharacters SpecialCharacters NUMBER SpecialCharacters SpecialCharacters'''
 def p_statement_property(p):
     '''statement : PROPERTY_IDENTIFIER CLASS_IDENTIFIER'''
     print(f"Propriedade: {p[1]} para classe {p[2]}")
