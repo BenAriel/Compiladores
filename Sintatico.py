@@ -1,68 +1,111 @@
 import ply.yacc as yacc
-from Lex import tokens  # Importa os tokens do seu lexer
+from Lex import lexer
+from Lex import tokens
 
-# Estrutura para armazenar os elementos do OWL
-owl_structure = {
-    "Classes": {},
-    "Individuals": {},
-    "DisjointClasses": [],
-    "Properties": {},
-}
+# Função para imprimir os tokens conforme o lexer os processa
+def imprimir_tokens(lexer):
+    while True:
+        tok = lexer.token()
+        if not tok:
+            break
+        print(f"Token: {tok.type} - Valor: {tok.value}")
 
-# Regras de gramática
-def p_ontology(p):
-    '''ontology : statements'''
-    p[0] = p[1]
+# Regra de classes primitivas
+def p_statement_class_primitive(p):
+    '''statement : Class CLASS_IDENTIFIER SubClassOf properties DisjointClasses IndividualNames'''
+    class_name = p[2]
+    properties = p[4]
+    disjoint_classes = p[5]
+    individuals = p[6]
+    
+    print(f"Classe Primitiva: {class_name}")
+    print(f"Propriedades: {properties}")
+    print(f"DisjointClasses: {disjoint_classes}")
+    print(f"Indivíduos: {individuals}")
 
-def p_statements_multiple(p):
-    '''statements : statements statement'''
-    p[0] = p[1]
-    p[0].append(p[2])
+# Regra de classes definidas
+def p_statement_class_defined(p):
+    '''statement : Class CLASS_IDENTIFIER EquivalentTo conditions IndividualNames'''
+    class_name = p[2]
+    conditions = p[4]
+    individuals = p[5]
+    
+    print(f"Classe Definida: {class_name}")
+    print(f"Condições: {conditions}")
+    print(f"Indivíduos: {individuals}")
 
-def p_statements_single(p):
-    '''statements : statement'''
-    p[0] = [p[1]]
+# Regra de classes com fechamento
+def p_statement_class_closure(p):
+    '''statement : Class CLASS_IDENTIFIER SubClassOf properties DisjointClasses IndividualNames Closure restrictions'''
+    class_name = p[2]
+    properties = p[4]
+    disjoint_classes = p[5]
+    individuals = p[6]
+    closure = p[7]  # Regras de fechamento
+    
+    print(f"Classe com Fechamento: {class_name}")
+    print(f"Propriedades: {properties}")
+    print(f"DisjointClasses: {disjoint_classes}")
+    print(f"Indivíduos: {individuals}")
+    print(f"Fechamento: {closure}")
 
-def p_statement_class(p):
-    '''statement : Class CLASS_IDENTIFIER properties'''
-    owl_structure["Classes"][p[2]] = p[3]
+# Regra de classes aninhadas
+def p_statement_class_nested(p):
+    '''statement : Class CLASS_IDENTIFIER EquivalentTo nested_conditions IndividualNames'''
+    class_name = p[2]
+    nested_conditions = p[4]
+    individuals = p[5]
+    
+    print(f"Classe Aninhada: {class_name}")
+    print(f"Condições Aninhadas: {nested_conditions}")
+    print(f"Indivíduos: {individuals}")
 
-def p_statement_individuals(p):
-    '''statement : Individuals ':' individual_list'''
-    owl_structure["Individuals"] = p[3]
+# Regra de classes enumeradas
+def p_statement_class_enumerated(p):
+    '''statement : Class CLASS_IDENTIFIER EquivalentTo enumerated_instances IndividualNames'''
+    class_name = p[2]
+    enumerated_instances = p[4]
+    individuals = p[5]
+    
+    print(f"Classe Enumerada: {class_name}")
+    print(f"Instâncias Enumeradas: {enumerated_instances}")
+    print(f"Indivíduos: {individuals}")
 
-def p_statement_disjointclasses(p):
-    '''statement : DisjointClasses ':' class_list'''
-    owl_structure["DisjointClasses"] = p[3]
+# Regra de classes cobertas
+def p_statement_class_covered(p):
+    '''statement : Class CLASS_IDENTIFIER EquivalentTo covered_classes IndividualNames'''
+    class_name = p[2]
+    covered_classes = p[4]
+    individuals = p[5]
+    
+    print(f"Classe Coberta: {class_name}")
+    print(f"Classes Filhas: {covered_classes}")
+    print(f"Indivíduos: {individuals}")
 
+# Definição de propriedades
 def p_properties(p):
-    '''properties : EquivalentTo ':' class_list
-                  | SubClassOf ':' class_list
-                  | empty'''
-    if len(p) > 2:
-        p[0] = {p[1]: p[3]}
-    else:
-        p[0] = {}
+    '''properties : PROPERTY_IDENTIFIER'''
+    p[0] = p[1]
 
-def p_individual_list(p):
-    '''individual_list : individual_list ',' IndividualNames
-                       | IndividualNames'''
-    if len(p) == 4:
-        p[0] = p[1] + [p[3]]
-    else:
-        p[0] = [p[1]]
+# Definição de condições
+def p_conditions(p):
+    '''conditions : CONDITION_EXPRESSION'''
+    p[0] = p[1]
 
-def p_class_list(p):
-    '''class_list : class_list ',' CLASS_IDENTIFIER
-                  | CLASS_IDENTIFIER'''
-    if len(p) == 4:
-        p[0] = p[1] + [p[3]]
-    else:
-        p[0] = [p[1]]
+# Definição de aninhamentos de condições
+def p_nested_conditions(p):
+    '''nested_conditions : NESTED_CONDITION_EXPRESSION'''
+    p[0] = p[1]
 
-def p_empty(p):
-    '''empty :'''
-    pass
+# Instâncias enumeradas
+def p_enumerated_instances(p):
+    '''enumerated_instances : ENUMERATED_INSTANCE'''
+    p[0] = p[1]
+
+# Definição de classes cobertas
+def p_covered_classes(p):
+    '''covered_classes : COVERED_CLASS'''
+    p[0] = p[1]
 
 # Tratamento de erros
 def p_error(p):
@@ -79,6 +122,11 @@ file_path = 'input.txt'
 with open(file_path, 'r') as file:
     data = file.read()
 
-result = parser.parse(data)
-print("\n=== Estrutura OWL ===")
-print(owl_structure)
+lexer.input(data)
+
+# Imprimir todos os tokens
+print("Tokens identificados:")
+imprimir_tokens(lexer)
+
+# Parse da entrada
+parser.parse(data, lexer=lexer)

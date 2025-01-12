@@ -8,6 +8,7 @@ Unused terminals:
     DIVIDE
     DisjointWith
     EXACTLY
+    Individuals
     LPAREN
     Literal
     MAX
@@ -21,7 +22,6 @@ Unused terminals:
     Name
     OR
     PLUS
-    PROPERTY_IDENTIFIER
     PROPERTY_IDENTIFIER_has
     PROPERTY_IDENTIFIER_is_Of
     PlainLiteral
@@ -59,38 +59,33 @@ Unused terminals:
 
 Grammar
 
-Rule 0     S' -> ontology
-Rule 1     ontology -> statements
-Rule 2     statements -> statements statement
-Rule 3     statements -> statement
-Rule 4     statement -> Class CLASS_IDENTIFIER properties
-Rule 5     statement -> Individuals : individual_list
-Rule 6     statement -> DisjointClasses : class_list
-Rule 7     properties -> EquivalentTo : class_list
-Rule 8     properties -> SubClassOf : class_list
-Rule 9     properties -> empty
-Rule 10    individual_list -> individual_list , IndividualNames
-Rule 11    individual_list -> IndividualNames
-Rule 12    class_list -> class_list , CLASS_IDENTIFIER
-Rule 13    class_list -> CLASS_IDENTIFIER
-Rule 14    empty -> <empty>
+Rule 0     S' -> statement
+Rule 1     statement -> Class CLASS_IDENTIFIER SubClassOf properties DisjointClasses IndividualNames
+Rule 2     statement -> Class CLASS_IDENTIFIER EquivalentTo conditions IndividualNames
+Rule 3     statement -> Class CLASS_IDENTIFIER SubClassOf properties DisjointClasses IndividualNames Closure restrictions
+Rule 4     statement -> Class CLASS_IDENTIFIER EquivalentTo nested_conditions IndividualNames
+Rule 5     statement -> Class CLASS_IDENTIFIER EquivalentTo enumerated_instances IndividualNames
+Rule 6     statement -> Class CLASS_IDENTIFIER EquivalentTo covered_classes IndividualNames
+Rule 7     properties -> PROPERTY_IDENTIFIER
+Rule 8     conditions -> CONDITION_EXPRESSION
+Rule 9     nested_conditions -> NESTED_CONDITION_EXPRESSION
+Rule 10    enumerated_instances -> ENUMERATED_INSTANCE
+Rule 11    covered_classes -> COVERED_CLASS
 
 Terminals, with rules where they appear
 
-,                    : 10 12
-:                    : 5 6 7 8
 ALL                  : 
 AND                  : 
-CLASS_IDENTIFIER     : 4 12 13
-Class                : 4
+CLASS_IDENTIFIER     : 1 2 3 4 5 6
+Class                : 1 2 3 4 5 6
 DATA_TYPE            : 
 DIVIDE               : 
-DisjointClasses      : 6
+DisjointClasses      : 1 3
 DisjointWith         : 
 EXACTLY              : 
-EquivalentTo         : 7
-IndividualNames      : 10 11
-Individuals          : 5
+EquivalentTo         : 2 4 5 6
+IndividualNames      : 1 2 3 4 5 6
+Individuals          : 
 LPAREN               : 
 Literal              : 
 MAX                  : 
@@ -104,14 +99,14 @@ NUMBER               :
 Name                 : 
 OR                   : 
 PLUS                 : 
-PROPERTY_IDENTIFIER  : 
+PROPERTY_IDENTIFIER  : 7
 PROPERTY_IDENTIFIER_has : 
 PROPERTY_IDENTIFIER_is_Of : 
 PlainLiteral         : 
 RPAREN               : 
 SOME                 : 
 SpecialCharacters    : 
-SubClassOf           : 8
+SubClassOf           : 1 3
 THAT                 : 
 TIMES                : 
 VALUE                : 
@@ -144,290 +139,16 @@ xsd                  :
 
 Nonterminals, with rules where they appear
 
-class_list           : 6 7 8 12
-empty                : 9
-individual_list      : 5 10
-ontology             : 0
-properties           : 4
-statement            : 2 3
-statements           : 1 2
-
-Parsing method: LALR
-
-state 0
-
-    (0) S' -> . ontology
-    (1) ontology -> . statements
-    (2) statements -> . statements statement
-    (3) statements -> . statement
-    (4) statement -> . Class CLASS_IDENTIFIER properties
-    (5) statement -> . Individuals : individual_list
-    (6) statement -> . DisjointClasses : class_list
-
-    Class           shift and go to state 4
-    Individuals     shift and go to state 5
-    DisjointClasses shift and go to state 6
-
-    ontology                       shift and go to state 1
-    statements                     shift and go to state 2
-    statement                      shift and go to state 3
-
-state 1
-
-    (0) S' -> ontology .
-
-
-
-state 2
-
-    (1) ontology -> statements .
-    (2) statements -> statements . statement
-    (4) statement -> . Class CLASS_IDENTIFIER properties
-    (5) statement -> . Individuals : individual_list
-    (6) statement -> . DisjointClasses : class_list
-
-    $end            reduce using rule 1 (ontology -> statements .)
-    Class           shift and go to state 4
-    Individuals     shift and go to state 5
-    DisjointClasses shift and go to state 6
-
-    statement                      shift and go to state 7
-
-state 3
-
-    (3) statements -> statement .
-
-    Class           reduce using rule 3 (statements -> statement .)
-    Individuals     reduce using rule 3 (statements -> statement .)
-    DisjointClasses reduce using rule 3 (statements -> statement .)
-    $end            reduce using rule 3 (statements -> statement .)
-
-
-state 4
-
-    (4) statement -> Class . CLASS_IDENTIFIER properties
-
-    CLASS_IDENTIFIER shift and go to state 8
-
-
-state 5
-
-    (5) statement -> Individuals . : individual_list
-
-    :               shift and go to state 9
-
-
-state 6
-
-    (6) statement -> DisjointClasses . : class_list
-
-    :               shift and go to state 10
-
-
-state 7
-
-    (2) statements -> statements statement .
-
-    Class           reduce using rule 2 (statements -> statements statement .)
-    Individuals     reduce using rule 2 (statements -> statements statement .)
-    DisjointClasses reduce using rule 2 (statements -> statements statement .)
-    $end            reduce using rule 2 (statements -> statements statement .)
-
-
-state 8
-
-    (4) statement -> Class CLASS_IDENTIFIER . properties
-    (7) properties -> . EquivalentTo : class_list
-    (8) properties -> . SubClassOf : class_list
-    (9) properties -> . empty
-    (14) empty -> .
-
-    EquivalentTo    shift and go to state 12
-    SubClassOf      shift and go to state 13
-    Class           reduce using rule 14 (empty -> .)
-    Individuals     reduce using rule 14 (empty -> .)
-    DisjointClasses reduce using rule 14 (empty -> .)
-    $end            reduce using rule 14 (empty -> .)
-
-    properties                     shift and go to state 11
-    empty                          shift and go to state 14
-
-state 9
-
-    (5) statement -> Individuals : . individual_list
-    (10) individual_list -> . individual_list , IndividualNames
-    (11) individual_list -> . IndividualNames
-
-    IndividualNames shift and go to state 16
-
-    individual_list                shift and go to state 15
-
-state 10
-
-    (6) statement -> DisjointClasses : . class_list
-    (12) class_list -> . class_list , CLASS_IDENTIFIER
-    (13) class_list -> . CLASS_IDENTIFIER
-
-    CLASS_IDENTIFIER shift and go to state 18
-
-    class_list                     shift and go to state 17
-
-state 11
-
-    (4) statement -> Class CLASS_IDENTIFIER properties .
-
-    Class           reduce using rule 4 (statement -> Class CLASS_IDENTIFIER properties .)
-    Individuals     reduce using rule 4 (statement -> Class CLASS_IDENTIFIER properties .)
-    DisjointClasses reduce using rule 4 (statement -> Class CLASS_IDENTIFIER properties .)
-    $end            reduce using rule 4 (statement -> Class CLASS_IDENTIFIER properties .)
-
-
-state 12
-
-    (7) properties -> EquivalentTo . : class_list
-
-    :               shift and go to state 19
-
-
-state 13
-
-    (8) properties -> SubClassOf . : class_list
-
-    :               shift and go to state 20
-
-
-state 14
-
-    (9) properties -> empty .
-
-    Class           reduce using rule 9 (properties -> empty .)
-    Individuals     reduce using rule 9 (properties -> empty .)
-    DisjointClasses reduce using rule 9 (properties -> empty .)
-    $end            reduce using rule 9 (properties -> empty .)
-
-
-state 15
-
-    (5) statement -> Individuals : individual_list .
-    (10) individual_list -> individual_list . , IndividualNames
-
-    Class           reduce using rule 5 (statement -> Individuals : individual_list .)
-    Individuals     reduce using rule 5 (statement -> Individuals : individual_list .)
-    DisjointClasses reduce using rule 5 (statement -> Individuals : individual_list .)
-    $end            reduce using rule 5 (statement -> Individuals : individual_list .)
-    ,               shift and go to state 21
-
-
-state 16
-
-    (11) individual_list -> IndividualNames .
-
-    ,               reduce using rule 11 (individual_list -> IndividualNames .)
-    Class           reduce using rule 11 (individual_list -> IndividualNames .)
-    Individuals     reduce using rule 11 (individual_list -> IndividualNames .)
-    DisjointClasses reduce using rule 11 (individual_list -> IndividualNames .)
-    $end            reduce using rule 11 (individual_list -> IndividualNames .)
-
-
-state 17
-
-    (6) statement -> DisjointClasses : class_list .
-    (12) class_list -> class_list . , CLASS_IDENTIFIER
-
-    Class           reduce using rule 6 (statement -> DisjointClasses : class_list .)
-    Individuals     reduce using rule 6 (statement -> DisjointClasses : class_list .)
-    DisjointClasses reduce using rule 6 (statement -> DisjointClasses : class_list .)
-    $end            reduce using rule 6 (statement -> DisjointClasses : class_list .)
-    ,               shift and go to state 22
-
-
-state 18
-
-    (13) class_list -> CLASS_IDENTIFIER .
-
-    ,               reduce using rule 13 (class_list -> CLASS_IDENTIFIER .)
-    Class           reduce using rule 13 (class_list -> CLASS_IDENTIFIER .)
-    Individuals     reduce using rule 13 (class_list -> CLASS_IDENTIFIER .)
-    DisjointClasses reduce using rule 13 (class_list -> CLASS_IDENTIFIER .)
-    $end            reduce using rule 13 (class_list -> CLASS_IDENTIFIER .)
-
-
-state 19
-
-    (7) properties -> EquivalentTo : . class_list
-    (12) class_list -> . class_list , CLASS_IDENTIFIER
-    (13) class_list -> . CLASS_IDENTIFIER
-
-    CLASS_IDENTIFIER shift and go to state 18
-
-    class_list                     shift and go to state 23
-
-state 20
-
-    (8) properties -> SubClassOf : . class_list
-    (12) class_list -> . class_list , CLASS_IDENTIFIER
-    (13) class_list -> . CLASS_IDENTIFIER
-
-    CLASS_IDENTIFIER shift and go to state 18
-
-    class_list                     shift and go to state 24
-
-state 21
-
-    (10) individual_list -> individual_list , . IndividualNames
-
-    IndividualNames shift and go to state 25
-
-
-state 22
-
-    (12) class_list -> class_list , . CLASS_IDENTIFIER
-
-    CLASS_IDENTIFIER shift and go to state 26
-
-
-state 23
-
-    (7) properties -> EquivalentTo : class_list .
-    (12) class_list -> class_list . , CLASS_IDENTIFIER
-
-    Class           reduce using rule 7 (properties -> EquivalentTo : class_list .)
-    Individuals     reduce using rule 7 (properties -> EquivalentTo : class_list .)
-    DisjointClasses reduce using rule 7 (properties -> EquivalentTo : class_list .)
-    $end            reduce using rule 7 (properties -> EquivalentTo : class_list .)
-    ,               shift and go to state 22
-
-
-state 24
-
-    (8) properties -> SubClassOf : class_list .
-    (12) class_list -> class_list . , CLASS_IDENTIFIER
-
-    Class           reduce using rule 8 (properties -> SubClassOf : class_list .)
-    Individuals     reduce using rule 8 (properties -> SubClassOf : class_list .)
-    DisjointClasses reduce using rule 8 (properties -> SubClassOf : class_list .)
-    $end            reduce using rule 8 (properties -> SubClassOf : class_list .)
-    ,               shift and go to state 22
-
-
-state 25
-
-    (10) individual_list -> individual_list , IndividualNames .
-
-    ,               reduce using rule 10 (individual_list -> individual_list , IndividualNames .)
-    Class           reduce using rule 10 (individual_list -> individual_list , IndividualNames .)
-    Individuals     reduce using rule 10 (individual_list -> individual_list , IndividualNames .)
-    DisjointClasses reduce using rule 10 (individual_list -> individual_list , IndividualNames .)
-    $end            reduce using rule 10 (individual_list -> individual_list , IndividualNames .)
-
-
-state 26
-
-    (12) class_list -> class_list , CLASS_IDENTIFIER .
-
-    ,               reduce using rule 12 (class_list -> class_list , CLASS_IDENTIFIER .)
-    Class           reduce using rule 12 (class_list -> class_list , CLASS_IDENTIFIER .)
-    Individuals     reduce using rule 12 (class_list -> class_list , CLASS_IDENTIFIER .)
-    DisjointClasses reduce using rule 12 (class_list -> class_list , CLASS_IDENTIFIER .)
-    $end            reduce using rule 12 (class_list -> class_list , CLASS_IDENTIFIER .)
+CONDITION_EXPRESSION : 8
+COVERED_CLASS        : 11
+Closure              : 3
+ENUMERATED_INSTANCE  : 10
+NESTED_CONDITION_EXPRESSION : 9
+conditions           : 2
+covered_classes      : 6
+enumerated_instances : 5
+nested_conditions    : 4
+properties           : 1 3
+restrictions         : 3
+statement            : 0
 

@@ -262,6 +262,7 @@ with open(file_path, 'r') as file:
 lexer.input(data)
 #inicializa a tabela de símbolos(como é uma estrutura de dados do tipo set, não permite repetições)
 simbol_table = set()
+listaToken = []
 
 # Dicionário para armazenar os tokens identificados
 identified_tokens = {
@@ -281,6 +282,7 @@ while True:
     if not tok:
         break
     simbol_table.add(tok.type)
+    listaToken.append(tok)
     if tok.type in reserved.values():
         identified_tokens["Reserved Words"].add(tok.value)
     elif tok.type == "NAMESPACEID":
