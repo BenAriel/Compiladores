@@ -3,11 +3,14 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     ALL
-    AND
+    Class
     DATA_TYPE
     DIVIDE
+    DisjointClasses
     DisjointWith
     EXACTLY
+    EquivalentTo
+    IndividualNames
     Individuals
     LPAREN
     Literal
@@ -27,7 +30,6 @@ Unused terminals:
     PlainLiteral
     RPAREN
     SOME
-    SpecialCharacters
     THAT
     TIMES
     VALUE
@@ -60,31 +62,24 @@ Unused terminals:
 Grammar
 
 Rule 0     S' -> statement
-Rule 1     statement -> Class CLASS_IDENTIFIER SubClassOf properties DisjointClasses IndividualNames
-Rule 2     statement -> Class CLASS_IDENTIFIER EquivalentTo conditions IndividualNames
-Rule 3     statement -> Class CLASS_IDENTIFIER SubClassOf properties DisjointClasses IndividualNames Closure restrictions
-Rule 4     statement -> Class CLASS_IDENTIFIER EquivalentTo nested_conditions IndividualNames
-Rule 5     statement -> Class CLASS_IDENTIFIER EquivalentTo enumerated_instances IndividualNames
-Rule 6     statement -> Class CLASS_IDENTIFIER EquivalentTo covered_classes IndividualNames
-Rule 7     properties -> PROPERTY_IDENTIFIER
-Rule 8     conditions -> CONDITION_EXPRESSION
-Rule 9     nested_conditions -> NESTED_CONDITION_EXPRESSION
-Rule 10    enumerated_instances -> ENUMERATED_INSTANCE
-Rule 11    covered_classes -> COVERED_CLASS
+Rule 1     statement -> PROPERTY_IDENTIFIER CLASS_IDENTIFIER
+Rule 2     statement -> SubClassOf PROPERTY_IDENTIFIER CLASS_IDENTIFIER
+Rule 3     statement -> CLASS_IDENTIFIER AND CLASS_IDENTIFIER
+Rule 4     statement -> CLASS_IDENTIFIER SpecialCharacters CLASS_IDENTIFIER
 
 Terminals, with rules where they appear
 
 ALL                  : 
-AND                  : 
-CLASS_IDENTIFIER     : 1 2 3 4 5 6
-Class                : 1 2 3 4 5 6
+AND                  : 3
+CLASS_IDENTIFIER     : 1 2 3 3 4 4
+Class                : 
 DATA_TYPE            : 
 DIVIDE               : 
-DisjointClasses      : 1 3
+DisjointClasses      : 
 DisjointWith         : 
 EXACTLY              : 
-EquivalentTo         : 2 4 5 6
-IndividualNames      : 1 2 3 4 5 6
+EquivalentTo         : 
+IndividualNames      : 
 Individuals          : 
 LPAREN               : 
 Literal              : 
@@ -99,14 +94,14 @@ NUMBER               :
 Name                 : 
 OR                   : 
 PLUS                 : 
-PROPERTY_IDENTIFIER  : 7
+PROPERTY_IDENTIFIER  : 1 2
 PROPERTY_IDENTIFIER_has : 
 PROPERTY_IDENTIFIER_is_Of : 
 PlainLiteral         : 
 RPAREN               : 
 SOME                 : 
-SpecialCharacters    : 
-SubClassOf           : 1 3
+SpecialCharacters    : 4
+SubClassOf           : 2
 THAT                 : 
 TIMES                : 
 VALUE                : 
@@ -139,16 +134,98 @@ xsd                  :
 
 Nonterminals, with rules where they appear
 
-CONDITION_EXPRESSION : 8
-COVERED_CLASS        : 11
-Closure              : 3
-ENUMERATED_INSTANCE  : 10
-NESTED_CONDITION_EXPRESSION : 9
-conditions           : 2
-covered_classes      : 6
-enumerated_instances : 5
-nested_conditions    : 4
-properties           : 1 3
-restrictions         : 3
 statement            : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . PROPERTY_IDENTIFIER CLASS_IDENTIFIER
+    (2) statement -> . SubClassOf PROPERTY_IDENTIFIER CLASS_IDENTIFIER
+    (3) statement -> . CLASS_IDENTIFIER AND CLASS_IDENTIFIER
+    (4) statement -> . CLASS_IDENTIFIER SpecialCharacters CLASS_IDENTIFIER
+
+    PROPERTY_IDENTIFIER shift and go to state 2
+    SubClassOf      shift and go to state 4
+    CLASS_IDENTIFIER shift and go to state 3
+
+    statement                      shift and go to state 1
+
+state 1
+
+    (0) S' -> statement .
+
+
+
+state 2
+
+    (1) statement -> PROPERTY_IDENTIFIER . CLASS_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 5
+
+
+state 3
+
+    (3) statement -> CLASS_IDENTIFIER . AND CLASS_IDENTIFIER
+    (4) statement -> CLASS_IDENTIFIER . SpecialCharacters CLASS_IDENTIFIER
+
+    AND             shift and go to state 6
+    SpecialCharacters shift and go to state 7
+
+
+state 4
+
+    (2) statement -> SubClassOf . PROPERTY_IDENTIFIER CLASS_IDENTIFIER
+
+    PROPERTY_IDENTIFIER shift and go to state 8
+
+
+state 5
+
+    (1) statement -> PROPERTY_IDENTIFIER CLASS_IDENTIFIER .
+
+    $end            reduce using rule 1 (statement -> PROPERTY_IDENTIFIER CLASS_IDENTIFIER .)
+
+
+state 6
+
+    (3) statement -> CLASS_IDENTIFIER AND . CLASS_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 9
+
+
+state 7
+
+    (4) statement -> CLASS_IDENTIFIER SpecialCharacters . CLASS_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 10
+
+
+state 8
+
+    (2) statement -> SubClassOf PROPERTY_IDENTIFIER . CLASS_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 11
+
+
+state 9
+
+    (3) statement -> CLASS_IDENTIFIER AND CLASS_IDENTIFIER .
+
+    $end            reduce using rule 3 (statement -> CLASS_IDENTIFIER AND CLASS_IDENTIFIER .)
+
+
+state 10
+
+    (4) statement -> CLASS_IDENTIFIER SpecialCharacters CLASS_IDENTIFIER .
+
+    $end            reduce using rule 4 (statement -> CLASS_IDENTIFIER SpecialCharacters CLASS_IDENTIFIER .)
+
+
+state 11
+
+    (2) statement -> SubClassOf PROPERTY_IDENTIFIER CLASS_IDENTIFIER .
+
+    $end            reduce using rule 2 (statement -> SubClassOf PROPERTY_IDENTIFIER CLASS_IDENTIFIER .)
 

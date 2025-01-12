@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "ALL AND CLASS_IDENTIFIER Class DATA_TYPE DIVIDE DisjointClasses DisjointWith EXACTLY EquivalentTo IndividualNames Individuals LPAREN Literal MAX MIN MINUS NAMESPACEID NCName NMTOKEN NOT NUMBER Name OR PLUS PROPERTY_IDENTIFIER PROPERTY_IDENTIFIER_has PROPERTY_IDENTIFIER_is_Of PlainLiteral RPAREN SOME SpecialCharacters SubClassOf THAT TIMES VALUE XMLLiteral anyURI base64Binary boolean byte dateTime dateTimeStamp decimal double float hexBinary int integer langString languague long negativeInteger nonNegativeInteger owl rational rdf rdfs real string xsdontology : statementsstatements : statements statementstatements : statementstatement : Class CLASS_IDENTIFIER propertiesstatement : Individuals ':' individual_liststatement : DisjointClasses ':' class_listproperties : EquivalentTo ':' class_list\n| SubClassOf ':' class_list\n| emptyindividual_list : individual_list ',' IndividualNames\n| IndividualNamesclass_list : class_list ',' CLASS_IDENTIFIER\n| CLASS_IDENTIFIERempty :"
+_lr_signature = 'ALL AND CLASS_IDENTIFIER Class DATA_TYPE DIVIDE DisjointClasses DisjointWith EXACTLY EquivalentTo IndividualNames Individuals LPAREN Literal MAX MIN MINUS NAMESPACEID NCName NMTOKEN NOT NUMBER Name OR PLUS PROPERTY_IDENTIFIER PROPERTY_IDENTIFIER_has PROPERTY_IDENTIFIER_is_Of PlainLiteral RPAREN SOME SpecialCharacters SubClassOf THAT TIMES VALUE XMLLiteral anyURI base64Binary boolean byte dateTime dateTimeStamp decimal double float hexBinary int integer langString languague long negativeInteger nonNegativeInteger owl rational rdf rdfs real string xsdstatement : PROPERTY_IDENTIFIER CLASS_IDENTIFIERstatement : SubClassOf PROPERTY_IDENTIFIER CLASS_IDENTIFIERstatement : CLASS_IDENTIFIER AND CLASS_IDENTIFIERstatement : CLASS_IDENTIFIER SpecialCharacters CLASS_IDENTIFIER'
     
-_lr_action_items = {'Class':([0,2,3,7,8,11,14,15,16,17,18,23,24,25,26,],[4,4,-3,-2,-14,-4,-9,-5,-11,-6,-13,-7,-8,-10,-12,]),'Individuals':([0,2,3,7,8,11,14,15,16,17,18,23,24,25,26,],[5,5,-3,-2,-14,-4,-9,-5,-11,-6,-13,-7,-8,-10,-12,]),'DisjointClasses':([0,2,3,7,8,11,14,15,16,17,18,23,24,25,26,],[6,6,-3,-2,-14,-4,-9,-5,-11,-6,-13,-7,-8,-10,-12,]),'$end':([1,2,3,7,8,11,14,15,16,17,18,23,24,25,26,],[0,-1,-3,-2,-14,-4,-9,-5,-11,-6,-13,-7,-8,-10,-12,]),'CLASS_IDENTIFIER':([4,10,19,20,22,],[8,18,18,18,26,]),':':([5,6,12,13,],[9,10,19,20,]),'EquivalentTo':([8,],[12,]),'SubClassOf':([8,],[13,]),'IndividualNames':([9,21,],[16,25,]),',':([15,16,17,18,23,24,25,26,],[21,-11,22,-13,22,22,-10,-12,]),}
+_lr_action_items = {'PROPERTY_IDENTIFIER':([0,4,],[2,8,]),'SubClassOf':([0,],[4,]),'CLASS_IDENTIFIER':([0,2,6,7,8,],[3,5,9,10,11,]),'$end':([1,5,9,10,11,],[0,-1,-3,-4,-2,]),'AND':([3,],[6,]),'SpecialCharacters':([3,],[7,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'ontology':([0,],[1,]),'statements':([0,],[2,]),'statement':([0,2,],[3,7,]),'properties':([8,],[11,]),'empty':([8,],[14,]),'individual_list':([9,],[15,]),'class_list':([10,19,20,],[17,23,24,]),}
+_lr_goto_items = {'statement':([0,],[1,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,19 +26,9 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> ontology","S'",1,None,None,None),
-  ('ontology -> statements','ontology',1,'p_ontology','Sintatico.py',14),
-  ('statements -> statements statement','statements',2,'p_statements_multiple','Sintatico.py',18),
-  ('statements -> statement','statements',1,'p_statements_single','Sintatico.py',23),
-  ('statement -> Class CLASS_IDENTIFIER properties','statement',3,'p_statement_class','Sintatico.py',27),
-  ('statement -> Individuals : individual_list','statement',3,'p_statement_individuals','Sintatico.py',31),
-  ('statement -> DisjointClasses : class_list','statement',3,'p_statement_disjointclasses','Sintatico.py',35),
-  ('properties -> EquivalentTo : class_list','properties',3,'p_properties','Sintatico.py',39),
-  ('properties -> SubClassOf : class_list','properties',3,'p_properties','Sintatico.py',40),
-  ('properties -> empty','properties',1,'p_properties','Sintatico.py',41),
-  ('individual_list -> individual_list , IndividualNames','individual_list',3,'p_individual_list','Sintatico.py',48),
-  ('individual_list -> IndividualNames','individual_list',1,'p_individual_list','Sintatico.py',49),
-  ('class_list -> class_list , CLASS_IDENTIFIER','class_list',3,'p_class_list','Sintatico.py',56),
-  ('class_list -> CLASS_IDENTIFIER','class_list',1,'p_class_list','Sintatico.py',57),
-  ('empty -> <empty>','empty',0,'p_empty','Sintatico.py',64),
+  ("S' -> statement","S'",1,None,None,None),
+  ('statement -> PROPERTY_IDENTIFIER CLASS_IDENTIFIER','statement',2,'p_statement_property','Sintatico.py',7),
+  ('statement -> SubClassOf PROPERTY_IDENTIFIER CLASS_IDENTIFIER','statement',3,'p_statement_subclass_property','Sintatico.py',11),
+  ('statement -> CLASS_IDENTIFIER AND CLASS_IDENTIFIER','statement',3,'p_statement_and','Sintatico.py',15),
+  ('statement -> CLASS_IDENTIFIER SpecialCharacters CLASS_IDENTIFIER','statement',3,'p_statement_with_comma','Sintatico.py',19),
 ]

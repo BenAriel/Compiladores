@@ -245,90 +245,14 @@ def t_error(t):
 
 # constroi  o lexer e inicializa as variáveis(cria atributos no lexer) de contagem
 lexer = lex.lex()
-lexer.num_reserved = 0
-lexer.num_individual_names = 0
-lexer.num_special_characters = 0
-lexer.num_numbers = 0
-lexer.num_namespace_ids = 0
-lexer.num_data_types = 0
-lexer.num_property_identifiers = 0
-lexer.num_class_identifiers = 0
 
-# lendo o arquivo de entrada
-file_path = 'input.txt'
-with open(file_path, 'r') as file:
-    data = file.read()
-
-lexer.input(data)
-#inicializa a tabela de símbolos(como é uma estrutura de dados do tipo set, não permite repetições)
-simbol_table = set()
-listaToken = []
-
-# Dicionário para armazenar os tokens identificados
-identified_tokens = {
-    "Reserved Words": set(),
-    "Namespaces": set(),
-    "Individual Names": set(),
-    "Special Characters": set(),
-    "Property Identifiers": set(),
-    "Class Identifiers": set(),
-    "Data Types": set(),
-    "Numbers": set(),
-}
-
-#para cada token, adiciona o token ao seu rescpetivo conjunto no dicionário de tokens identificados e adiciona o tipo do token à tabela de símbolos
-while True:
-    tok = lexer.token()
-    if not tok:
-        break
-    simbol_table.add(tok.type)
-    listaToken.append(tok)
-    if tok.type in reserved.values():
-        identified_tokens["Reserved Words"].add(tok.value)
-    elif tok.type == "NAMESPACEID":
-        identified_tokens["Namespaces"].add(tok.value)
-    elif tok.type == "IndividualNames":
-        identified_tokens["Individual Names"].add(tok.value)
-    elif tok.type == "SpecialCharacters":
-        identified_tokens["Special Characters"].add(tok.value)
-    elif tok.type.startswith("PROPERTY_IDENTIFIER"):
-        identified_tokens["Property Identifiers"].add(tok.value)
-    elif tok.type == "CLASS_IDENTIFIER":
-        identified_tokens["Class Identifiers"].add(tok.value)
-    elif tok.type == "DATA_TYPE":
-        identified_tokens["Data Types"].add(tok.value)
-    elif tok.type == "NUMBER":
-        identified_tokens["Numbers"].add(tok.value)
-
-#imprime a quantidade de tokens identificados de cada tipo
-print("=== Sumário ===")
-print(f"Número de palavras reservadas: {lexer.num_reserved}")
-print(f"Número de Nomes Individuais: {lexer.num_individual_names}")
-print(f"Número de Caracteres Especiais: {lexer.num_special_characters}")
-print(f"Número de Números: {lexer.num_numbers}")
-print(f"Número de IDs de Namespace: {lexer.num_namespace_ids}")
-print(f"Número de Tipos de Dados: {lexer.num_data_types}")
-print(f"Número de Identificadores de Propriedades: {lexer.num_property_identifiers}")
-print(f"Número de Identificadores de Classes: {lexer.num_class_identifiers}")
-
-#imprime cada token único identificado de cada tipo
-print("\n=== Tokens Detalhados ===")
-for category, items in identified_tokens.items():
-    print(f"\n{category}:")
-    for item in sorted(items):
-        print(f"  - {item}")
-
-
-
-print('\n deseja ver todos os tokens encontrados em ordem no arquivo? \n formato de exibição: (TOKEN,valor,linha,posição na linha). s/n')
-
-# imprime todos os tokens encontrados no arquivo no formato (TOKEN, valor, linha, posição na linha)
-if(input().lower() == 's'):
-    lexer.input(data)
-    while True:
-        tok = lexer.token()
-        if not tok:
-            break
-        print(tok)
-else :
-    print('fim do programa')
+def init_lexer(lexer):
+    lexer.num_reserved = 0
+    lexer.num_namespace_ids = 0
+    lexer.num_data_types = 0
+    lexer.num_property_identifiers = 0
+    lexer.num_class_identifiers = 0
+    lexer.num_individual_names = 0
+    lexer.num_special_characters = 0
+    
+init_lexer(lexer)
