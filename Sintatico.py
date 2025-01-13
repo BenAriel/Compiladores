@@ -7,12 +7,25 @@ from Lex import tokens  # Importa os tokens definidos no léxico
 def p_statement_primitive_class(p): #Apenas some ou todas palavras reservadas?
     '''statement : Class CLASS_IDENTIFIER SubClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals '''
     print(f"Classe primitiva: {p[2]}")
-def p_primitive_class_mandatory(p):
-    '''primitive_class_mandatory : PROPERTY_IDENTIFIER_has  SOME CLASS_IDENTIFIER    
-    | PROPERTY_IDENTIFIER_has  SOME CLASS_IDENTIFIER SpecialCharacters primitive_class_mandatory
-    | PROPERTY_IDENTIFIER_has  SOME NAMESPACEID DATA_TYPE
-    | PROPERTY_IDENTIFIER_has  SOME NAMESPACEID DATA_TYPE SpecialCharacters primitive_class_mandatory
 
+def p_statement_reserved_word(p):
+    '''statement_reserved_word : SOME
+     | EXACTLY
+     | MIN
+     | MAX'''
+    
+def p_statement_property_identify(p):
+    '''statement_property_identify : PROPERTY_IDENTIFIER_has
+     | PROPERTY_IDENTIFIER_is_Of
+     | PROPERTY_IDENTIFIER'''
+    
+def p_primitive_class_mandatory(p):
+    '''primitive_class_mandatory : statement_property_identify  statement_reserved_word CLASS_IDENTIFIER    
+    | statement_property_identify  statement_reserved_word CLASS_IDENTIFIER SpecialCharacters primitive_class_mandatory
+    | statement_property_identify  statement_reserved_word NAMESPACEID DATA_TYPE
+    | statement_property_identify  statement_reserved_word NAMESPACEID DATA_TYPE SpecialCharacters primitive_class_mandatory
+    | CLASS_IDENTIFIER
+    | CLASS_IDENTIFIER SpecialCharacters primitive_class_mandatory
     ''' 
 
 def p_statement_class_disjoin(p):
