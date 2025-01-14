@@ -45,8 +45,6 @@ def p_statement_class_individuals(p):
     | Individuals statement_class_individuals_check
     '''
 
-
-
 def p_statement_class_individuals_check(p):
     '''statement_class_individuals_check : IndividualNames
     | IndividualNames COMMA statement_class_individuals_check'''
@@ -72,6 +70,40 @@ def p_statement_operatior_sybmol(p):
     | LESS_THAN EQUALS'''
     pass
 #classe anxioma fechada
+
+def p_statement_closed_axiom_class(p):
+    '''statement : Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER COMMA closed_axiom_mandatory'''
+    print(f"Classe axioma fechada: {p[2]}") 
+
+def p_closed_axiom_mandatory(p):
+    '''closed_axiom_mandatory : CLASS_IDENTIFIER
+    | statement_property_restriction
+    | CLASS_IDENTIFIER COMMA closed_axiom_mandatory
+    | statement_property_restriction COMMA closed_axiom_mandatory'''
+
+def p_statement_property_restriction(p):
+    '''statement_property_restriction : statement_property_identify SOME CLASS_IDENTIFIER
+    | statement_property_identify ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN'''
+
+def p_closed_axiom_restriction_combination(p):
+    '''closed_axiom_restriction_combination : CLASS_IDENTIFIER
+    | CLASS_IDENTIFIER OR closed_axiom_restriction_combination'''
+    
+#classe com descrições aninhadas
+
+def p_statement_nested_descriptions_class(p):
+    '''statement : Class CLASS_IDENTIFIER EquivalentTo nested_descriptions'''
+    print(f"Classe com descrições aninhadas: {p[2]}")
+    return p[2]
+
+def p_nested_descriptions(p):
+    '''nested_descriptions : CLASS_IDENTIFIER
+                          | LEFT_PAREN nested_descriptions RIGHT_PAREN
+                          | nested_descriptions AND nested_descriptions
+                          | nested_descriptions OR nested_descriptions
+                          | statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+                          | statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN
+                          '''
 
 #classe enumerada
 def p_statement_enumerated_class(p):

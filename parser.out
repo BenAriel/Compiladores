@@ -77,34 +77,50 @@ Rule 29    statement_operator_symbol -> GREATER_THAN
 Rule 30    statement_operator_symbol -> EQUALS
 Rule 31    statement_operator_symbol -> GREATER_THAN EQUALS
 Rule 32    statement_operator_symbol -> LESS_THAN EQUALS
-Rule 33    statement -> Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check
-Rule 34    statement_enumerated_class_check -> CLASS_IDENTIFIER RIGHT_CURLY_BRACKET
-Rule 35    statement_enumerated_class_check -> CLASS_IDENTIFIER COMMA statement_enumerated_class_check
-Rule 36    statement -> Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check
-Rule 37    statement_covered_class_check -> CLASS_IDENTIFIER
-Rule 38    statement_covered_class_check -> CLASS_IDENTIFIER OR statement_covered_class_check
-Rule 39    empty -> <empty>
+Rule 33    statement -> Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER COMMA closed_axiom_mandatory
+Rule 34    closed_axiom_mandatory -> CLASS_IDENTIFIER
+Rule 35    closed_axiom_mandatory -> statement_property_restriction
+Rule 36    closed_axiom_mandatory -> CLASS_IDENTIFIER COMMA closed_axiom_mandatory
+Rule 37    closed_axiom_mandatory -> statement_property_restriction COMMA closed_axiom_mandatory
+Rule 38    statement_property_restriction -> statement_property_identify SOME CLASS_IDENTIFIER
+Rule 39    statement_property_restriction -> statement_property_identify ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN
+Rule 40    closed_axiom_restriction_combination -> CLASS_IDENTIFIER
+Rule 41    closed_axiom_restriction_combination -> CLASS_IDENTIFIER OR closed_axiom_restriction_combination
+Rule 42    statement -> Class CLASS_IDENTIFIER EquivalentTo nested_descriptions
+Rule 43    nested_descriptions -> CLASS_IDENTIFIER
+Rule 44    nested_descriptions -> LEFT_PAREN nested_descriptions RIGHT_PAREN
+Rule 45    nested_descriptions -> nested_descriptions AND nested_descriptions
+Rule 46    nested_descriptions -> nested_descriptions OR nested_descriptions
+Rule 47    nested_descriptions -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+Rule 48    nested_descriptions -> statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN
+Rule 49    statement -> Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check
+Rule 50    statement_enumerated_class_check -> CLASS_IDENTIFIER RIGHT_CURLY_BRACKET
+Rule 51    statement_enumerated_class_check -> CLASS_IDENTIFIER COMMA statement_enumerated_class_check
+Rule 52    statement -> Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check
+Rule 53    statement_covered_class_check -> CLASS_IDENTIFIER
+Rule 54    statement_covered_class_check -> CLASS_IDENTIFIER OR statement_covered_class_check
+Rule 55    empty -> <empty>
 
 Terminals, with rules where they appear
 
 ALL                  : 
-AND                  : 24 25 26 27
-CLASS_IDENTIFIER     : 1 9 10 13 14 17 18 23 24 24 25 25 26 27 33 34 35 36 37 38
-COMMA                : 10 12 14 18 22 25 27 35
-Class                : 1 23 33 36
+AND                  : 24 25 26 27 45
+CLASS_IDENTIFIER     : 1 9 10 13 14 17 18 23 24 24 25 25 26 27 33 33 34 36 38 40 41 42 43 47 49 50 51 52 53 54
+COMMA                : 10 12 14 18 22 25 27 33 36 37 51
+Class                : 1 23 33 42 49 52
 DATA_TYPE            : 11 12 26 27
 DIVIDE               : 
 DisjointClasses      : 16
 DisjointWith         : 
 EQUALS               : 30 31 32
 EXACTLY              : 3
-EquivalentTo         : 24 25 26 27 33 36
+EquivalentTo         : 24 25 26 27 42 49 52
 GREATER_THAN         : 29 31
 IndividualNames      : 21 22
 Individuals          : 20
 LEFT_BRACKET         : 26 27
-LEFT_CURLY_BRACKET   : 33
-LEFT_PAREN           : 24 25 26 27
+LEFT_CURLY_BRACKET   : 49
+LEFT_PAREN           : 24 25 26 27 39 44 48
 LESS_THAN            : 28 32
 Literal              : 
 MAX                  : 5
@@ -116,17 +132,18 @@ NMTOKEN              :
 NOT                  : 
 NUMBER               : 26 27
 Name                 : 
-OR                   : 38
+ONLY                 : 39
+OR                   : 41 46 54
 PLUS                 : 
 PROPERTY_IDENTIFIER  : 8
 PROPERTY_IDENTIFIER_has : 6
 PROPERTY_IDENTIFIER_is_Of : 7
 PlainLiteral         : 
 RIGHT_BRACKET        : 26 27
-RIGHT_CURLY_BRACKET  : 34
-RIGHT_PAREN          : 24 25 26 27
-SOME                 : 2
-SubClassOf           : 1
+RIGHT_CURLY_BRACKET  : 50
+RIGHT_PAREN          : 24 25 26 27 39 44 48
+SOME                 : 2 38
+SubClassOf           : 1 33
 THAT                 : 
 TIMES                : 
 VALUE                : 
@@ -159,19 +176,23 @@ xsd                  :
 
 Nonterminals, with rules where they appear
 
+closed_axiom_mandatory : 33 36 37
+closed_axiom_restriction_combination : 39 41
 empty                : 15 19
+nested_descriptions  : 42 44 45 45 46 46 48
 primitive_class_mandatory : 1 10 12 14
 statement            : 0
 statement_class_disjoin : 1
 statement_class_disjoin_check : 16 18
 statement_class_individuals : 1 23
 statement_class_individuals_check : 20 22
-statement_covered_class_check : 36 38
+statement_covered_class_check : 52 54
 statement_defined_class_equivalent : 23 25 27
-statement_enumerated_class_check : 33 35
+statement_enumerated_class_check : 49 51
 statement_operator_symbol : 26 27
-statement_property_identify : 9 10 11 12 24 25 26 27
-statement_reserved_word : 9 10 11 12 24 25 26 27
+statement_property_identify : 9 10 11 12 24 25 26 27 38 39 47 48
+statement_property_restriction : 35 37
+statement_reserved_word : 9 10 11 12 24 25 26 27 47 48
 
 Parsing method: LALR
 
@@ -180,8 +201,10 @@ state 0
     (0) S' -> . statement
     (1) statement -> . Class CLASS_IDENTIFIER SubClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals
     (23) statement -> . Class CLASS_IDENTIFIER statement_defined_class_equivalent statement_class_individuals
-    (33) statement -> . Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check
-    (36) statement -> . Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check
+    (33) statement -> . Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER COMMA closed_axiom_mandatory
+    (42) statement -> . Class CLASS_IDENTIFIER EquivalentTo nested_descriptions
+    (49) statement -> . Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check
+    (52) statement -> . Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check
 
     Class           shift and go to state 2
 
@@ -197,8 +220,10 @@ state 2
 
     (1) statement -> Class . CLASS_IDENTIFIER SubClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals
     (23) statement -> Class . CLASS_IDENTIFIER statement_defined_class_equivalent statement_class_individuals
-    (33) statement -> Class . CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check
-    (36) statement -> Class . CLASS_IDENTIFIER EquivalentTo statement_covered_class_check
+    (33) statement -> Class . CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER COMMA closed_axiom_mandatory
+    (42) statement -> Class . CLASS_IDENTIFIER EquivalentTo nested_descriptions
+    (49) statement -> Class . CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check
+    (52) statement -> Class . CLASS_IDENTIFIER EquivalentTo statement_covered_class_check
 
     CLASS_IDENTIFIER shift and go to state 3
 
@@ -207,8 +232,10 @@ state 3
 
     (1) statement -> Class CLASS_IDENTIFIER . SubClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals
     (23) statement -> Class CLASS_IDENTIFIER . statement_defined_class_equivalent statement_class_individuals
-    (33) statement -> Class CLASS_IDENTIFIER . EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check
-    (36) statement -> Class CLASS_IDENTIFIER . EquivalentTo statement_covered_class_check
+    (33) statement -> Class CLASS_IDENTIFIER . SubClassOf CLASS_IDENTIFIER COMMA closed_axiom_mandatory
+    (42) statement -> Class CLASS_IDENTIFIER . EquivalentTo nested_descriptions
+    (49) statement -> Class CLASS_IDENTIFIER . EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check
+    (52) statement -> Class CLASS_IDENTIFIER . EquivalentTo statement_covered_class_check
     (24) statement_defined_class_equivalent -> . EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
     (25) statement_defined_class_equivalent -> . EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
     (26) statement_defined_class_equivalent -> . EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
@@ -222,6 +249,7 @@ state 3
 state 4
 
     (1) statement -> Class CLASS_IDENTIFIER SubClassOf . primitive_class_mandatory statement_class_disjoin statement_class_individuals
+    (33) statement -> Class CLASS_IDENTIFIER SubClassOf . CLASS_IDENTIFIER COMMA closed_axiom_mandatory
     (9) primitive_class_mandatory -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
     (10) primitive_class_mandatory -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER COMMA primitive_class_mandatory
     (11) primitive_class_mandatory -> . statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE
@@ -245,39 +273,56 @@ state 5
     (23) statement -> Class CLASS_IDENTIFIER statement_defined_class_equivalent . statement_class_individuals
     (19) statement_class_individuals -> . empty
     (20) statement_class_individuals -> . Individuals statement_class_individuals_check
-    (39) empty -> .
+    (55) empty -> .
 
     Individuals     shift and go to state 15
-    $end            reduce using rule 39 (empty -> .)
+    $end            reduce using rule 55 (empty -> .)
 
     statement_class_individuals    shift and go to state 13
     empty                          shift and go to state 14
 
 state 6
 
-    (33) statement -> Class CLASS_IDENTIFIER EquivalentTo . LEFT_CURLY_BRACKET statement_enumerated_class_check
-    (36) statement -> Class CLASS_IDENTIFIER EquivalentTo . statement_covered_class_check
+    (42) statement -> Class CLASS_IDENTIFIER EquivalentTo . nested_descriptions
+    (49) statement -> Class CLASS_IDENTIFIER EquivalentTo . LEFT_CURLY_BRACKET statement_enumerated_class_check
+    (52) statement -> Class CLASS_IDENTIFIER EquivalentTo . statement_covered_class_check
     (24) statement_defined_class_equivalent -> EquivalentTo . CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
     (25) statement_defined_class_equivalent -> EquivalentTo . CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
     (26) statement_defined_class_equivalent -> EquivalentTo . CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo . CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
-    (37) statement_covered_class_check -> . CLASS_IDENTIFIER
-    (38) statement_covered_class_check -> . CLASS_IDENTIFIER OR statement_covered_class_check
+    (43) nested_descriptions -> . CLASS_IDENTIFIER
+    (44) nested_descriptions -> . LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (45) nested_descriptions -> . nested_descriptions AND nested_descriptions
+    (46) nested_descriptions -> . nested_descriptions OR nested_descriptions
+    (47) nested_descriptions -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+    (48) nested_descriptions -> . statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (53) statement_covered_class_check -> . CLASS_IDENTIFIER
+    (54) statement_covered_class_check -> . CLASS_IDENTIFIER OR statement_covered_class_check
+    (6) statement_property_identify -> . PROPERTY_IDENTIFIER_has
+    (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
+    (8) statement_property_identify -> . PROPERTY_IDENTIFIER
 
-    LEFT_CURLY_BRACKET shift and go to state 17
+    LEFT_CURLY_BRACKET shift and go to state 18
     CLASS_IDENTIFIER shift and go to state 16
+    LEFT_PAREN      shift and go to state 20
+    PROPERTY_IDENTIFIER_has shift and go to state 10
+    PROPERTY_IDENTIFIER_is_Of shift and go to state 11
+    PROPERTY_IDENTIFIER shift and go to state 12
 
-    statement_covered_class_check  shift and go to state 18
+    nested_descriptions            shift and go to state 17
+    statement_covered_class_check  shift and go to state 19
+    statement_property_identify    shift and go to state 21
 
 state 7
 
+    (33) statement -> Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER . COMMA closed_axiom_mandatory
     (13) primitive_class_mandatory -> CLASS_IDENTIFIER .
     (14) primitive_class_mandatory -> CLASS_IDENTIFIER . COMMA primitive_class_mandatory
 
+    COMMA           shift and go to state 22
     DisjointClasses reduce using rule 13 (primitive_class_mandatory -> CLASS_IDENTIFIER .)
     Individuals     reduce using rule 13 (primitive_class_mandatory -> CLASS_IDENTIFIER .)
     $end            reduce using rule 13 (primitive_class_mandatory -> CLASS_IDENTIFIER .)
-    COMMA           shift and go to state 19
 
 
 state 8
@@ -285,14 +330,14 @@ state 8
     (1) statement -> Class CLASS_IDENTIFIER SubClassOf primitive_class_mandatory . statement_class_disjoin statement_class_individuals
     (15) statement_class_disjoin -> . empty
     (16) statement_class_disjoin -> . DisjointClasses statement_class_disjoin_check
-    (39) empty -> .
+    (55) empty -> .
 
-    DisjointClasses shift and go to state 22
-    Individuals     reduce using rule 39 (empty -> .)
-    $end            reduce using rule 39 (empty -> .)
+    DisjointClasses shift and go to state 25
+    Individuals     reduce using rule 55 (empty -> .)
+    $end            reduce using rule 55 (empty -> .)
 
-    statement_class_disjoin        shift and go to state 20
-    empty                          shift and go to state 21
+    statement_class_disjoin        shift and go to state 23
+    empty                          shift and go to state 24
 
 state 9
 
@@ -305,12 +350,12 @@ state 9
     (4) statement_reserved_word -> . MIN
     (5) statement_reserved_word -> . MAX
 
-    SOME            shift and go to state 24
-    EXACTLY         shift and go to state 25
-    MIN             shift and go to state 26
-    MAX             shift and go to state 27
+    SOME            shift and go to state 27
+    EXACTLY         shift and go to state 28
+    MIN             shift and go to state 29
+    MAX             shift and go to state 30
 
-    statement_reserved_word        shift and go to state 23
+    statement_reserved_word        shift and go to state 26
 
 state 10
 
@@ -320,6 +365,7 @@ state 10
     EXACTLY         reduce using rule 6 (statement_property_identify -> PROPERTY_IDENTIFIER_has .)
     MIN             reduce using rule 6 (statement_property_identify -> PROPERTY_IDENTIFIER_has .)
     MAX             reduce using rule 6 (statement_property_identify -> PROPERTY_IDENTIFIER_has .)
+    ONLY            reduce using rule 6 (statement_property_identify -> PROPERTY_IDENTIFIER_has .)
 
 
 state 11
@@ -330,6 +376,7 @@ state 11
     EXACTLY         reduce using rule 7 (statement_property_identify -> PROPERTY_IDENTIFIER_is_Of .)
     MIN             reduce using rule 7 (statement_property_identify -> PROPERTY_IDENTIFIER_is_Of .)
     MAX             reduce using rule 7 (statement_property_identify -> PROPERTY_IDENTIFIER_is_Of .)
+    ONLY            reduce using rule 7 (statement_property_identify -> PROPERTY_IDENTIFIER_is_Of .)
 
 
 state 12
@@ -340,6 +387,7 @@ state 12
     EXACTLY         reduce using rule 8 (statement_property_identify -> PROPERTY_IDENTIFIER .)
     MIN             reduce using rule 8 (statement_property_identify -> PROPERTY_IDENTIFIER .)
     MAX             reduce using rule 8 (statement_property_identify -> PROPERTY_IDENTIFIER .)
+    ONLY            reduce using rule 8 (statement_property_identify -> PROPERTY_IDENTIFIER .)
 
 
 state 13
@@ -362,9 +410,9 @@ state 15
     (21) statement_class_individuals_check -> . IndividualNames
     (22) statement_class_individuals_check -> . IndividualNames COMMA statement_class_individuals_check
 
-    IndividualNames shift and go to state 29
+    IndividualNames shift and go to state 32
 
-    statement_class_individuals_check shift and go to state 28
+    statement_class_individuals_check shift and go to state 31
 
 state 16
 
@@ -372,66 +420,132 @@ state 16
     (25) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER . AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER . AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER . AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
-    (37) statement_covered_class_check -> CLASS_IDENTIFIER .
-    (38) statement_covered_class_check -> CLASS_IDENTIFIER . OR statement_covered_class_check
+    (43) nested_descriptions -> CLASS_IDENTIFIER .
+    (53) statement_covered_class_check -> CLASS_IDENTIFIER .
+    (54) statement_covered_class_check -> CLASS_IDENTIFIER . OR statement_covered_class_check
 
-    AND             shift and go to state 30
-    $end            reduce using rule 37 (statement_covered_class_check -> CLASS_IDENTIFIER .)
-    OR              shift and go to state 31
+  ! shift/reduce conflict for AND resolved as shift
+  ! reduce/reduce conflict for $end resolved using rule 43 (nested_descriptions -> CLASS_IDENTIFIER .)
+  ! shift/reduce conflict for OR resolved as shift
+    AND             shift and go to state 33
+    $end            reduce using rule 43 (nested_descriptions -> CLASS_IDENTIFIER .)
+    OR              shift and go to state 34
+
+  ! AND             [ reduce using rule 43 (nested_descriptions -> CLASS_IDENTIFIER .) ]
+  ! OR              [ reduce using rule 43 (nested_descriptions -> CLASS_IDENTIFIER .) ]
+  ! $end            [ reduce using rule 53 (statement_covered_class_check -> CLASS_IDENTIFIER .) ]
 
 
 state 17
 
-    (33) statement -> Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET . statement_enumerated_class_check
-    (34) statement_enumerated_class_check -> . CLASS_IDENTIFIER RIGHT_CURLY_BRACKET
-    (35) statement_enumerated_class_check -> . CLASS_IDENTIFIER COMMA statement_enumerated_class_check
+    (42) statement -> Class CLASS_IDENTIFIER EquivalentTo nested_descriptions .
+    (45) nested_descriptions -> nested_descriptions . AND nested_descriptions
+    (46) nested_descriptions -> nested_descriptions . OR nested_descriptions
 
-    CLASS_IDENTIFIER shift and go to state 32
+    $end            reduce using rule 42 (statement -> Class CLASS_IDENTIFIER EquivalentTo nested_descriptions .)
+    AND             shift and go to state 35
+    OR              shift and go to state 36
 
-    statement_enumerated_class_check shift and go to state 33
 
 state 18
 
-    (36) statement -> Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check .
+    (49) statement -> Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET . statement_enumerated_class_check
+    (50) statement_enumerated_class_check -> . CLASS_IDENTIFIER RIGHT_CURLY_BRACKET
+    (51) statement_enumerated_class_check -> . CLASS_IDENTIFIER COMMA statement_enumerated_class_check
 
-    $end            reduce using rule 36 (statement -> Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check .)
+    CLASS_IDENTIFIER shift and go to state 37
 
+    statement_enumerated_class_check shift and go to state 38
 
 state 19
 
+    (52) statement -> Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check .
+
+    $end            reduce using rule 52 (statement -> Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check .)
+
+
+state 20
+
+    (44) nested_descriptions -> LEFT_PAREN . nested_descriptions RIGHT_PAREN
+    (43) nested_descriptions -> . CLASS_IDENTIFIER
+    (44) nested_descriptions -> . LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (45) nested_descriptions -> . nested_descriptions AND nested_descriptions
+    (46) nested_descriptions -> . nested_descriptions OR nested_descriptions
+    (47) nested_descriptions -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+    (48) nested_descriptions -> . statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (6) statement_property_identify -> . PROPERTY_IDENTIFIER_has
+    (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
+    (8) statement_property_identify -> . PROPERTY_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 40
+    LEFT_PAREN      shift and go to state 20
+    PROPERTY_IDENTIFIER_has shift and go to state 10
+    PROPERTY_IDENTIFIER_is_Of shift and go to state 11
+    PROPERTY_IDENTIFIER shift and go to state 12
+
+    nested_descriptions            shift and go to state 39
+    statement_property_identify    shift and go to state 21
+
+state 21
+
+    (47) nested_descriptions -> statement_property_identify . statement_reserved_word CLASS_IDENTIFIER
+    (48) nested_descriptions -> statement_property_identify . statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (2) statement_reserved_word -> . SOME
+    (3) statement_reserved_word -> . EXACTLY
+    (4) statement_reserved_word -> . MIN
+    (5) statement_reserved_word -> . MAX
+
+    SOME            shift and go to state 27
+    EXACTLY         shift and go to state 28
+    MIN             shift and go to state 29
+    MAX             shift and go to state 30
+
+    statement_reserved_word        shift and go to state 41
+
+state 22
+
+    (33) statement -> Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER COMMA . closed_axiom_mandatory
     (14) primitive_class_mandatory -> CLASS_IDENTIFIER COMMA . primitive_class_mandatory
+    (34) closed_axiom_mandatory -> . CLASS_IDENTIFIER
+    (35) closed_axiom_mandatory -> . statement_property_restriction
+    (36) closed_axiom_mandatory -> . CLASS_IDENTIFIER COMMA closed_axiom_mandatory
+    (37) closed_axiom_mandatory -> . statement_property_restriction COMMA closed_axiom_mandatory
     (9) primitive_class_mandatory -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
     (10) primitive_class_mandatory -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER COMMA primitive_class_mandatory
     (11) primitive_class_mandatory -> . statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE
     (12) primitive_class_mandatory -> . statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE COMMA primitive_class_mandatory
     (13) primitive_class_mandatory -> . CLASS_IDENTIFIER
     (14) primitive_class_mandatory -> . CLASS_IDENTIFIER COMMA primitive_class_mandatory
+    (38) statement_property_restriction -> . statement_property_identify SOME CLASS_IDENTIFIER
+    (39) statement_property_restriction -> . statement_property_identify ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN
     (6) statement_property_identify -> . PROPERTY_IDENTIFIER_has
     (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
     (8) statement_property_identify -> . PROPERTY_IDENTIFIER
 
-    CLASS_IDENTIFIER shift and go to state 7
+    CLASS_IDENTIFIER shift and go to state 42
     PROPERTY_IDENTIFIER_has shift and go to state 10
     PROPERTY_IDENTIFIER_is_Of shift and go to state 11
     PROPERTY_IDENTIFIER shift and go to state 12
 
-    primitive_class_mandatory      shift and go to state 34
-    statement_property_identify    shift and go to state 9
+    closed_axiom_mandatory         shift and go to state 43
+    primitive_class_mandatory      shift and go to state 44
+    statement_property_restriction shift and go to state 45
+    statement_property_identify    shift and go to state 46
 
-state 20
+state 23
 
     (1) statement -> Class CLASS_IDENTIFIER SubClassOf primitive_class_mandatory statement_class_disjoin . statement_class_individuals
     (19) statement_class_individuals -> . empty
     (20) statement_class_individuals -> . Individuals statement_class_individuals_check
-    (39) empty -> .
+    (55) empty -> .
 
     Individuals     shift and go to state 15
-    $end            reduce using rule 39 (empty -> .)
+    $end            reduce using rule 55 (empty -> .)
 
-    statement_class_individuals    shift and go to state 35
+    statement_class_individuals    shift and go to state 47
     empty                          shift and go to state 14
 
-state 21
+state 24
 
     (15) statement_class_disjoin -> empty .
 
@@ -439,112 +553,213 @@ state 21
     $end            reduce using rule 15 (statement_class_disjoin -> empty .)
 
 
-state 22
+state 25
 
     (16) statement_class_disjoin -> DisjointClasses . statement_class_disjoin_check
     (17) statement_class_disjoin_check -> . CLASS_IDENTIFIER
     (18) statement_class_disjoin_check -> . CLASS_IDENTIFIER COMMA statement_class_disjoin_check
 
-    CLASS_IDENTIFIER shift and go to state 37
+    CLASS_IDENTIFIER shift and go to state 49
 
-    statement_class_disjoin_check  shift and go to state 36
+    statement_class_disjoin_check  shift and go to state 48
 
-state 23
+state 26
 
     (9) primitive_class_mandatory -> statement_property_identify statement_reserved_word . CLASS_IDENTIFIER
     (10) primitive_class_mandatory -> statement_property_identify statement_reserved_word . CLASS_IDENTIFIER COMMA primitive_class_mandatory
     (11) primitive_class_mandatory -> statement_property_identify statement_reserved_word . NAMESPACEID DATA_TYPE
     (12) primitive_class_mandatory -> statement_property_identify statement_reserved_word . NAMESPACEID DATA_TYPE COMMA primitive_class_mandatory
 
-    CLASS_IDENTIFIER shift and go to state 38
-    NAMESPACEID     shift and go to state 39
+    CLASS_IDENTIFIER shift and go to state 50
+    NAMESPACEID     shift and go to state 51
 
 
-state 24
+state 27
 
     (2) statement_reserved_word -> SOME .
 
     CLASS_IDENTIFIER reduce using rule 2 (statement_reserved_word -> SOME .)
     NAMESPACEID     reduce using rule 2 (statement_reserved_word -> SOME .)
+    LEFT_PAREN      reduce using rule 2 (statement_reserved_word -> SOME .)
 
 
-state 25
+state 28
 
     (3) statement_reserved_word -> EXACTLY .
 
     CLASS_IDENTIFIER reduce using rule 3 (statement_reserved_word -> EXACTLY .)
     NAMESPACEID     reduce using rule 3 (statement_reserved_word -> EXACTLY .)
+    LEFT_PAREN      reduce using rule 3 (statement_reserved_word -> EXACTLY .)
 
 
-state 26
+state 29
 
     (4) statement_reserved_word -> MIN .
 
     CLASS_IDENTIFIER reduce using rule 4 (statement_reserved_word -> MIN .)
     NAMESPACEID     reduce using rule 4 (statement_reserved_word -> MIN .)
+    LEFT_PAREN      reduce using rule 4 (statement_reserved_word -> MIN .)
 
 
-state 27
+state 30
 
     (5) statement_reserved_word -> MAX .
 
     CLASS_IDENTIFIER reduce using rule 5 (statement_reserved_word -> MAX .)
     NAMESPACEID     reduce using rule 5 (statement_reserved_word -> MAX .)
+    LEFT_PAREN      reduce using rule 5 (statement_reserved_word -> MAX .)
 
 
-state 28
+state 31
 
     (20) statement_class_individuals -> Individuals statement_class_individuals_check .
 
     $end            reduce using rule 20 (statement_class_individuals -> Individuals statement_class_individuals_check .)
 
 
-state 29
+state 32
 
     (21) statement_class_individuals_check -> IndividualNames .
     (22) statement_class_individuals_check -> IndividualNames . COMMA statement_class_individuals_check
 
     $end            reduce using rule 21 (statement_class_individuals_check -> IndividualNames .)
-    COMMA           shift and go to state 40
+    COMMA           shift and go to state 52
 
 
-state 30
+state 33
 
     (24) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND . LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
     (25) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND . LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND . LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND . LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    LEFT_PAREN      shift and go to state 41
-
-
-state 31
-
-    (38) statement_covered_class_check -> CLASS_IDENTIFIER OR . statement_covered_class_check
-    (37) statement_covered_class_check -> . CLASS_IDENTIFIER
-    (38) statement_covered_class_check -> . CLASS_IDENTIFIER OR statement_covered_class_check
-
-    CLASS_IDENTIFIER shift and go to state 42
-
-    statement_covered_class_check  shift and go to state 43
-
-state 32
-
-    (34) statement_enumerated_class_check -> CLASS_IDENTIFIER . RIGHT_CURLY_BRACKET
-    (35) statement_enumerated_class_check -> CLASS_IDENTIFIER . COMMA statement_enumerated_class_check
-
-    RIGHT_CURLY_BRACKET shift and go to state 44
-    COMMA           shift and go to state 45
-
-
-state 33
-
-    (33) statement -> Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check .
-
-    $end            reduce using rule 33 (statement -> Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check .)
+    LEFT_PAREN      shift and go to state 53
 
 
 state 34
+
+    (54) statement_covered_class_check -> CLASS_IDENTIFIER OR . statement_covered_class_check
+    (53) statement_covered_class_check -> . CLASS_IDENTIFIER
+    (54) statement_covered_class_check -> . CLASS_IDENTIFIER OR statement_covered_class_check
+
+    CLASS_IDENTIFIER shift and go to state 54
+
+    statement_covered_class_check  shift and go to state 55
+
+state 35
+
+    (45) nested_descriptions -> nested_descriptions AND . nested_descriptions
+    (43) nested_descriptions -> . CLASS_IDENTIFIER
+    (44) nested_descriptions -> . LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (45) nested_descriptions -> . nested_descriptions AND nested_descriptions
+    (46) nested_descriptions -> . nested_descriptions OR nested_descriptions
+    (47) nested_descriptions -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+    (48) nested_descriptions -> . statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (6) statement_property_identify -> . PROPERTY_IDENTIFIER_has
+    (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
+    (8) statement_property_identify -> . PROPERTY_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 40
+    LEFT_PAREN      shift and go to state 20
+    PROPERTY_IDENTIFIER_has shift and go to state 10
+    PROPERTY_IDENTIFIER_is_Of shift and go to state 11
+    PROPERTY_IDENTIFIER shift and go to state 12
+
+    nested_descriptions            shift and go to state 56
+    statement_property_identify    shift and go to state 21
+
+state 36
+
+    (46) nested_descriptions -> nested_descriptions OR . nested_descriptions
+    (43) nested_descriptions -> . CLASS_IDENTIFIER
+    (44) nested_descriptions -> . LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (45) nested_descriptions -> . nested_descriptions AND nested_descriptions
+    (46) nested_descriptions -> . nested_descriptions OR nested_descriptions
+    (47) nested_descriptions -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+    (48) nested_descriptions -> . statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (6) statement_property_identify -> . PROPERTY_IDENTIFIER_has
+    (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
+    (8) statement_property_identify -> . PROPERTY_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 40
+    LEFT_PAREN      shift and go to state 20
+    PROPERTY_IDENTIFIER_has shift and go to state 10
+    PROPERTY_IDENTIFIER_is_Of shift and go to state 11
+    PROPERTY_IDENTIFIER shift and go to state 12
+
+    nested_descriptions            shift and go to state 57
+    statement_property_identify    shift and go to state 21
+
+state 37
+
+    (50) statement_enumerated_class_check -> CLASS_IDENTIFIER . RIGHT_CURLY_BRACKET
+    (51) statement_enumerated_class_check -> CLASS_IDENTIFIER . COMMA statement_enumerated_class_check
+
+    RIGHT_CURLY_BRACKET shift and go to state 58
+    COMMA           shift and go to state 59
+
+
+state 38
+
+    (49) statement -> Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check .
+
+    $end            reduce using rule 49 (statement -> Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check .)
+
+
+state 39
+
+    (44) nested_descriptions -> LEFT_PAREN nested_descriptions . RIGHT_PAREN
+    (45) nested_descriptions -> nested_descriptions . AND nested_descriptions
+    (46) nested_descriptions -> nested_descriptions . OR nested_descriptions
+
+    RIGHT_PAREN     shift and go to state 60
+    AND             shift and go to state 35
+    OR              shift and go to state 36
+
+
+state 40
+
+    (43) nested_descriptions -> CLASS_IDENTIFIER .
+
+    RIGHT_PAREN     reduce using rule 43 (nested_descriptions -> CLASS_IDENTIFIER .)
+    AND             reduce using rule 43 (nested_descriptions -> CLASS_IDENTIFIER .)
+    OR              reduce using rule 43 (nested_descriptions -> CLASS_IDENTIFIER .)
+    $end            reduce using rule 43 (nested_descriptions -> CLASS_IDENTIFIER .)
+
+
+state 41
+
+    (47) nested_descriptions -> statement_property_identify statement_reserved_word . CLASS_IDENTIFIER
+    (48) nested_descriptions -> statement_property_identify statement_reserved_word . LEFT_PAREN nested_descriptions RIGHT_PAREN
+
+    CLASS_IDENTIFIER shift and go to state 61
+    LEFT_PAREN      shift and go to state 62
+
+
+state 42
+
+    (34) closed_axiom_mandatory -> CLASS_IDENTIFIER .
+    (36) closed_axiom_mandatory -> CLASS_IDENTIFIER . COMMA closed_axiom_mandatory
+    (13) primitive_class_mandatory -> CLASS_IDENTIFIER .
+    (14) primitive_class_mandatory -> CLASS_IDENTIFIER . COMMA primitive_class_mandatory
+
+  ! reduce/reduce conflict for $end resolved using rule 13 (primitive_class_mandatory -> CLASS_IDENTIFIER .)
+    COMMA           shift and go to state 63
+    DisjointClasses reduce using rule 13 (primitive_class_mandatory -> CLASS_IDENTIFIER .)
+    Individuals     reduce using rule 13 (primitive_class_mandatory -> CLASS_IDENTIFIER .)
+    $end            reduce using rule 13 (primitive_class_mandatory -> CLASS_IDENTIFIER .)
+
+  ! $end            [ reduce using rule 34 (closed_axiom_mandatory -> CLASS_IDENTIFIER .) ]
+
+
+state 43
+
+    (33) statement -> Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER COMMA closed_axiom_mandatory .
+
+    $end            reduce using rule 33 (statement -> Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER COMMA closed_axiom_mandatory .)
+
+
+state 44
 
     (14) primitive_class_mandatory -> CLASS_IDENTIFIER COMMA primitive_class_mandatory .
 
@@ -553,14 +768,44 @@ state 34
     $end            reduce using rule 14 (primitive_class_mandatory -> CLASS_IDENTIFIER COMMA primitive_class_mandatory .)
 
 
-state 35
+state 45
+
+    (35) closed_axiom_mandatory -> statement_property_restriction .
+    (37) closed_axiom_mandatory -> statement_property_restriction . COMMA closed_axiom_mandatory
+
+    $end            reduce using rule 35 (closed_axiom_mandatory -> statement_property_restriction .)
+    COMMA           shift and go to state 64
+
+
+state 46
+
+    (9) primitive_class_mandatory -> statement_property_identify . statement_reserved_word CLASS_IDENTIFIER
+    (10) primitive_class_mandatory -> statement_property_identify . statement_reserved_word CLASS_IDENTIFIER COMMA primitive_class_mandatory
+    (11) primitive_class_mandatory -> statement_property_identify . statement_reserved_word NAMESPACEID DATA_TYPE
+    (12) primitive_class_mandatory -> statement_property_identify . statement_reserved_word NAMESPACEID DATA_TYPE COMMA primitive_class_mandatory
+    (38) statement_property_restriction -> statement_property_identify . SOME CLASS_IDENTIFIER
+    (39) statement_property_restriction -> statement_property_identify . ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN
+    (2) statement_reserved_word -> . SOME
+    (3) statement_reserved_word -> . EXACTLY
+    (4) statement_reserved_word -> . MIN
+    (5) statement_reserved_word -> . MAX
+
+    SOME            shift and go to state 65
+    ONLY            shift and go to state 66
+    EXACTLY         shift and go to state 28
+    MIN             shift and go to state 29
+    MAX             shift and go to state 30
+
+    statement_reserved_word        shift and go to state 26
+
+state 47
 
     (1) statement -> Class CLASS_IDENTIFIER SubClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals .
 
     $end            reduce using rule 1 (statement -> Class CLASS_IDENTIFIER SubClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals .)
 
 
-state 36
+state 48
 
     (16) statement_class_disjoin -> DisjointClasses statement_class_disjoin_check .
 
@@ -568,17 +813,17 @@ state 36
     $end            reduce using rule 16 (statement_class_disjoin -> DisjointClasses statement_class_disjoin_check .)
 
 
-state 37
+state 49
 
     (17) statement_class_disjoin_check -> CLASS_IDENTIFIER .
     (18) statement_class_disjoin_check -> CLASS_IDENTIFIER . COMMA statement_class_disjoin_check
 
     Individuals     reduce using rule 17 (statement_class_disjoin_check -> CLASS_IDENTIFIER .)
     $end            reduce using rule 17 (statement_class_disjoin_check -> CLASS_IDENTIFIER .)
-    COMMA           shift and go to state 46
+    COMMA           shift and go to state 67
 
 
-state 38
+state 50
 
     (9) primitive_class_mandatory -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER .
     (10) primitive_class_mandatory -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER . COMMA primitive_class_mandatory
@@ -586,28 +831,28 @@ state 38
     DisjointClasses reduce using rule 9 (primitive_class_mandatory -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER .)
     Individuals     reduce using rule 9 (primitive_class_mandatory -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER .)
     $end            reduce using rule 9 (primitive_class_mandatory -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER .)
-    COMMA           shift and go to state 47
+    COMMA           shift and go to state 68
 
 
-state 39
+state 51
 
     (11) primitive_class_mandatory -> statement_property_identify statement_reserved_word NAMESPACEID . DATA_TYPE
     (12) primitive_class_mandatory -> statement_property_identify statement_reserved_word NAMESPACEID . DATA_TYPE COMMA primitive_class_mandatory
 
-    DATA_TYPE       shift and go to state 48
+    DATA_TYPE       shift and go to state 69
 
 
-state 40
+state 52
 
     (22) statement_class_individuals_check -> IndividualNames COMMA . statement_class_individuals_check
     (21) statement_class_individuals_check -> . IndividualNames
     (22) statement_class_individuals_check -> . IndividualNames COMMA statement_class_individuals_check
 
-    IndividualNames shift and go to state 29
+    IndividualNames shift and go to state 32
 
-    statement_class_individuals_check shift and go to state 49
+    statement_class_individuals_check shift and go to state 70
 
-state 41
+state 53
 
     (24) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN . statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
     (25) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN . statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
@@ -621,52 +866,199 @@ state 41
     PROPERTY_IDENTIFIER_is_Of shift and go to state 11
     PROPERTY_IDENTIFIER shift and go to state 12
 
-    statement_property_identify    shift and go to state 50
+    statement_property_identify    shift and go to state 71
 
-state 42
+state 54
 
-    (37) statement_covered_class_check -> CLASS_IDENTIFIER .
-    (38) statement_covered_class_check -> CLASS_IDENTIFIER . OR statement_covered_class_check
+    (53) statement_covered_class_check -> CLASS_IDENTIFIER .
+    (54) statement_covered_class_check -> CLASS_IDENTIFIER . OR statement_covered_class_check
 
-    $end            reduce using rule 37 (statement_covered_class_check -> CLASS_IDENTIFIER .)
-    OR              shift and go to state 31
-
-
-state 43
-
-    (38) statement_covered_class_check -> CLASS_IDENTIFIER OR statement_covered_class_check .
-
-    $end            reduce using rule 38 (statement_covered_class_check -> CLASS_IDENTIFIER OR statement_covered_class_check .)
+    $end            reduce using rule 53 (statement_covered_class_check -> CLASS_IDENTIFIER .)
+    OR              shift and go to state 34
 
 
-state 44
+state 55
 
-    (34) statement_enumerated_class_check -> CLASS_IDENTIFIER RIGHT_CURLY_BRACKET .
+    (54) statement_covered_class_check -> CLASS_IDENTIFIER OR statement_covered_class_check .
 
-    $end            reduce using rule 34 (statement_enumerated_class_check -> CLASS_IDENTIFIER RIGHT_CURLY_BRACKET .)
+    $end            reduce using rule 54 (statement_covered_class_check -> CLASS_IDENTIFIER OR statement_covered_class_check .)
 
 
-state 45
+state 56
 
-    (35) statement_enumerated_class_check -> CLASS_IDENTIFIER COMMA . statement_enumerated_class_check
-    (34) statement_enumerated_class_check -> . CLASS_IDENTIFIER RIGHT_CURLY_BRACKET
-    (35) statement_enumerated_class_check -> . CLASS_IDENTIFIER COMMA statement_enumerated_class_check
+    (45) nested_descriptions -> nested_descriptions AND nested_descriptions .
+    (45) nested_descriptions -> nested_descriptions . AND nested_descriptions
+    (46) nested_descriptions -> nested_descriptions . OR nested_descriptions
 
-    CLASS_IDENTIFIER shift and go to state 32
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+    $end            reduce using rule 45 (nested_descriptions -> nested_descriptions AND nested_descriptions .)
+    RIGHT_PAREN     reduce using rule 45 (nested_descriptions -> nested_descriptions AND nested_descriptions .)
+    AND             shift and go to state 35
+    OR              shift and go to state 36
 
-    statement_enumerated_class_check shift and go to state 51
+  ! AND             [ reduce using rule 45 (nested_descriptions -> nested_descriptions AND nested_descriptions .) ]
+  ! OR              [ reduce using rule 45 (nested_descriptions -> nested_descriptions AND nested_descriptions .) ]
 
-state 46
+
+state 57
+
+    (46) nested_descriptions -> nested_descriptions OR nested_descriptions .
+    (45) nested_descriptions -> nested_descriptions . AND nested_descriptions
+    (46) nested_descriptions -> nested_descriptions . OR nested_descriptions
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+    $end            reduce using rule 46 (nested_descriptions -> nested_descriptions OR nested_descriptions .)
+    RIGHT_PAREN     reduce using rule 46 (nested_descriptions -> nested_descriptions OR nested_descriptions .)
+    AND             shift and go to state 35
+    OR              shift and go to state 36
+
+  ! AND             [ reduce using rule 46 (nested_descriptions -> nested_descriptions OR nested_descriptions .) ]
+  ! OR              [ reduce using rule 46 (nested_descriptions -> nested_descriptions OR nested_descriptions .) ]
+
+
+state 58
+
+    (50) statement_enumerated_class_check -> CLASS_IDENTIFIER RIGHT_CURLY_BRACKET .
+
+    $end            reduce using rule 50 (statement_enumerated_class_check -> CLASS_IDENTIFIER RIGHT_CURLY_BRACKET .)
+
+
+state 59
+
+    (51) statement_enumerated_class_check -> CLASS_IDENTIFIER COMMA . statement_enumerated_class_check
+    (50) statement_enumerated_class_check -> . CLASS_IDENTIFIER RIGHT_CURLY_BRACKET
+    (51) statement_enumerated_class_check -> . CLASS_IDENTIFIER COMMA statement_enumerated_class_check
+
+    CLASS_IDENTIFIER shift and go to state 37
+
+    statement_enumerated_class_check shift and go to state 72
+
+state 60
+
+    (44) nested_descriptions -> LEFT_PAREN nested_descriptions RIGHT_PAREN .
+
+    AND             reduce using rule 44 (nested_descriptions -> LEFT_PAREN nested_descriptions RIGHT_PAREN .)
+    OR              reduce using rule 44 (nested_descriptions -> LEFT_PAREN nested_descriptions RIGHT_PAREN .)
+    $end            reduce using rule 44 (nested_descriptions -> LEFT_PAREN nested_descriptions RIGHT_PAREN .)
+    RIGHT_PAREN     reduce using rule 44 (nested_descriptions -> LEFT_PAREN nested_descriptions RIGHT_PAREN .)
+
+
+state 61
+
+    (47) nested_descriptions -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER .
+
+    AND             reduce using rule 47 (nested_descriptions -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER .)
+    OR              reduce using rule 47 (nested_descriptions -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER .)
+    $end            reduce using rule 47 (nested_descriptions -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER .)
+    RIGHT_PAREN     reduce using rule 47 (nested_descriptions -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER .)
+
+
+state 62
+
+    (48) nested_descriptions -> statement_property_identify statement_reserved_word LEFT_PAREN . nested_descriptions RIGHT_PAREN
+    (43) nested_descriptions -> . CLASS_IDENTIFIER
+    (44) nested_descriptions -> . LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (45) nested_descriptions -> . nested_descriptions AND nested_descriptions
+    (46) nested_descriptions -> . nested_descriptions OR nested_descriptions
+    (47) nested_descriptions -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+    (48) nested_descriptions -> . statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN
+    (6) statement_property_identify -> . PROPERTY_IDENTIFIER_has
+    (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
+    (8) statement_property_identify -> . PROPERTY_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 40
+    LEFT_PAREN      shift and go to state 20
+    PROPERTY_IDENTIFIER_has shift and go to state 10
+    PROPERTY_IDENTIFIER_is_Of shift and go to state 11
+    PROPERTY_IDENTIFIER shift and go to state 12
+
+    statement_property_identify    shift and go to state 21
+    nested_descriptions            shift and go to state 73
+
+state 63
+
+    (36) closed_axiom_mandatory -> CLASS_IDENTIFIER COMMA . closed_axiom_mandatory
+    (14) primitive_class_mandatory -> CLASS_IDENTIFIER COMMA . primitive_class_mandatory
+    (34) closed_axiom_mandatory -> . CLASS_IDENTIFIER
+    (35) closed_axiom_mandatory -> . statement_property_restriction
+    (36) closed_axiom_mandatory -> . CLASS_IDENTIFIER COMMA closed_axiom_mandatory
+    (37) closed_axiom_mandatory -> . statement_property_restriction COMMA closed_axiom_mandatory
+    (9) primitive_class_mandatory -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+    (10) primitive_class_mandatory -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER COMMA primitive_class_mandatory
+    (11) primitive_class_mandatory -> . statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE
+    (12) primitive_class_mandatory -> . statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE COMMA primitive_class_mandatory
+    (13) primitive_class_mandatory -> . CLASS_IDENTIFIER
+    (14) primitive_class_mandatory -> . CLASS_IDENTIFIER COMMA primitive_class_mandatory
+    (38) statement_property_restriction -> . statement_property_identify SOME CLASS_IDENTIFIER
+    (39) statement_property_restriction -> . statement_property_identify ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN
+    (6) statement_property_identify -> . PROPERTY_IDENTIFIER_has
+    (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
+    (8) statement_property_identify -> . PROPERTY_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 42
+    PROPERTY_IDENTIFIER_has shift and go to state 10
+    PROPERTY_IDENTIFIER_is_Of shift and go to state 11
+    PROPERTY_IDENTIFIER shift and go to state 12
+
+    closed_axiom_mandatory         shift and go to state 74
+    primitive_class_mandatory      shift and go to state 44
+    statement_property_restriction shift and go to state 45
+    statement_property_identify    shift and go to state 46
+
+state 64
+
+    (37) closed_axiom_mandatory -> statement_property_restriction COMMA . closed_axiom_mandatory
+    (34) closed_axiom_mandatory -> . CLASS_IDENTIFIER
+    (35) closed_axiom_mandatory -> . statement_property_restriction
+    (36) closed_axiom_mandatory -> . CLASS_IDENTIFIER COMMA closed_axiom_mandatory
+    (37) closed_axiom_mandatory -> . statement_property_restriction COMMA closed_axiom_mandatory
+    (38) statement_property_restriction -> . statement_property_identify SOME CLASS_IDENTIFIER
+    (39) statement_property_restriction -> . statement_property_identify ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN
+    (6) statement_property_identify -> . PROPERTY_IDENTIFIER_has
+    (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
+    (8) statement_property_identify -> . PROPERTY_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 76
+    PROPERTY_IDENTIFIER_has shift and go to state 10
+    PROPERTY_IDENTIFIER_is_Of shift and go to state 11
+    PROPERTY_IDENTIFIER shift and go to state 12
+
+    statement_property_restriction shift and go to state 45
+    closed_axiom_mandatory         shift and go to state 75
+    statement_property_identify    shift and go to state 77
+
+state 65
+
+    (38) statement_property_restriction -> statement_property_identify SOME . CLASS_IDENTIFIER
+    (2) statement_reserved_word -> SOME .
+
+  ! shift/reduce conflict for CLASS_IDENTIFIER resolved as shift
+    CLASS_IDENTIFIER shift and go to state 78
+    NAMESPACEID     reduce using rule 2 (statement_reserved_word -> SOME .)
+
+  ! CLASS_IDENTIFIER [ reduce using rule 2 (statement_reserved_word -> SOME .) ]
+
+
+state 66
+
+    (39) statement_property_restriction -> statement_property_identify ONLY . LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN
+
+    LEFT_PAREN      shift and go to state 79
+
+
+state 67
 
     (18) statement_class_disjoin_check -> CLASS_IDENTIFIER COMMA . statement_class_disjoin_check
     (17) statement_class_disjoin_check -> . CLASS_IDENTIFIER
     (18) statement_class_disjoin_check -> . CLASS_IDENTIFIER COMMA statement_class_disjoin_check
 
-    CLASS_IDENTIFIER shift and go to state 37
+    CLASS_IDENTIFIER shift and go to state 49
 
-    statement_class_disjoin_check  shift and go to state 52
+    statement_class_disjoin_check  shift and go to state 80
 
-state 47
+state 68
 
     (10) primitive_class_mandatory -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER COMMA . primitive_class_mandatory
     (9) primitive_class_mandatory -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
@@ -679,15 +1071,15 @@ state 47
     (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
     (8) statement_property_identify -> . PROPERTY_IDENTIFIER
 
-    CLASS_IDENTIFIER shift and go to state 7
+    CLASS_IDENTIFIER shift and go to state 81
     PROPERTY_IDENTIFIER_has shift and go to state 10
     PROPERTY_IDENTIFIER_is_Of shift and go to state 11
     PROPERTY_IDENTIFIER shift and go to state 12
 
     statement_property_identify    shift and go to state 9
-    primitive_class_mandatory      shift and go to state 53
+    primitive_class_mandatory      shift and go to state 82
 
-state 48
+state 69
 
     (11) primitive_class_mandatory -> statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE .
     (12) primitive_class_mandatory -> statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE . COMMA primitive_class_mandatory
@@ -695,17 +1087,17 @@ state 48
     DisjointClasses reduce using rule 11 (primitive_class_mandatory -> statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE .)
     Individuals     reduce using rule 11 (primitive_class_mandatory -> statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE .)
     $end            reduce using rule 11 (primitive_class_mandatory -> statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE .)
-    COMMA           shift and go to state 54
+    COMMA           shift and go to state 83
 
 
-state 49
+state 70
 
     (22) statement_class_individuals_check -> IndividualNames COMMA statement_class_individuals_check .
 
     $end            reduce using rule 22 (statement_class_individuals_check -> IndividualNames COMMA statement_class_individuals_check .)
 
 
-state 50
+state 71
 
     (24) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify . statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
     (25) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify . statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
@@ -716,21 +1108,82 @@ state 50
     (4) statement_reserved_word -> . MIN
     (5) statement_reserved_word -> . MAX
 
-    SOME            shift and go to state 24
-    EXACTLY         shift and go to state 25
-    MIN             shift and go to state 26
-    MAX             shift and go to state 27
+    SOME            shift and go to state 27
+    EXACTLY         shift and go to state 28
+    MIN             shift and go to state 29
+    MAX             shift and go to state 30
 
-    statement_reserved_word        shift and go to state 55
+    statement_reserved_word        shift and go to state 84
 
-state 51
+state 72
 
-    (35) statement_enumerated_class_check -> CLASS_IDENTIFIER COMMA statement_enumerated_class_check .
+    (51) statement_enumerated_class_check -> CLASS_IDENTIFIER COMMA statement_enumerated_class_check .
 
-    $end            reduce using rule 35 (statement_enumerated_class_check -> CLASS_IDENTIFIER COMMA statement_enumerated_class_check .)
+    $end            reduce using rule 51 (statement_enumerated_class_check -> CLASS_IDENTIFIER COMMA statement_enumerated_class_check .)
 
 
-state 52
+state 73
+
+    (48) nested_descriptions -> statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions . RIGHT_PAREN
+    (45) nested_descriptions -> nested_descriptions . AND nested_descriptions
+    (46) nested_descriptions -> nested_descriptions . OR nested_descriptions
+
+    RIGHT_PAREN     shift and go to state 85
+    AND             shift and go to state 35
+    OR              shift and go to state 36
+
+
+state 74
+
+    (36) closed_axiom_mandatory -> CLASS_IDENTIFIER COMMA closed_axiom_mandatory .
+
+    $end            reduce using rule 36 (closed_axiom_mandatory -> CLASS_IDENTIFIER COMMA closed_axiom_mandatory .)
+
+
+state 75
+
+    (37) closed_axiom_mandatory -> statement_property_restriction COMMA closed_axiom_mandatory .
+
+    $end            reduce using rule 37 (closed_axiom_mandatory -> statement_property_restriction COMMA closed_axiom_mandatory .)
+
+
+state 76
+
+    (34) closed_axiom_mandatory -> CLASS_IDENTIFIER .
+    (36) closed_axiom_mandatory -> CLASS_IDENTIFIER . COMMA closed_axiom_mandatory
+
+    $end            reduce using rule 34 (closed_axiom_mandatory -> CLASS_IDENTIFIER .)
+    COMMA           shift and go to state 86
+
+
+state 77
+
+    (38) statement_property_restriction -> statement_property_identify . SOME CLASS_IDENTIFIER
+    (39) statement_property_restriction -> statement_property_identify . ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN
+
+    SOME            shift and go to state 87
+    ONLY            shift and go to state 66
+
+
+state 78
+
+    (38) statement_property_restriction -> statement_property_identify SOME CLASS_IDENTIFIER .
+
+    COMMA           reduce using rule 38 (statement_property_restriction -> statement_property_identify SOME CLASS_IDENTIFIER .)
+    $end            reduce using rule 38 (statement_property_restriction -> statement_property_identify SOME CLASS_IDENTIFIER .)
+
+
+state 79
+
+    (39) statement_property_restriction -> statement_property_identify ONLY LEFT_PAREN . closed_axiom_restriction_combination RIGHT_PAREN
+    (40) closed_axiom_restriction_combination -> . CLASS_IDENTIFIER
+    (41) closed_axiom_restriction_combination -> . CLASS_IDENTIFIER OR closed_axiom_restriction_combination
+
+    CLASS_IDENTIFIER shift and go to state 89
+
+    closed_axiom_restriction_combination shift and go to state 88
+
+state 80
 
     (18) statement_class_disjoin_check -> CLASS_IDENTIFIER COMMA statement_class_disjoin_check .
 
@@ -738,7 +1191,18 @@ state 52
     $end            reduce using rule 18 (statement_class_disjoin_check -> CLASS_IDENTIFIER COMMA statement_class_disjoin_check .)
 
 
-state 53
+state 81
+
+    (13) primitive_class_mandatory -> CLASS_IDENTIFIER .
+    (14) primitive_class_mandatory -> CLASS_IDENTIFIER . COMMA primitive_class_mandatory
+
+    DisjointClasses reduce using rule 13 (primitive_class_mandatory -> CLASS_IDENTIFIER .)
+    Individuals     reduce using rule 13 (primitive_class_mandatory -> CLASS_IDENTIFIER .)
+    $end            reduce using rule 13 (primitive_class_mandatory -> CLASS_IDENTIFIER .)
+    COMMA           shift and go to state 90
+
+
+state 82
 
     (10) primitive_class_mandatory -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER COMMA primitive_class_mandatory .
 
@@ -747,7 +1211,7 @@ state 53
     $end            reduce using rule 10 (primitive_class_mandatory -> statement_property_identify statement_reserved_word CLASS_IDENTIFIER COMMA primitive_class_mandatory .)
 
 
-state 54
+state 83
 
     (12) primitive_class_mandatory -> statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE COMMA . primitive_class_mandatory
     (9) primitive_class_mandatory -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
@@ -760,26 +1224,102 @@ state 54
     (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
     (8) statement_property_identify -> . PROPERTY_IDENTIFIER
 
-    CLASS_IDENTIFIER shift and go to state 7
+    CLASS_IDENTIFIER shift and go to state 81
     PROPERTY_IDENTIFIER_has shift and go to state 10
     PROPERTY_IDENTIFIER_is_Of shift and go to state 11
     PROPERTY_IDENTIFIER shift and go to state 12
 
     statement_property_identify    shift and go to state 9
-    primitive_class_mandatory      shift and go to state 56
+    primitive_class_mandatory      shift and go to state 91
 
-state 55
+state 84
 
     (24) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word . CLASS_IDENTIFIER RIGHT_PAREN
     (25) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word . CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word . NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word . NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    CLASS_IDENTIFIER shift and go to state 57
-    NAMESPACEID     shift and go to state 58
+    CLASS_IDENTIFIER shift and go to state 92
+    NAMESPACEID     shift and go to state 93
 
 
-state 56
+state 85
+
+    (48) nested_descriptions -> statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN .
+
+    AND             reduce using rule 48 (nested_descriptions -> statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN .)
+    OR              reduce using rule 48 (nested_descriptions -> statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN .)
+    $end            reduce using rule 48 (nested_descriptions -> statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN .)
+    RIGHT_PAREN     reduce using rule 48 (nested_descriptions -> statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN .)
+
+
+state 86
+
+    (36) closed_axiom_mandatory -> CLASS_IDENTIFIER COMMA . closed_axiom_mandatory
+    (34) closed_axiom_mandatory -> . CLASS_IDENTIFIER
+    (35) closed_axiom_mandatory -> . statement_property_restriction
+    (36) closed_axiom_mandatory -> . CLASS_IDENTIFIER COMMA closed_axiom_mandatory
+    (37) closed_axiom_mandatory -> . statement_property_restriction COMMA closed_axiom_mandatory
+    (38) statement_property_restriction -> . statement_property_identify SOME CLASS_IDENTIFIER
+    (39) statement_property_restriction -> . statement_property_identify ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN
+    (6) statement_property_identify -> . PROPERTY_IDENTIFIER_has
+    (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
+    (8) statement_property_identify -> . PROPERTY_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 76
+    PROPERTY_IDENTIFIER_has shift and go to state 10
+    PROPERTY_IDENTIFIER_is_Of shift and go to state 11
+    PROPERTY_IDENTIFIER shift and go to state 12
+
+    closed_axiom_mandatory         shift and go to state 74
+    statement_property_restriction shift and go to state 45
+    statement_property_identify    shift and go to state 77
+
+state 87
+
+    (38) statement_property_restriction -> statement_property_identify SOME . CLASS_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 78
+
+
+state 88
+
+    (39) statement_property_restriction -> statement_property_identify ONLY LEFT_PAREN closed_axiom_restriction_combination . RIGHT_PAREN
+
+    RIGHT_PAREN     shift and go to state 94
+
+
+state 89
+
+    (40) closed_axiom_restriction_combination -> CLASS_IDENTIFIER .
+    (41) closed_axiom_restriction_combination -> CLASS_IDENTIFIER . OR closed_axiom_restriction_combination
+
+    RIGHT_PAREN     reduce using rule 40 (closed_axiom_restriction_combination -> CLASS_IDENTIFIER .)
+    OR              shift and go to state 95
+
+
+state 90
+
+    (14) primitive_class_mandatory -> CLASS_IDENTIFIER COMMA . primitive_class_mandatory
+    (9) primitive_class_mandatory -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+    (10) primitive_class_mandatory -> . statement_property_identify statement_reserved_word CLASS_IDENTIFIER COMMA primitive_class_mandatory
+    (11) primitive_class_mandatory -> . statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE
+    (12) primitive_class_mandatory -> . statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE COMMA primitive_class_mandatory
+    (13) primitive_class_mandatory -> . CLASS_IDENTIFIER
+    (14) primitive_class_mandatory -> . CLASS_IDENTIFIER COMMA primitive_class_mandatory
+    (6) statement_property_identify -> . PROPERTY_IDENTIFIER_has
+    (7) statement_property_identify -> . PROPERTY_IDENTIFIER_is_Of
+    (8) statement_property_identify -> . PROPERTY_IDENTIFIER
+
+    CLASS_IDENTIFIER shift and go to state 81
+    PROPERTY_IDENTIFIER_has shift and go to state 10
+    PROPERTY_IDENTIFIER_is_Of shift and go to state 11
+    PROPERTY_IDENTIFIER shift and go to state 12
+
+    primitive_class_mandatory      shift and go to state 44
+    statement_property_identify    shift and go to state 9
+
+state 91
 
     (12) primitive_class_mandatory -> statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE COMMA primitive_class_mandatory .
 
@@ -788,41 +1328,66 @@ state 56
     $end            reduce using rule 12 (primitive_class_mandatory -> statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE COMMA primitive_class_mandatory .)
 
 
-state 57
+state 92
 
     (24) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER . RIGHT_PAREN
     (25) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER . RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    RIGHT_PAREN     shift and go to state 59
+    RIGHT_PAREN     shift and go to state 96
 
 
-state 58
+state 93
 
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID . DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID . DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    DATA_TYPE       shift and go to state 60
+    DATA_TYPE       shift and go to state 97
 
 
-state 59
+state 94
+
+    (39) statement_property_restriction -> statement_property_identify ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN .
+
+    COMMA           reduce using rule 39 (statement_property_restriction -> statement_property_identify ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN .)
+    $end            reduce using rule 39 (statement_property_restriction -> statement_property_identify ONLY LEFT_PAREN closed_axiom_restriction_combination RIGHT_PAREN .)
+
+
+state 95
+
+    (41) closed_axiom_restriction_combination -> CLASS_IDENTIFIER OR . closed_axiom_restriction_combination
+    (40) closed_axiom_restriction_combination -> . CLASS_IDENTIFIER
+    (41) closed_axiom_restriction_combination -> . CLASS_IDENTIFIER OR closed_axiom_restriction_combination
+
+    CLASS_IDENTIFIER shift and go to state 89
+
+    closed_axiom_restriction_combination shift and go to state 98
+
+state 96
 
     (24) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN .
     (25) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN . COMMA statement_defined_class_equivalent
 
     Individuals     reduce using rule 24 (statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN .)
     $end            reduce using rule 24 (statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN .)
-    COMMA           shift and go to state 61
+    COMMA           shift and go to state 99
 
 
-state 60
+state 97
 
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE . LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE . LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    LEFT_BRACKET    shift and go to state 62
+    LEFT_BRACKET    shift and go to state 100
 
 
-state 61
+state 98
+
+    (41) closed_axiom_restriction_combination -> CLASS_IDENTIFIER OR closed_axiom_restriction_combination .
+
+    RIGHT_PAREN     reduce using rule 41 (closed_axiom_restriction_combination -> CLASS_IDENTIFIER OR closed_axiom_restriction_combination .)
+
+
+state 99
 
     (25) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA . statement_defined_class_equivalent
     (24) statement_defined_class_equivalent -> . EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
@@ -830,11 +1395,11 @@ state 61
     (26) statement_defined_class_equivalent -> . EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> . EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    EquivalentTo    shift and go to state 63
+    EquivalentTo    shift and go to state 101
 
-    statement_defined_class_equivalent shift and go to state 64
+    statement_defined_class_equivalent shift and go to state 102
 
-state 62
+state 100
 
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET . statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET . statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
@@ -844,23 +1409,23 @@ state 62
     (31) statement_operator_symbol -> . GREATER_THAN EQUALS
     (32) statement_operator_symbol -> . LESS_THAN EQUALS
 
-    LESS_THAN       shift and go to state 66
-    GREATER_THAN    shift and go to state 67
-    EQUALS          shift and go to state 68
+    LESS_THAN       shift and go to state 104
+    GREATER_THAN    shift and go to state 105
+    EQUALS          shift and go to state 106
 
-    statement_operator_symbol      shift and go to state 65
+    statement_operator_symbol      shift and go to state 103
 
-state 63
+state 101
 
     (24) statement_defined_class_equivalent -> EquivalentTo . CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
     (25) statement_defined_class_equivalent -> EquivalentTo . CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
     (26) statement_defined_class_equivalent -> EquivalentTo . CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo . CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    CLASS_IDENTIFIER shift and go to state 69
+    CLASS_IDENTIFIER shift and go to state 107
 
 
-state 64
+state 102
 
     (25) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent .
 
@@ -868,90 +1433,90 @@ state 64
     $end            reduce using rule 25 (statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent .)
 
 
-state 65
+state 103
 
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol . NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol . NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    NUMBER          shift and go to state 70
+    NUMBER          shift and go to state 108
 
 
-state 66
+state 104
 
     (28) statement_operator_symbol -> LESS_THAN .
     (32) statement_operator_symbol -> LESS_THAN . EQUALS
 
     NUMBER          reduce using rule 28 (statement_operator_symbol -> LESS_THAN .)
-    EQUALS          shift and go to state 71
+    EQUALS          shift and go to state 109
 
 
-state 67
+state 105
 
     (29) statement_operator_symbol -> GREATER_THAN .
     (31) statement_operator_symbol -> GREATER_THAN . EQUALS
 
     NUMBER          reduce using rule 29 (statement_operator_symbol -> GREATER_THAN .)
-    EQUALS          shift and go to state 72
+    EQUALS          shift and go to state 110
 
 
-state 68
+state 106
 
     (30) statement_operator_symbol -> EQUALS .
 
     NUMBER          reduce using rule 30 (statement_operator_symbol -> EQUALS .)
 
 
-state 69
+state 107
 
     (24) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER . AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
     (25) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER . AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER . AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER . AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    AND             shift and go to state 30
+    AND             shift and go to state 33
 
 
-state 70
+state 108
 
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER . RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER . RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    RIGHT_BRACKET   shift and go to state 73
+    RIGHT_BRACKET   shift and go to state 111
 
 
-state 71
+state 109
 
     (32) statement_operator_symbol -> LESS_THAN EQUALS .
 
     NUMBER          reduce using rule 32 (statement_operator_symbol -> LESS_THAN EQUALS .)
 
 
-state 72
+state 110
 
     (31) statement_operator_symbol -> GREATER_THAN EQUALS .
 
     NUMBER          reduce using rule 31 (statement_operator_symbol -> GREATER_THAN EQUALS .)
 
 
-state 73
+state 111
 
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET . RIGHT_PAREN
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET . RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    RIGHT_PAREN     shift and go to state 74
+    RIGHT_PAREN     shift and go to state 112
 
 
-state 74
+state 112
 
     (26) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN .
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN . COMMA statement_defined_class_equivalent
 
     Individuals     reduce using rule 26 (statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN .)
     $end            reduce using rule 26 (statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN .)
-    COMMA           shift and go to state 75
+    COMMA           shift and go to state 113
 
 
-state 75
+state 113
 
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA . statement_defined_class_equivalent
     (24) statement_defined_class_equivalent -> . EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
@@ -959,14 +1524,28 @@ state 75
     (26) statement_defined_class_equivalent -> . EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
     (27) statement_defined_class_equivalent -> . EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent
 
-    EquivalentTo    shift and go to state 63
+    EquivalentTo    shift and go to state 101
 
-    statement_defined_class_equivalent shift and go to state 76
+    statement_defined_class_equivalent shift and go to state 114
 
-state 76
+state 114
 
     (27) statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent .
 
     Individuals     reduce using rule 27 (statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent .)
     $end            reduce using rule 27 (statement_defined_class_equivalent -> EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent .)
 
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for AND in state 16 resolved as shift
+WARNING: shift/reduce conflict for OR in state 16 resolved as shift
+WARNING: shift/reduce conflict for AND in state 56 resolved as shift
+WARNING: shift/reduce conflict for OR in state 56 resolved as shift
+WARNING: shift/reduce conflict for AND in state 57 resolved as shift
+WARNING: shift/reduce conflict for OR in state 57 resolved as shift
+WARNING: shift/reduce conflict for CLASS_IDENTIFIER in state 65 resolved as shift
+WARNING: reduce/reduce conflict in state 16 resolved using rule (nested_descriptions -> CLASS_IDENTIFIER)
+WARNING: rejected rule (statement_covered_class_check -> CLASS_IDENTIFIER) in state 16
+WARNING: reduce/reduce conflict in state 42 resolved using rule (primitive_class_mandatory -> CLASS_IDENTIFIER)
+WARNING: rejected rule (closed_axiom_mandatory -> CLASS_IDENTIFIER) in state 42

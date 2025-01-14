@@ -1,2 +1,4 @@
- Class: Spiciness
- EquivalentTo: Hot or Medium or Mild
+Class: SpicyPizza
+EquivalentTo:
+Pizza
+and (hasTopping some (hasSpiciness value Hot))
