@@ -8,8 +8,16 @@ tokens = (
     'MINUS',
     'TIMES',
     'DIVIDE',
-    'LPAREN',
-    'RPAREN',
+    'COMMA',
+    'LEFT_BRACKET',
+    'RIGHT_BRACKET',
+    'LEFT_CURLY_BRACKET',
+    'RIGHT_CURLY_BRACKET',
+    'LEFT_PAREN',
+    'RIGHT_PAREN',
+    'LESS_THAN',
+    'GREATER_THAN',
+    'EQUALS',
     'NOT',
     'AND',
     'OR',
@@ -26,7 +34,6 @@ tokens = (
     'SubClassOf',
     'DisjointClasses',
     'IndividualNames',
-    'SpecialCharacters',
     'PROPERTY_IDENTIFIER',
     'PROPERTY_IDENTIFIER_has',
     'PROPERTY_IDENTIFIER_is_Of',
@@ -117,6 +124,7 @@ namespacesAndTypes= {
     'NMTOKEN' : 'NMTOKEN',
     'nonNegativeInteger' : 'nonNegativeInteger',
 }
+
 # expressçao regular para palavras reservadas que podem ter variações de maiusculas e minusculas,como por exemplo: not, Not, NOT, nOt.
 RESERVED_GERAL = r'\b([Nn][Oo][Tt]|[Aa][Nn][Dd]|[Oo][Rr]|[Ss][Oo][Mm][Ee]|[Aa][Ll][Ll]|[Vv][Aa][Ll][Uu][Ee]|[Mm][Ii][Nn]|[Mm][Aa][Xx]|[Ee][Xx][Aa][Cc][Tt][Ll][Yy]|[Tt][Hh][Aa][Tt])\b'
 
@@ -128,6 +136,8 @@ INDIVIDUALS_NAMES = r'\b[A-Z][a-zA-Z]*\d+\b'
 
 # expressão regular para identificar caracteres especiais
 SPECIAL_CARACTERES = r'[\(\)\[\]\{\}\,\<\>\"\=]'
+
+
 
 # expressão regular para identificar classes
 CLASS_IDENTIFIER = r'\b[A-Z][a-zA-Z]*(\s[A-Z][a-zA-Z]*)*\b(?!:)'
@@ -144,6 +154,66 @@ t_TIMES = r'\*'
 t_DIVIDE = r'/'
 
 #funções para identificar os tokens. cada função tem uma expressão regular que identifica o token(o que está dentro do parênteses de @token é a expressão regular que identifica aquele token) e retorna o token identificado.
+
+def t_COMMA(t):
+    r'\,'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_LEFT_BRACKET(t):
+    r'\['
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_RIGHT_BRACKET(t):
+    r'\]'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_LEFT_CURLY_BRACKET(t):
+    r'\{'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_RIGHT_CURLY_BRACKET(t):
+
+    r'\}'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_LEFT_PAREN(t):
+    
+    r'\('
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_RIGHT_PAREN(t):
+    
+    r'\)'
+    t.lexer.num_special_characters += 1
+    return t
+
+
+def t_LESS_THAN(t):
+
+    r'\<'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_GREATER_THAN(t):
+
+    r'\>'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_EQUALS(t):
+    
+    r'\='
+    t.lexer.num_special_characters += 1
+    return t
+
+
+
 
 #funçaõ para reconhecer números
 def t_NUMBER(t):
@@ -205,7 +275,7 @@ def t_INDIVIDUAL_NAMES(t):
 #função para reconhecer caracteres especiais
 @TOKEN(SPECIAL_CARACTERES)
 def t_SPECIAL_CHARACTERS(t):
-    t.type = "SpecialCharacters"
+    t.type = t.value
     t.lexer.num_special_characters += 1
     return t
 
