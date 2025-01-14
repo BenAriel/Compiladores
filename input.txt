@@ -1,4 +1,33 @@
-Class: SpicyPizza
+Class: Pizza
+SubClassOf:
+hasBase some PizzaBase,
+hasCaloricContent some xsd:integer
+DisjointClasses:
+Pizza, PizzaBase, PizzaTopping
+Individuals:
+CustomPizza1,
+CustomPizza2
+
+Class: Spiciness
+EquivalentTo: {Hot , Medium , Mild}
+
+Class: MargheritaPizza
+SubClassOf:
+NamedPizza,
+hasTopping some MozzarellaTopping,
+hasTopping some TomatoTopping,
+hasTopping only (MozzarellaTopping or TomatoTopping)
+
+Class: Spiciness
+EquivalentTo: Hot or Medium or Mild
+
+Class: CheesyPizza
 EquivalentTo:
-Pizza
-and (hasTopping some (hasSpiciness value Hot))
+Pizza and (hasTopping some CheeseTopping)
+
+Individuals:
+CheesyPizza1
+
+Class: HighCaloriePizza
+EquivalentTo:
+Pizza and (hasCaloricContent some xsd:integer[>= 400])

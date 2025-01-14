@@ -1,6 +1,10 @@
 import ply.yacc as yacc
 from Lex import tokens  # Importa os tokens definidos no léxico
 
+def p_statements(p):
+    '''statements : statement
+                  | statement statements'''
+
 # Regras de produção1
 
 # funções para classe primitiva
