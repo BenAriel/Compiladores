@@ -1,36 +1,17 @@
-Class: Pizza
-SubClassOf:
-hasBase some PizzaBase,
-hasCaloricContent some xsd:integer
-DisjointClasses:
-Pizza, PizzaBase, PizzaTopping
-Individuals:
-CustomPizza1,
-CustomPizza2
-
-Class: Spiciness
-EquivalentTo: {Hot , Medium , Mild}
-
-Class: CheesyPizza
-EquivalentTo:
-Pizza and (hasTopping some CheeseTopping)
-Individuals:
-CheesyPizza1
-Class: HighCaloriePizza
-EquivalentTo:
-Pizza and (hasCaloricContent some xsd:integer[>= 400])
-
-Class: MargheritaPizza
-SubClassOf:
-NamedPizza,
-hasTopping some MozzarellaTopping,
-hasTopping some TomatoTopping,
-hasTopping only (MozzarellaTopping or TomatoTopping)
-
-Class: Spiciness
-EquivalentTo: Hot or Medium or Mild
-
-Class: SpicyPizza
-EquivalentTo:
-Pizza
-and (hasTopping some (hasSpiciness value Hot))
+Class: RegulatoryActivity
+    EquivalentTo: ValueActivity
+        and ((bundles some
+                (CnAObject or CoreObject or PoPObject)) or
+             (consumes some CounterObject))
+        and ((grants some CnAObject) or
+             (transfers some
+                (CoreObject or PoPObject)))
+        and (isAuthorityOf some Regulator)
+        and (hasTransaction some ValueTransaction)
+        and (bundles only
+                (CnAObject or CoreObject or PoPObject))
+        and (consumes only CounterObject)
+        and (grants only CnAObject)
+        and (isAuthorityOf only Regulator)
+        and (transfers only
+                (CoreObject or PoPObject))
