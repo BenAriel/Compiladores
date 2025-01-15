@@ -11,6 +11,15 @@ CustomPizza2
 Class: Spiciness
 EquivalentTo: {Hot , Medium , Mild}
 
+Class: CheesyPizza
+EquivalentTo:
+Pizza and (hasTopping some CheeseTopping)
+Individuals:
+CheesyPizza1
+Class: HighCaloriePizza
+EquivalentTo:
+Pizza and (hasCaloricContent some xsd:integer[>= 400])
+
 Class: MargheritaPizza
 SubClassOf:
 NamedPizza,
@@ -21,13 +30,7 @@ hasTopping only (MozzarellaTopping or TomatoTopping)
 Class: Spiciness
 EquivalentTo: Hot or Medium or Mild
 
-Class: CheesyPizza
+Class: SpicyPizza
 EquivalentTo:
-Pizza and (hasTopping some CheeseTopping)
-
-Individuals:
-CheesyPizza1
-
-Class: HighCaloriePizza
-EquivalentTo:
-Pizza and (hasCaloricContent some xsd:integer[>= 400])
+Pizza
+and (hasTopping some (hasSpiciness value Hot))
