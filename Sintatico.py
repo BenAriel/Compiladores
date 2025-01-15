@@ -107,6 +107,7 @@ def p_statement_nested_descriptions_class(p):
 
 def p_nested_descriptions(p):
     '''nested_descriptions : CLASS_IDENTIFIER
+                          | LEFT_PAREN nested_descriptions
                           | statement_property_identify statement_reserved_word CLASS_IDENTIFIER
                           | statement_property_identify statement_reserved_word LEFT_PAREN nested_descriptions RIGHT_PAREN
                           | statement_property_identify VALUE CLASS_IDENTIFIER
