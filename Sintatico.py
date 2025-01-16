@@ -58,8 +58,30 @@ def p_statement_class_individuals_check(p):
                                          | IndividualNames COMMA statement_class_individuals_check'''
     pass
 
-# Classes aninhadas
+# Classes definidas
+
 def p_statement_defined_class(p):
+    '''statement : Class CLASS_IDENTIFIER EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_defined_class_equivalent statement_class_individuals'''
+    print(f"Classe definida: {p[2]}") 
+    return p[2]
+
+def p_statement_defined_class_equivalent(p):
+    '''statement_defined_class_equivalent : statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
+    | statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
+                                          | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
+                                          | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent '''
+    pass
+
+def p_statement_operator_symbol(p):
+    '''statement_operator_symbol : LESS_THAN
+    | GREATER_THAN
+    | EQUALS
+    |  GREATER_THAN EQUALS
+    | LESS_THAN EQUALS'''
+    pass
+    
+# Classes aninhadas
+def p_statement_aninhada_class(p):
     '''statement : Class CLASS_IDENTIFIER EquivalentTo nested_descriptions'''
     print(f"Classe aninhada: {p[2]}")
 
