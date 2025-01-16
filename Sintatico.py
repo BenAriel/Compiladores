@@ -1,17 +1,48 @@
 import ply.yacc as yacc
 from Lex import tokens  # Importa os tokens definidos no léxico
 
+class_counter = 0
 # Conjunto inicial de regras de produção
 def p_statements(p):
-    '''statements : statement
-                  | statement statements'''
+    '''statements : Class CLASS_IDENTIFIER statement_defined_class statements
+                  | Class CLASS_IDENTIFIER statement_defined_class
+                  | Class CLASS_IDENTIFIER statement_primitive_class
+                  | Class CLASS_IDENTIFIER statement_primitive_class statements
+                  | empty'''
     pass
 
-# Classes primitivas
+def p_statement_defined_class(p):
+    '''statement_defined_class : EquivalentTo_possible maybe_suclassof statement_class_disjoin statement_class_individuals
+                               | subclassof_possible EquivalentTo_possible statement_class_disjoin statement_class_individuals'''  
+    
+    print(f"Classe definida")
 def p_statement_primitive_class(p):
-    '''statement : Class CLASS_IDENTIFIER SubClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals'''
-    print(f"Classe primitiva: {p[2]}")
+    '''statement_primitive_class : subclassof_possible statement_class_disjoin statement_class_individuals'''
+    print(f"Classe primitiva: {p[1]}")
 
+def p_EquivalentTo_possible(p):
+    '''EquivalentTo_possible : EquivalentTo JustDefined
+                             | EquivalentTo nested
+                             | EquivalentTo statement_closed_axiom_class
+                             | EquivalentTo statement_enumerated_class
+                             | EquivalentTo statement_covered_class'''
+    pass
+
+def p_maybe_suclassof(p):
+    '''maybe_suclassof : subclassof_possible
+                       | empty'''
+    pass
+
+def p_subclassof_possible(p):
+    '''subclassof_possible : SubClassOf primitive_class_mandatory
+                           | SubClassOf statement_closed_axiom_class'''
+    pass
+
+def p_justDefined(p):
+    '''JustDefined :  CLASS_IDENTIFIER AND LEFT_PAREN statement_defined_class_equivalent statement_class_individuals
+                        | CLASS_IDENTIFIER COMMA statement_defined_class_equivalent statement_class_individuals'''
+    print(f"Classe definida normal: {p[1]}")
+    pass
 def p_statement_reserved_word(p):
     '''statement_reserved_word : SOME
                                | EXACTLY
@@ -58,12 +89,6 @@ def p_statement_class_individuals_check(p):
                                          | IndividualNames COMMA statement_class_individuals_check'''
     pass
 
-# Classes definidas
-
-def p_statement_defined_class(p):
-    '''statement : Class CLASS_IDENTIFIER EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_defined_class_equivalent statement_class_individuals'''
-    print(f"Classe definida: {p[2]}") 
-    return p[2]
 
 def p_statement_defined_class_equivalent(p):
     '''statement_defined_class_equivalent : statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
@@ -79,24 +104,20 @@ def p_statement_operator_symbol(p):
     |  GREATER_THAN EQUALS
     | LESS_THAN EQUALS'''
     pass
-    
-# Classes aninhadas
-def p_statement_aninhada_class(p):
-    '''statement : Class CLASS_IDENTIFIER EquivalentTo nested_descriptions'''
-    print(f"Classe aninhada: {p[2]}")
 
-def p_nested_descriptions(p):
-    '''nested_descriptions : nested_descriptions AND nested_descriptions
-                           | nested_descriptions OR nested_descriptions
-                           | LEFT_PAREN nested_descriptions RIGHT_PAREN
-                           | statement_property_identify statement_reserved_word nested_descriptions
+
+def p_nested(p):
+    '''nested : nested AND nested
+                           | nested OR nested
+                           | LEFT_PAREN nested RIGHT_PAREN
+                           | statement_property_identify statement_reserved_word nested
                            | statement_property_identify statement_reserved_word CLASS_IDENTIFIER
                            | statement_property_identify statement_reserved_word VALUE CLASS_IDENTIFIER
-                           | statement_property_identify statement_reserved_word VALUE nested_descriptions
+                           | statement_property_identify statement_reserved_word VALUE nested
                            | statement_property_identify statement_reserved_word ONLY CLASS_IDENTIFIER
-                           | statement_property_identify statement_reserved_word ONLY nested_descriptions
+                           | statement_property_identify statement_reserved_word ONLY nested
                            | statement_property_identify statement_reserved_word SOME CLASS_IDENTIFIER
-                           | statement_property_identify statement_reserved_word SOME nested_descriptions
+                           | statement_property_identify statement_reserved_word SOME nested
                            | CLASS_IDENTIFIER'''
     if len(p) == 4:
         if p[2] in ["AND", "OR"]:
@@ -110,7 +131,7 @@ def p_nested_descriptions(p):
 
 # Classes com axiomas fechados
 def p_statement_closed_axiom_class(p):
-    '''statement : Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER COMMA closed_axiom_mandatory'''
+    '''statement_closed_axiom_class : CLASS_IDENTIFIER COMMA closed_axiom_mandatory'''
     print(f"Classe axioma fechada: {p[2]}")
 
 def p_closed_axiom_mandatory(p):
@@ -132,7 +153,7 @@ def p_closed_axiom_restriction_combination(p):
 
 # Classes enumeradas
 def p_statement_enumerated_class(p):
-    '''statement : Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check RIGHT_CURLY_BRACKET'''
+    '''statement_enumerated_class : LEFT_CURLY_BRACKET statement_enumerated_class_check RIGHT_CURLY_BRACKET'''
     print(f"Classe enumerada: {p[2]}")
 
 def p_statement_enumerated_class_check(p):
@@ -142,7 +163,7 @@ def p_statement_enumerated_class_check(p):
 
 # Classes cobertas
 def p_statement_covered_class(p):
-    '''statement : Class CLASS_IDENTIFIER EquivalentTo statement_covered_class_check'''
+    '''statement_covered_class : statement_covered_class_check'''
     print(f"Classe coberta: {p[2]}")
 
 def p_statement_covered_class_check(p):
