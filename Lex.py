@@ -8,8 +8,16 @@ tokens = (
     'MINUS',
     'TIMES',
     'DIVIDE',
-    'LPAREN',
-    'RPAREN',
+    'COMMA',
+    'LEFT_BRACKET',
+    'RIGHT_BRACKET',
+    'LEFT_CURLY_BRACKET',
+    'RIGHT_CURLY_BRACKET',
+    'LEFT_PAREN',
+    'RIGHT_PAREN',
+    'LESS_THAN',
+    'GREATER_THAN',
+    'EQUALS',
     'NOT',
     'AND',
     'OR',
@@ -26,7 +34,6 @@ tokens = (
     'SubClassOf',
     'DisjointClasses',
     'IndividualNames',
-    'SpecialCharacters',
     'PROPERTY_IDENTIFIER',
     'PROPERTY_IDENTIFIER_has',
     'PROPERTY_IDENTIFIER_is_Of',
@@ -64,6 +71,7 @@ tokens = (
     'NAMESPACEID',
     'DATA_TYPE',
     'DisjointWith',
+    'ONLY',
 )
 #dicionário de palavras reservadas
 reserved = {
@@ -83,6 +91,7 @@ reserved = {
     'subclassof:': 'SubClassOf',
     'disjointclasses:': 'DisjointClasses',
     'disjointwith:' : 'DisjointWith',
+    'only' : 'ONLY',
 }
 #dicionário de namespaces e tipos de dados
 namespacesAndTypes= {
@@ -117,17 +126,20 @@ namespacesAndTypes= {
     'NMTOKEN' : 'NMTOKEN',
     'nonNegativeInteger' : 'nonNegativeInteger',
 }
+
 # expressçao regular para palavras reservadas que podem ter variações de maiusculas e minusculas,como por exemplo: not, Not, NOT, nOt.
 RESERVED_GERAL = r'\b([Nn][Oo][Tt]|[Aa][Nn][Dd]|[Oo][Rr]|[Ss][Oo][Mm][Ee]|[Aa][Ll][Ll]|[Vv][Aa][Ll][Uu][Ee]|[Mm][Ii][Nn]|[Mm][Aa][Xx]|[Ee][Xx][Aa][Cc][Tt][Ll][Yy]|[Tt][Hh][Aa][Tt])\b'
 
 # expressão regular para palavras reservadas que não tem variacão,tem apenas uma forma de escrever.
-RESERVED_OTHERS = r'(Class:|EquivalentTo:|Individuals:|SubClassOf:|DisjointClasses:|DisjointWith:)'
+RESERVED_OTHERS = r'(Class:|EquivalentTo:|Individuals:|SubClassOf:|DisjointClasses:|DisjointWith:|only)'
 
 # expressão regular para identificar nomes de individuos
 INDIVIDUALS_NAMES = r'\b[A-Z][a-zA-Z]*\d+\b'
 
 # expressão regular para identificar caracteres especiais
 SPECIAL_CARACTERES = r'[\(\)\[\]\{\}\,\<\>\"\=]'
+
+
 
 # expressão regular para identificar classes
 CLASS_IDENTIFIER = r'\b[A-Z][a-zA-Z]*(\s[A-Z][a-zA-Z]*)*\b(?!:)'
@@ -144,6 +156,66 @@ t_TIMES = r'\*'
 t_DIVIDE = r'/'
 
 #funções para identificar os tokens. cada função tem uma expressão regular que identifica o token(o que está dentro do parênteses de @token é a expressão regular que identifica aquele token) e retorna o token identificado.
+
+def t_COMMA(t):
+    r'\,'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_LEFT_BRACKET(t):
+    r'\['
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_RIGHT_BRACKET(t):
+    r'\]'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_LEFT_CURLY_BRACKET(t):
+    r'\{'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_RIGHT_CURLY_BRACKET(t):
+
+    r'\}'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_LEFT_PAREN(t):
+    
+    r'\('
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_RIGHT_PAREN(t):
+    
+    r'\)'
+    t.lexer.num_special_characters += 1
+    return t
+
+
+def t_LESS_THAN(t):
+
+    r'\<'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_GREATER_THAN(t):
+
+    r'\>'
+    t.lexer.num_special_characters += 1
+    return t
+
+def t_EQUALS(t):
+    
+    r'\='
+    t.lexer.num_special_characters += 1
+    return t
+
+
+
 
 #funçaõ para reconhecer números
 def t_NUMBER(t):
@@ -205,7 +277,7 @@ def t_INDIVIDUAL_NAMES(t):
 #função para reconhecer caracteres especiais
 @TOKEN(SPECIAL_CARACTERES)
 def t_SPECIAL_CHARACTERS(t):
-    t.type = "SpecialCharacters"
+    t.type = t.value
     t.lexer.num_special_characters += 1
     return t
 
@@ -245,88 +317,15 @@ def t_error(t):
 
 # constroi  o lexer e inicializa as variáveis(cria atributos no lexer) de contagem
 lexer = lex.lex()
-lexer.num_reserved = 0
-lexer.num_individual_names = 0
-lexer.num_special_characters = 0
-lexer.num_numbers = 0
-lexer.num_namespace_ids = 0
-lexer.num_data_types = 0
-lexer.num_property_identifiers = 0
-lexer.num_class_identifiers = 0
 
-# lendo o arquivo de entrada
-file_path = 'input.txt'
-with open(file_path, 'r') as file:
-    data = file.read()
-
-lexer.input(data)
-#inicializa a tabela de símbolos(como é uma estrutura de dados do tipo set, não permite repetições)
-simbol_table = set()
-
-# Dicionário para armazenar os tokens identificados
-identified_tokens = {
-    "Reserved Words": set(),
-    "Namespaces": set(),
-    "Individual Names": set(),
-    "Special Characters": set(),
-    "Property Identifiers": set(),
-    "Class Identifiers": set(),
-    "Data Types": set(),
-    "Numbers": set(),
-}
-
-#para cada token, adiciona o token ao seu rescpetivo conjunto no dicionário de tokens identificados e adiciona o tipo do token à tabela de símbolos
-while True:
-    tok = lexer.token()
-    if not tok:
-        break
-    simbol_table.add(tok.type)
-    if tok.type in reserved.values():
-        identified_tokens["Reserved Words"].add(tok.value)
-    elif tok.type == "NAMESPACEID":
-        identified_tokens["Namespaces"].add(tok.value)
-    elif tok.type == "IndividualNames":
-        identified_tokens["Individual Names"].add(tok.value)
-    elif tok.type == "SpecialCharacters":
-        identified_tokens["Special Characters"].add(tok.value)
-    elif tok.type.startswith("PROPERTY_IDENTIFIER"):
-        identified_tokens["Property Identifiers"].add(tok.value)
-    elif tok.type == "CLASS_IDENTIFIER":
-        identified_tokens["Class Identifiers"].add(tok.value)
-    elif tok.type == "DATA_TYPE":
-        identified_tokens["Data Types"].add(tok.value)
-    elif tok.type == "NUMBER":
-        identified_tokens["Numbers"].add(tok.value)
-
-#imprime a quantidade de tokens identificados de cada tipo
-print("=== Sumário ===")
-print(f"Número de palavras reservadas: {lexer.num_reserved}")
-print(f"Número de Nomes Individuais: {lexer.num_individual_names}")
-print(f"Número de Caracteres Especiais: {lexer.num_special_characters}")
-print(f"Número de Números: {lexer.num_numbers}")
-print(f"Número de IDs de Namespace: {lexer.num_namespace_ids}")
-print(f"Número de Tipos de Dados: {lexer.num_data_types}")
-print(f"Número de Identificadores de Propriedades: {lexer.num_property_identifiers}")
-print(f"Número de Identificadores de Classes: {lexer.num_class_identifiers}")
-
-#imprime cada token único identificado de cada tipo
-print("\n=== Tokens Detalhados ===")
-for category, items in identified_tokens.items():
-    print(f"\n{category}:")
-    for item in sorted(items):
-        print(f"  - {item}")
-
-
-
-print('\n deseja ver todos os tokens encontrados em ordem no arquivo? \n formato de exibição: (TOKEN,valor,linha,posição na linha). s/n')
-
-# imprime todos os tokens encontrados no arquivo no formato (TOKEN, valor, linha, posição na linha)
-if(input().lower() == 's'):
-    lexer.input(data)
-    while True:
-        tok = lexer.token()
-        if not tok:
-            break
-        print(tok)
-else :
-    print('fim do programa')
+def init_lexer(lexer):
+    lexer.num_reserved = 0
+    lexer.num_namespace_ids = 0
+    lexer.num_data_types = 0
+    lexer.num_property_identifiers = 0
+    lexer.num_class_identifiers = 0
+    lexer.num_individual_names = 0
+    lexer.num_special_characters = 0
+    lexer.num_numbers = 0
+    
+init_lexer(lexer)
