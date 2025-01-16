@@ -121,6 +121,18 @@ def p_usually_inside_paren(p):
     | statement_property_identify statement_reserved_word NUMBER CLASS_IDENTIFIER
     | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET'''
 
+def p_usually_others_inside_paren(p):
+    '''usually_others_paren : statement_property_identify statement_others_reserved_word CLASS_IDENTIFIER
+    | statement_property_identify statement_others_reserved_word LEFT_PAREN usually_others_others_paren
+    | statement_property_identify statement_others_reserved_word NAMESPACEID DATA_TYPE
+    | statement_property_identify statement_others_reserved_word NUMBER NAMESPACEID DATA_TYPE
+    | statement_property_identify statement_others_reserved_word NUMBER CLASS_IDENTIFIER
+    | statement_property_identify statement_others_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET'''
+
+def p_usually_others_others_inside_paren(p):
+    ''' usually_others_others_paren : CLASS_IDENTIFIER RIGHT_PAREN
+                                    | CLASS_IDENTIFIER OR usually_others_others_paren'''
+
 def p_simple_paren(p):
     '''simple_paren : LEFT_PAREN usually_inside_paren RIGHT_PAREN'''
     pass
@@ -128,6 +140,7 @@ def p_simple_paren(p):
 
 def p_expression(p):
     '''expression : usually_inside_paren
+                    | usually_others_paren
                             | usually_inside_paren COMMA expression
                             | simple_paren
                             | simple_paren AND expression'''
@@ -166,6 +179,8 @@ def p_nested_descriptions(p):
                            | statement_property_identify statement_others_reserved_word CLASS_IDENTIFIER
                            | statement_property_identify statement_others_reserved_word VALUE CLASS_IDENTIFIER
                            | statement_property_identify statement_others_reserved_word VALUE IndividualNames
+                           | statement_property_identify VALUE IndividualNames
+                           | statement_property_identify VALUE CLASS_IDENTIFIER
                            | statement_property_identify statement_others_reserved_word VALUE nested_descriptions
                            | statement_property_identify statement_others_reserved_word ONLY CLASS_IDENTIFIER
                            | statement_property_identify statement_others_reserved_word ONLY nested_descriptions

@@ -129,12 +129,12 @@
 
  Class: PizzaBase
  DisjointClasses:
-Pizza, PizzaBase, PizzaTopping
-
- Class: PizzaTopping
- DisjointClasses:
  Pizza, PizzaBase, PizzaTopping
  
  Class: Spiciness
  EquivalentTo:
  {Hot1 , Medium1 , Mild1}
+
+ Class: PizzaTopping
+ DisjointClasses:
+ Pizza, PizzaBase, PizzaTopping
