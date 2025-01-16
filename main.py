@@ -30,7 +30,7 @@ if __name__ == "__main__":
         result = parser.parse(data, lexer=lexer)
 
         # Exibe a árvore sintática resultante
-        print("\nÁrvore Sintática:", result)
+        print("\nFim da execução do programa")
 
     except FileNotFoundError:
         print(f"Erro: Arquivo '{input_file}' não encontrado.")
