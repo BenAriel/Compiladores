@@ -58,26 +58,33 @@ def p_statement_class_individuals_check(p):
                                          | IndividualNames COMMA statement_class_individuals_check'''
     pass
 
-# funções para classe definida
+# Classes aninhadas
 def p_statement_defined_class(p):
-    '''statement : Class CLASS_IDENTIFIER EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_defined_class_equivalent statement_class_individuals'''
-    print(f"Classe definida: {p[2]}") 
-    return p[2]
+    '''statement : Class CLASS_IDENTIFIER EquivalentTo nested_descriptions'''
+    print(f"Classe aninhada: {p[2]}")
 
-def p_statement_defined_class_equivalent(p):
-    '''statement_defined_class_equivalent : statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
-                                          | statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
-                                          | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
-                                          | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent '''
-    pass
-
-def p_statement_operator_symbol(p):
-    '''statement_operator_symbol : LESS_THAN
-                                 | GREATER_THAN
-                                 | EQUALS
-                                 | GREATER_THAN EQUALS
-                                 | LESS_THAN EQUALS'''
-    pass
+def p_nested_descriptions(p):
+    '''nested_descriptions : nested_descriptions AND nested_descriptions
+                           | nested_descriptions OR nested_descriptions
+                           | LEFT_PAREN nested_descriptions RIGHT_PAREN
+                           | statement_property_identify statement_reserved_word nested_descriptions
+                           | statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+                           | statement_property_identify statement_reserved_word VALUE CLASS_IDENTIFIER
+                           | statement_property_identify statement_reserved_word VALUE nested_descriptions
+                           | statement_property_identify statement_reserved_word ONLY CLASS_IDENTIFIER
+                           | statement_property_identify statement_reserved_word ONLY nested_descriptions
+                           | statement_property_identify statement_reserved_word SOME CLASS_IDENTIFIER
+                           | statement_property_identify statement_reserved_word SOME nested_descriptions
+                           | CLASS_IDENTIFIER'''
+    if len(p) == 4:
+        if p[2] in ["AND", "OR"]:
+            p[0] = f"({p[1]} {p[2]} {p[3]})"
+        else:
+            p[0] = f"{p[1]} {p[2]} {p[3]}"
+    elif len(p) == 3:
+        p[0] = f"({p[2]})"
+    else:
+        p[0] = f"{p[1]}"
 
 # Classes com axiomas fechados
 def p_statement_closed_axiom_class(p):
@@ -101,26 +108,6 @@ def p_closed_axiom_restriction_combination(p):
                                             | CLASS_IDENTIFIER OR closed_axiom_restriction_combination'''
     pass
 
-# Classes com descrições aninhadas
-def p_statement_nested_descriptions_class(p):
-    '''statement : Class CLASS_IDENTIFIER EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN nested_descriptions RIGHT_PAREN'''
-    print(f"Classe com descrições aninhadas: {p[2]}")
-
-def p_nested_descriptions(p):
-    '''nested_descriptions : nested_descriptions OR nested_descriptions
-                          | nested_descriptions AND nested_descriptions
-                          | LEFT_PAREN nested_descriptions RIGHT_PAREN
-                          | statement_property_identify statement_reserved_word CLASS_IDENTIFIER
-                          | statement_property_identify statement_reserved_word nested_descriptions
-                          | statement_property_identify statement_reserved_word VALUE CLASS_IDENTIFIER
-                          | statement_property_identify statement_reserved_word VALUE nested_descriptions
-                          | statement_property_identify statement_reserved_word ONLY CLASS_IDENTIFIER
-                          | statement_property_identify statement_reserved_word ONLY nested_descriptions
-                          | statement_property_identify statement_reserved_word SOME CLASS_IDENTIFIER
-                          | statement_property_identify statement_reserved_word SOME nested_descriptions
-                          | CLASS_IDENTIFIER'''
-    pass
-    
 # Classes enumeradas
 def p_statement_enumerated_class(p):
     '''statement : Class CLASS_IDENTIFIER EquivalentTo LEFT_CURLY_BRACKET statement_enumerated_class_check RIGHT_CURLY_BRACKET'''
