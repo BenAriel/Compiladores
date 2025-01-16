@@ -9,7 +9,10 @@ def p_statements(p):
 
 # Classes primitivas
 def p_statement_primitive_class(p):
-    '''statement : Class CLASS_IDENTIFIER SubClassOf primitive_class_mandatory statement_class_disjoin statement_class_individuals'''
+    '''statement : Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER COMMA expression statement_class_disjoin statement_class_individuals
+    | Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER AND expression statement_class_disjoin statement_class_individuals
+    | Class CLASS_IDENTIFIER SubClassOf expression statement_class_disjoin statement_class_individuals
+    | Class CLASS_IDENTIFIER SubClassOf CLASS_IDENTIFIER'''
     print(f"Classe primitiva: {p[2]}")
 
 def p_statement_reserved_word(p):
@@ -29,14 +32,23 @@ def p_statement_property_identify(p):
                                    | PROPERTY_IDENTIFIER'''
     p[0] = p[1]
 
-def p_primitive_class_mandatory(p):
-    '''primitive_class_mandatory : statement_property_identify statement_reserved_word CLASS_IDENTIFIER
-                                 | statement_property_identify statement_reserved_word CLASS_IDENTIFIER COMMA primitive_class_mandatory
-                                 | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE
-                                 | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE COMMA primitive_class_mandatory
-                                 | CLASS_IDENTIFIER
-                                 | CLASS_IDENTIFIER COMMA primitive_class_mandatory'''
+def p_usually_inside_paren(p):
+    '''usually_inside_paren : statement_property_identify statement_reserved_word CLASS_IDENTIFIER
+    | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE
+    | statement_property_identify statement_reserved_word NUMBER NAMESPACEID DATA_TYPE
+    | statement_property_identify statement_reserved_word NUMBER CLASS_IDENTIFIER
+    | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET'''
+
+def p_simple_paren(p):
+    '''simple_paren : LEFT_PAREN usually_inside_paren RIGHT_PAREN'''
     pass
+
+
+def p_expression(p):
+    '''expression : usually_inside_paren
+                            | usually_inside_paren COMMA expression
+                            | simple_paren
+                            | simple_paren AND expression'''
 
 def p_statement_class_disjoin(p):
     '''statement_class_disjoin : empty
@@ -61,15 +73,12 @@ def p_statement_class_individuals_check(p):
 # Classes definidas
 
 def p_statement_defined_class(p):
-    '''statement : Class CLASS_IDENTIFIER EquivalentTo CLASS_IDENTIFIER AND LEFT_PAREN statement_defined_class_equivalent statement_class_individuals'''
+    '''statement : Class CLASS_IDENTIFIER EquivalentTo CLASS_IDENTIFIER COMMA expression statement_class_disjoin statement_class_individuals
+    | Class CLASS_IDENTIFIER EquivalentTo CLASS_IDENTIFIER AND expression statement_class_disjoin statement_class_individuals
+    | Class CLASS_IDENTIFIER EquivalentTo expression statement_class_disjoin statement_class_individuals'''
     print(f"Classe definida: {p[2]}") 
 
-def p_statement_defined_class_equivalent(p):
-    '''statement_defined_class_equivalent : statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN
-    | statement_property_identify statement_reserved_word CLASS_IDENTIFIER RIGHT_PAREN COMMA statement_defined_class_equivalent
-                                          | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN
-                                          | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET RIGHT_PAREN COMMA statement_defined_class_equivalent '''
-    pass
+
 
 def p_statement_operator_symbol(p):
     '''statement_operator_symbol : LESS_THAN
@@ -91,6 +100,7 @@ def p_nested_descriptions(p):
                            | statement_property_identify statement_reserved_word nested_descriptions
                            | statement_property_identify statement_reserved_word CLASS_IDENTIFIER
                            | statement_property_identify statement_reserved_word VALUE CLASS_IDENTIFIER
+                           | statement_property_identify statement_reserved_word VALUE IndividualNames
                            | statement_property_identify statement_reserved_word VALUE nested_descriptions
                            | statement_property_identify statement_reserved_word ONLY CLASS_IDENTIFIER
                            | statement_property_identify statement_reserved_word ONLY nested_descriptions
