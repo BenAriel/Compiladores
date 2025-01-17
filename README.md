@@ -8,7 +8,8 @@
 5. [Funcionamento do Programa](#funcionamento-do-programa)  
    5.1. [Tokens Reconhecidos](#tokens-reconhecidos)  
    5.2. [Etapas Principais](#etapas-principais)  
-6. [Exemplo de Saída](#exemplo-de-saída) 
+6. [Exemplo de Saída](#exemplo-de-saída)
+7. [Analisador Sintático com PLY](#Analisador Sintático com PLY)
 
 
 # Analisador Léxico com PLY
