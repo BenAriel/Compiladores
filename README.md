@@ -8,7 +8,8 @@
 5. [Funcionamento do Programa](#funcionamento-do-programa)  
    5.1. [Tokens Reconhecidos](#tokens-reconhecidos)  
    5.2. [Etapas Principais](#etapas-principais)  
-6. [Exemplo de Saída](#exemplo-de-saída) 
+6. [Exemplo de Saída](#exemplo-de-saída)
+7. [Analisador Sintático com PLY](#analisador-sintático-com-ply)
 
 
 # Analisador Léxico com PLY
@@ -155,6 +156,72 @@ Data Types:
 
 Numbers:
 
+# Analisador Sintático com PLY
+Este projeto implementa um analisador sintático para uma linguagem baseada em OWL2 (Web Ontology Language) utilizando a biblioteca [PLY](https://www.dabeaz.com/ply/), que fornece ferramentas para análise léxica e sintática em Python.
 
 
+---
+
+## **Objetivo**
+O objetivo principal de um analisador sintático é verificar se uma sequência de tokens (gerados pelo analisador léxico) está estruturada de acordo com as regras gramaticais de uma linguagem formal. Em outras palavras, ele valida a sintaxe do código que é o nosso arquivo input.txt, assegurando que ele segue a gramática definida para a linguagem.
+
+## **Como Usar**
+
+1. **Preencha o arquivo `input.txt`**:
+   - Insira o código ou texto a ser analisado dentro do arquivo `input.txt`. O arquivo por padrão vem com o teste enviado junto ao arquivo do trabalho.
+
+2. **Execute o programa**:
+   - No terminal, execute o script:
+     ```bash
+     python main.py
+     ```
+
+   - Ou utilize alguma IDE para rodar o programa.
+
+3. **Interação no Terminal**:
+   - O programa exibirá um resumo das classes sintáticas encontrados.
+
+---
+
+## **Funcionamento do Programa**
+
+### **Etapas Principais**
+
+1. **Definição das gramáticas**:
+   - Cada gramática será única para seu tipo de classe.
+   - Exceto as gramáticas auxiliares que combinam diferentes estruturas para formação da classe.
+     
+2. **Análise do Arquivo de Entrada**:
+   - O arquivo `input.txt` é lido e processado pelo analisador léxico gerando os tokens.
+   - Os tokens são identificados e o analisador sintático vai validando a estrutura a partir das regras gramaticais.
+
+3. **Resumo e Relatório**:
+   - O programa exibe:
+     - As classes com sua classe primaria sendo Primitiva ou Definida e podendo ter ou não classe secundaria, podendo ser Coberta, Fechamento, Numerada, Aninhada.
+
+4. **Tratamento de Erros**:
+   - Sequências não reconhecidas são tratadas e exibidas com mensagens informativas.
+
+---
+
+## Exemplo de Saída
+
+### Entrada (input.txt):  
+  
+Class: InterestingPizza
+ EquivalentTo:
+ Pizza
+ and (hasTopping min 3 PizzaTopping)
+
+ Class: SpicyPizza
+ EquivalentTo:
+ Pizza
+ and (hasTopping some (hasSpiciness value Hot1)) 
+
+### Saída:  
+Iniciando parsing do arquivo...
+
+Classe definida normal: InterestingPizza
+
+Classe primaria Definida, Classe secundaria aninhada: SpicyPizza 
 
