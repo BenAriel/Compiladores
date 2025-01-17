@@ -209,13 +209,19 @@ O objetivo principal de um analisador sintático é verificar se uma sequência 
 ### Entrada (input.txt):  
   
 Class: InterestingPizza
+
  EquivalentTo:
+ 
  Pizza
+ 
  and (hasTopping min 3 PizzaTopping)
 
  Class: SpicyPizza
+ 
  EquivalentTo:
+ 
  Pizza
+ 
  and (hasTopping some (hasSpiciness value Hot1)) 
 
 ### Saída:  
