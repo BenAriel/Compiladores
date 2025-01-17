@@ -220,6 +220,8 @@ Class: InterestingPizza
 
 ### Saída:  
 Iniciando parsing do arquivo...
+
 Classe definida normal: InterestingPizza
+
 Classe primaria Definida, Classe secundaria aninhada: SpicyPizza 
 
