@@ -134,7 +134,8 @@ def p_usually_others_inside_paren(p):
     | statement_property_identify statement_others_reserved_word NAMESPACEID DATA_TYPE
     | statement_property_identify statement_others_reserved_word NUMBER NAMESPACEID DATA_TYPE
     | statement_property_identify statement_others_reserved_word NUMBER CLASS_IDENTIFIER
-    | statement_property_identify statement_others_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET'''
+    | statement_property_identify statement_others_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET
+    '''
 
 def p_usually_others_others_inside_paren(p):
     ''' usually_others_others_paren : CLASS_IDENTIFIER RIGHT_PAREN
@@ -165,6 +166,7 @@ def p_other_expression(p):
                             | simple_other_paren COMMA other_expression
                             | simple_other_paren AND other_expression
                             | usually_others_paren AND other_expression
+                            | usually_inside_paren AND other_expression
                             '''
 
 # Classes aninhadas
