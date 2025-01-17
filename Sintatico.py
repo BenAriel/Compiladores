@@ -144,6 +144,10 @@ def p_simple_paren(p):
     '''simple_paren : LEFT_PAREN usually_inside_paren RIGHT_PAREN'''
     pass
 
+def p_simple_other_paren(p):
+    '''simple_other_paren : LEFT_PAREN usually_others_paren RIGHT_PAREN'''
+    pass
+
 
 def p_expression(p):
     '''expression : usually_inside_paren
@@ -156,8 +160,10 @@ def p_other_expression(p):
     '''other_expression : usually_inside_paren
                             | usually_others_paren
                             | usually_inside_paren COMMA other_expression
-                            | simple_paren
-                            | simple_paren AND other_expression
+                            | usually_others_paren COMMA other_expression
+                            | simple_other_paren
+                            | simple_other_paren COMMA other_expression
+                            | simple_other_paren AND other_expression
                             | usually_others_paren AND other_expression
                             '''
 
