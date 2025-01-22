@@ -12,8 +12,7 @@ def p_statements(p):
     pass
 
 def p_statement_defined_class(p):
-    '''statement_defined_class : EquivalentTo_possible maybe_suclassof statement_class_disjoin statement_class_individuals
-                               | subclassof_possible EquivalentTo_possible statement_class_disjoin statement_class_individuals'''  
+    '''statement_defined_class : EquivalentTo_possible maybe_suclassof statement_class_disjoin statement_class_individuals '''  
     
 def p_statement_primitive_class(p):
     '''statement_primitive_class : subclassof_possible statement_class_disjoin statement_class_individuals'''
