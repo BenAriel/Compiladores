@@ -53,13 +53,10 @@ def p_operators(p):
     '''operators : MIN
                  | MAX
                  | EXACTLY '''
-    pass
+    p[0] = p[1]
 
 def p_statement_reserved_word(p):
     '''statement_reserved_word : SOME
-                               | EXACTLY
-                               | MIN
-                               | MAX
                                | OR
                                | AND
                                | VALUE'''
@@ -122,9 +119,13 @@ def p_statement_operator_symbol(p):
     '''statement_operator_symbol : LESS_THAN
     | GREATER_THAN
     | EQUALS
-    |  GREATER_THAN EQUALS
+    | GREATER_THAN EQUALS
     | LESS_THAN EQUALS'''
-    pass
+
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = p[1] + p[2]
 
 
 def p_usually_inside_paren(p):
@@ -133,6 +134,7 @@ def p_usually_inside_paren(p):
     | statement_property_identify operators NUMBER NAMESPACEID DATA_TYPE
     | statement_property_identify operators NUMBER CLASS_IDENTIFIER
     | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET'''
+
 
     if len(p) == 4 and isinstance(p[2],str) and isinstance(p[3],str):
         print("produção 1")
@@ -146,7 +148,7 @@ def p_usually_inside_paren(p):
     elif len(p) == 5 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str):
         print("produção 4")
         print("propriedade : ", p[1] + " tipo: object property")
-    elif len(p) == 9 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str) and isinstance(p[5],str) and isinstance(p[6],str) and isinstance(p[7],str)  and isinstance(p[8],str):
+    elif len(p) == 9 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str) and isinstance(p[5],str) and (isinstance(p[6],str) or callable(p[6])) and isinstance(p[7],int)  and isinstance(p[8],str):
         print("produção 5")
         print("propriedade : ", p[1] + " tipo: data property")
     else :

@@ -1,4 +1,4 @@
- Class: Customer
+Class: Customer
  EquivalentTo:
  Person
  and (purchasedPizza some Pizza)
