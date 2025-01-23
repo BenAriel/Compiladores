@@ -142,10 +142,10 @@ def p_usually_inside_paren(p):
     elif len(p) == 5 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str):
         print("produção 2")
         print("propriedade : ", p[1] + " tipo: data property")
-    elif len(p) == 6 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str) and isinstance(p[5],str):
+    elif len(p) == 6 and isinstance(p[2],str) and isinstance(p[3],int) and isinstance(p[4],str) and isinstance(p[5],str):
         print("produção 3")
         print("propriedade : ", p[1] + " tipo: data property")
-    elif len(p) == 5 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str):
+    elif len(p) == 5 and isinstance(p[2],str) and isinstance(p[3],int) and isinstance(p[4],str):
         print("produção 4")
         print("propriedade : ", p[1] + " tipo: object property")
     elif len(p) == 9 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str) and isinstance(p[5],str) and (isinstance(p[6],str) or callable(p[6])) and isinstance(p[7],int)  and isinstance(p[8],str):
