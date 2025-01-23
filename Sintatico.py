@@ -48,6 +48,13 @@ def p_justDefined(p):
     print(f"Classe definida normal: {p[-2]}")
     pass
 
+
+def p_operators(p):
+    '''operators : MIN
+                 | MAX
+                 | EXACTLY '''
+    pass
+
 def p_statement_reserved_word(p):
     '''statement_reserved_word : SOME
                                | EXACTLY
@@ -123,9 +130,28 @@ def p_statement_operator_symbol(p):
 def p_usually_inside_paren(p):
     '''usually_inside_paren : statement_property_identify statement_reserved_word CLASS_IDENTIFIER
     | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE
-    | statement_property_identify statement_reserved_word NUMBER NAMESPACEID DATA_TYPE
-    | statement_property_identify statement_reserved_word NUMBER CLASS_IDENTIFIER
+    | statement_property_identify operators NUMBER NAMESPACEID DATA_TYPE
+    | statement_property_identify operators NUMBER CLASS_IDENTIFIER
     | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET'''
+
+    if len(p) == 4 and isinstance(p[2],str) and isinstance(p[3],str):
+        print("produção 1")
+        print("Propriedade : ", p[1] + " tipo: object property")
+    elif len(p) == 5 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str):
+        print("produção 2")
+        print("propriedade : ", p[1] + " tipo: data property")
+    elif len(p) == 6 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str) and isinstance(p[5],str):
+        print("produção 3")
+        print("propriedade : ", p[1] + " tipo: data property")
+    elif len(p) == 5 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str):
+        print("produção 4")
+        print("propriedade : ", p[1] + " tipo: object property")
+    elif len(p) == 9 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str) and isinstance(p[5],str) and isinstance(p[6],str) and isinstance(p[7],str)  and isinstance(p[8],str):
+        print("produção 5")
+        print("propriedade : ", p[1] + " tipo: data property")
+    else :
+     print("entrou nessa função mas algum if ta errado")
+
 
 def p_usually_others_inside_paren(p):
     '''usually_others_paren : statement_property_identify statement_others_reserved_word CLASS_IDENTIFIER
