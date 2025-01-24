@@ -2,13 +2,16 @@ import ply.yacc as yacc
 from Lex import tokens  # Importa os tokens definidos no léxico
 
 # Conjunto inicial de regras de produção
-
+x = None
+array = []
 def p_statements(p):
     '''statements : Class CLASS_IDENTIFIER statement_defined_class statements
                   | Class CLASS_IDENTIFIER statement_defined_class
                   | Class CLASS_IDENTIFIER statement_primitive_class
                   | Class CLASS_IDENTIFIER statement_primitive_class statements
                   | empty'''
+    global x
+    x = True
     pass
 
 def p_statement_defined_class(p):
@@ -45,7 +48,11 @@ def p_justDefined(p):
     | expression statement_class_disjoin statement_class_individuals
     | CLASS_IDENTIFIER
     | empty'''
-    print(f"Classe definida normal: {p[-2]}")
+    global x
+    if (x == True):
+        print(f"Classe definida normal: {p[-2]}")
+    else:
+        print("erro na classe definida" + p[-2] + ". erro de sobrecarregamento ou corsão." ) 
     pass
 
 
@@ -64,7 +71,6 @@ def p_statement_reserved_word(p):
 
 def p_statement_others_reserved_word(p):
     '''statement_others_reserved_word : SOME
-                               | ONLY
                                | MIN
                                | EXACTLY
                                | OR
@@ -84,7 +90,9 @@ def p_primitive_class_mandatory(p):
                                  | expression statement_class_disjoin statement_class_individuals
                                  | CLASS_IDENTIFIER
                                  | empty  '''
-    print(f"Classe primitiva normal: {p[-2]}")
+    global x
+    if (x == True):
+        print(f"Classe primitiva normal: {p[-2]}")
     pass
 
 def p_statement_class_disjoin(p):
@@ -134,8 +142,12 @@ def p_usually_inside_paren(p):
     | statement_property_identify operators NUMBER NAMESPACEID DATA_TYPE
     | statement_property_identify operators NUMBER CLASS_IDENTIFIER
     | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET'''
-
-
+    
+    def p_error_usually_inside_paren(t):
+        print("Erro: ", t)
+        global x
+        x = False
+    
     if len(p) == 4 and isinstance(p[2],str) and isinstance(p[3],str):
         print("produção 1")
         print("Propriedade : ", p[1] + " tipo: object property")
@@ -149,8 +161,11 @@ def p_usually_inside_paren(p):
         print("produção 4")
         print("propriedade : ", p[1] + " tipo: object property")
     elif len(p) == 9 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str) and isinstance(p[5],str) and (isinstance(p[6],str) or callable(p[6])) and isinstance(p[7],int)  and isinstance(p[8],str):
-        print("produção 5")
-        print("propriedade : ", p[1] + " tipo: data property")
+        if p[4] == "integer": 
+            print("produção 5")
+            print("propriedade : ", p[1] + " tipo: data property")
+        else:
+            p_error_usually_inside_paren("Tipo de dado inválido. deve ser integer ou float")
     else :
      print("entrou nessa função mas algum if ta errado")
 
@@ -176,6 +191,9 @@ def p_simple_other_paren(p):
     '''simple_other_paren : LEFT_PAREN usually_others_paren RIGHT_PAREN'''
     pass
 
+def p_expression_only(p):
+    '''expression_only : CLASS_IDENTIFIER OR expression_only 
+                        | CLASS_IDENTIFIER'''
 
 def p_expression(p):
     '''expression : usually_inside_paren
@@ -232,22 +250,21 @@ def p_nested_descriptions(p):
     else:
         p[0] = f"{p[1]}"
 
+
 # Classes com axiomas fechados
 def p_statement_closed_axiom_class(p):
-    '''statement_closed_axiom_class : CLASS_IDENTIFIER COMMA other_expression 
-                |  CLASS_IDENTIFIER AND other_expression
-                |  CLASS_IDENTIFIER other_expression'''
+    '''statement_closed_axiom_class : CLASS_IDENTIFIER COMMA other_expression ONLY LEFT_PAREN expression_only RIGHT_PAREN 
+                |  CLASS_IDENTIFIER AND other_expression ONLY LEFT_PAREN expression_only RIGHT_PAREN
+                |  CLASS_IDENTIFIER other_expression ONLY LEFT_PAREN expression_only RIGHT_PAREN'''
 
     if (p[-1] == "SubClassOf:"):
         print(f"Classe primaria Primitiva, Classe secundaria fechamento: {p[-2]}")
     else:
         print(f"Classe primaria Definida, Classe secundaria fechamento: {p[-2]}")
+    
+    
 
-def p_closed_axiom_restriction_combination(p):
-    '''closed_axiom_restriction_combination : CLASS_IDENTIFIER
-                                            | CLASS_IDENTIFIER OR closed_axiom_restriction_combination'''
-    pass
-
+    
 # Classes enumeradas
 def p_statement_enumerated_class(p):
     '''statement_enumerated_class : LEFT_CURLY_BRACKET statement_enumerated_class_check RIGHT_CURLY_BRACKET'''
