@@ -72,6 +72,7 @@ def p_statement_reserved_word(p):
 def p_statement_others_reserved_word(p):
     '''statement_others_reserved_word : SOME
                                | MIN
+                               | ONLY
                                | EXACTLY
                                | OR
                                | MAX
@@ -194,6 +195,7 @@ def p_simple_other_paren(p):
 def p_expression_only(p):
     '''expression_only : CLASS_IDENTIFIER OR expression_only 
                         | CLASS_IDENTIFIER'''
+pass
 
 def p_expression(p):
     '''expression : usually_inside_paren
@@ -253,9 +255,9 @@ def p_nested_descriptions(p):
 
 # Classes com axiomas fechados
 def p_statement_closed_axiom_class(p):
-    '''statement_closed_axiom_class : CLASS_IDENTIFIER COMMA other_expression ONLY LEFT_PAREN expression_only RIGHT_PAREN 
-                |  CLASS_IDENTIFIER AND other_expression ONLY LEFT_PAREN expression_only RIGHT_PAREN
-                |  CLASS_IDENTIFIER other_expression ONLY LEFT_PAREN expression_only RIGHT_PAREN'''
+    '''statement_closed_axiom_class : CLASS_IDENTIFIER COMMA other_expression 
+                |  CLASS_IDENTIFIER AND other_expression
+                |  CLASS_IDENTIFIER other_expression'''
 
     if (p[-1] == "SubClassOf:"):
         print(f"Classe primaria Primitiva, Classe secundaria fechamento: {p[-2]}")
