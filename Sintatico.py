@@ -24,12 +24,14 @@ def p_statement_primitive_class(p):
     '''statement_primitive_class : subclassof_possible statement_class_disjoin statement_class_individuals'''
 
 def p_EquivalentTo_possible(p):
-    '''EquivalentTo_possible : EquivalentTo JustDefined
-                             | EquivalentTo nested
+    '''EquivalentTo_possible : EquivalentTo nested
                              | EquivalentTo statement_closed_axiom_class
                              | EquivalentTo statement_enumerated_class
                              | EquivalentTo statement_covered_class
+                             | EquivalentTo JustDefined
                              '''
+    global vetorAntes
+    vetorAntes.clear()
     pass
 
 def p_maybe_suclassof(p):
@@ -43,6 +45,8 @@ def p_subclassof_possible(p):
                            | SubClassOf statement_enumerated_class
                            | SubClassOf statement_covered_class
                            | SubClassOf primitive_class_mandatory'''
+    global vetorAntes
+    vetorAntes.clear()
     pass
 
 def p_justDefined(p):
@@ -54,8 +58,10 @@ def p_justDefined(p):
     global x
     if (x == True):
         print(f"Classe definida normal: {p[-2]}")
+        print("")
     else:
         print("erro na classe definida " + p[-2] + ". erro de sobrecarregamento ou corsão." ) 
+        print("")
     pass
 
 
@@ -97,8 +103,10 @@ def p_primitive_class_mandatory(p):
     global x
     if (x == True):
         print(f"Classe primitiva normal: {p[-2]}")
+        print("")
     else:
         print("erro na classe primitiva" + p[-2] + ". erro de sobrecarregamento ou corsão." ) 
+        print("")
     pass
 
 def p_statement_class_disjoin(p):
@@ -152,8 +160,11 @@ def p_usually_inside_paren(p):
     
     global vetorAntes
 
+    
     if (len(p) == 4):
         vetorAntes.append(p[3])
+    elif (len(p) == 5):
+        vetorAntes.append(p[4])
     
     if len(p) == 4 and isinstance(p[2],str) and isinstance(p[3],str):
         print("Propriedade : ", p[1] + " tipo: object property")
@@ -169,6 +180,8 @@ def p_usually_inside_paren(p):
         else:
             x = False
             print("Tipo de dado inválido. deve ser integer ou float")
+    elif len(p) == 2:
+        pass
     else:
         x = False
         print("Erro na definição da propriedade")
@@ -223,10 +236,13 @@ def p_other_expression(p):
 def p_statement_aninhada_class(p):
     '''nested : CLASS_IDENTIFIER AND nested_descriptions
                 |  CLASS_IDENTIFIER COMMA nested_descriptions'''
+    
     if (p[-1] == "SubClassOf:"):
         print(f"Classe primaria Primitiva, Classe secundaria aninhada: {p[-2]}")
+        print("")
     else:
         print(f"Classe primaria Definida, Classe secundaria aninhada: {p[-2]}")
+        print("")
 
 def p_nested_descriptions(p):
     '''nested_descriptions : nested_descriptions AND nested_descriptions
@@ -236,6 +252,7 @@ def p_nested_descriptions(p):
                            | statement_property_identify statement_others_reserved_word CLASS_IDENTIFIER
                            | statement_property_identify statement_others_reserved_word VALUE CLASS_IDENTIFIER
                            | statement_property_identify statement_others_reserved_word VALUE IndividualNames
+                           | CLASS_IDENTIFIER statement_others_reserved_word nested_descriptions
                            | statement_property_identify VALUE IndividualNames
                            | statement_property_identify VALUE CLASS_IDENTIFIER
                            | statement_property_identify statement_others_reserved_word VALUE nested_descriptions
@@ -260,16 +277,20 @@ def p_axiom_function(p):
                       | CLASS_IDENTIFIER OR axiom_function'''
     
     global vetorDepois
-    vetorDepois.append(p[1])
+    if not p[1] in vetorDepois:
+        vetorDepois.append(p[1])
 
 # Classes com axiomas fechados
 def p_statement_closed_axiom_class(p):
     '''statement_closed_axiom_class : CLASS_IDENTIFIER COMMA expression ONLY LEFT_PAREN axiom_function RIGHT_PAREN
                 |  CLASS_IDENTIFIER AND expression ONLY LEFT_PAREN axiom_function RIGHT_PAREN
-                |  CLASS_IDENTIFIER expression ONLY LEFT_PAREN axiom_function RIGHT_PAREN'''
-        
+                |  CLASS_IDENTIFIER expression ONLY LEFT_PAREN axiom_function RIGHT_PAREN
+                |  CLASS_IDENTIFIER COMMA expression ONLY axiom_function
+                |  CLASS_IDENTIFIER AND expression ONLY axiom_function
+                |  CLASS_IDENTIFIER expression ONLY axiom_function'''
+    
     global vetorAntes
-
+    
     for elemento in vetorAntes[:]:
         if elemento in vetorDepois:
             vetorDepois.remove(elemento)
@@ -278,8 +299,10 @@ def p_statement_closed_axiom_class(p):
     if (len(vetorDepois) == 0) and (len(vetorAntes) == 0):
         if (p[-1] == "SubClassOf:"):
             print(f"Classe primaria Primitiva, Classe secundaria fechamento: {p[-2]}")
+            print("")
         else:
             print(f"Classe primaria Definida, Classe secundaria fechamento: {p[-2]}")
+            print("")
     else:
         p_error_closed_axiom("o número de classificadores de identidade declarados não é igual ao número de classificadores de identidade usados no only")
 
@@ -289,10 +312,13 @@ def p_error_closed_axiom(p):
 # Classes enumeradas
 def p_statement_enumerated_class(p):
     '''statement_enumerated_class : LEFT_CURLY_BRACKET statement_enumerated_class_check RIGHT_CURLY_BRACKET'''
+    
     if (p[-1] == "SubClassOf:"):
         print(f"Classe primaria Primitiva, Classe secundaria enumerado: {p[-2]}")
+        print("")
     else:
         print(f"Classe primaria Definida, Classe secundaria enumerado: {p[-2]}")
+        print("")
 
 def p_statement_enumerated_class_check(p):
     '''statement_enumerated_class_check : IndividualNames
@@ -302,10 +328,13 @@ def p_statement_enumerated_class_check(p):
 # Classes cobertas
 def p_statement_covered_class(p):
     '''statement_covered_class : statement_covered_class_check'''
+    
     if (p[-1] == "SubClassOf:"):
         print(f"Classe primaria Primitiva, Classe secundaria coberta: {p[-2]}")
+        print("")
     else:
         print(f"Classe primaria Definida, Classe secundaria coberta: {p[-2]}")
+        print("")
 
 def p_statement_covered_class_check(p):
     '''statement_covered_class_check : CLASS_IDENTIFIER
