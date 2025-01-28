@@ -327,6 +327,7 @@ Iniciando parsing do arquivo...
 Propriedade : purchasedPizza
 
 tipo: object property
+
 propriedade :  hasPhone tipo: data property
 
 Classe definida normal: 
