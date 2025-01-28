@@ -2,7 +2,8 @@ import ply.yacc as yacc
 from Lex import tokens  # Importa os tokens definidos no léxico
 
 # Conjunto inicial de regras de produção
-x = None
+global x
+x = True
 vetorAntes = []
 vetorDepois = []
 
@@ -54,7 +55,7 @@ def p_justDefined(p):
     if (x == True):
         print(f"Classe definida normal: {p[-2]}")
     else:
-        print("erro na classe definida" + p[-2] + ". erro de sobrecarregamento ou corsão." ) 
+        print("erro na classe definida " + p[-2] + ". erro de sobrecarregamento ou corsão." ) 
     pass
 
 
@@ -96,6 +97,8 @@ def p_primitive_class_mandatory(p):
     global x
     if (x == True):
         print(f"Classe primitiva normal: {p[-2]}")
+    else:
+        print("erro na classe primitiva" + p[-2] + ". erro de sobrecarregamento ou corsão." ) 
     pass
 
 def p_statement_class_disjoin(p):
@@ -152,29 +155,23 @@ def p_usually_inside_paren(p):
     if (len(p) == 4):
         vetorAntes.append(p[3])
     
-    def p_error_usually_inside_paren(t):
-        print("Erro: ", t)
-        global x
-        x = False
-    
     if len(p) == 4 and isinstance(p[2],str) and isinstance(p[3],str):
-        print("produção 1")
         print("Propriedade : ", p[1] + " tipo: object property")
     elif len(p) == 5 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str):
-        print("produção 2")
         print("propriedade : ", p[1] + " tipo: data property")
     elif len(p) == 6 and isinstance(p[2],str) and isinstance(p[3],int) and isinstance(p[4],str) and isinstance(p[5],str):
-        print("produção 3")
         print("propriedade : ", p[1] + " tipo: data property")
     elif len(p) == 5 and isinstance(p[2],str) and isinstance(p[3],int) and isinstance(p[4],str):
-        print("produção 4")
         print("propriedade : ", p[1] + " tipo: object property")
     elif len(p) == 9 and isinstance(p[2],str) and isinstance(p[3],str) and isinstance(p[4],str) and isinstance(p[5],str) and (isinstance(p[6],str) or callable(p[6])) and isinstance(p[7],int)  and isinstance(p[8],str):
-        if p[4] == "integer": 
-            print("produção 5")
+        if p[4] == "integer":
             print("propriedade : ", p[1] + " tipo: data property")
         else:
-            p_error_usually_inside_paren("Tipo de dado inválido. deve ser integer ou float")
+            x = False
+            print("Tipo de dado inválido. deve ser integer ou float")
+    else:
+        x = False
+        print("Erro na definição da propriedade")
 
 
 def p_usually_others_inside_paren(p):
@@ -200,7 +197,7 @@ def p_simple_other_paren(p):
 
 def p_expression_only(p):
     '''expression_only : CLASS_IDENTIFIER OR expression_only 
-                        | CLASS_IDENTIFIER'''
+                        | CLASS_IDENTIFIER''' 
 pass
 
 def p_expression(p):
