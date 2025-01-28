@@ -3,7 +3,6 @@ from Lex import tokens  # Importa os tokens definidos no léxico
 
 # Conjunto inicial de regras de produção
 x = None
-array = []
 vetorAntes = []
 vetorDepois = []
 
@@ -150,9 +149,8 @@ def p_usually_inside_paren(p):
     
     global vetorAntes
 
-    vetorAntes.append(p[3])
-    
-    print(vetorAntes)
+    if (len(p) == 4):
+        vetorAntes.append(p[3])
     
     def p_error_usually_inside_paren(t):
         print("Erro: ", t)
@@ -263,6 +261,9 @@ def p_nested_descriptions(p):
 def p_axiom_function(p):
     '''axiom_function : CLASS_IDENTIFIER
                       | CLASS_IDENTIFIER OR axiom_function'''
+    
+    global vetorDepois
+    vetorDepois.append(p[1])
 
 # Classes com axiomas fechados
 def p_statement_closed_axiom_class(p):
@@ -276,9 +277,16 @@ def p_statement_closed_axiom_class(p):
         print(f"Classe primaria Definida, Classe secundaria fechamento: {p[-2]}")
         
     global vetorAntes
-    print(vetorAntes[0])
+    print(vetorAntes)
+    print(vetorDepois)
+
+    for elemento in vetorAntes:
+        if elemento in vetorDepois:
+            vetorDepois.remove(elemento)
     
-    
+    if len(vetorDepois) == 0:
+        print("Axioma fechado")
+
 
     
 # Classes enumeradas
