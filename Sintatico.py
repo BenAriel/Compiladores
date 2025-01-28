@@ -4,6 +4,9 @@ from Lex import tokens  # Importa os tokens definidos no léxico
 # Conjunto inicial de regras de produção
 x = None
 array = []
+vetorAntes = []
+vetorDepois = []
+
 def p_statements(p):
     '''statements : Class CLASS_IDENTIFIER statement_defined_class statements
                   | Class CLASS_IDENTIFIER statement_defined_class
@@ -142,7 +145,14 @@ def p_usually_inside_paren(p):
     | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE
     | statement_property_identify operators NUMBER NAMESPACEID DATA_TYPE
     | statement_property_identify operators NUMBER CLASS_IDENTIFIER
-    | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET'''
+    | statement_property_identify statement_reserved_word NAMESPACEID DATA_TYPE LEFT_BRACKET statement_operator_symbol NUMBER RIGHT_BRACKET
+    | statement_property_identify'''
+    
+    global vetorAntes
+
+    vetorAntes.append(p[3])
+    
+    print(vetorAntes)
     
     def p_error_usually_inside_paren(t):
         print("Erro: ", t)
@@ -167,8 +177,6 @@ def p_usually_inside_paren(p):
             print("propriedade : ", p[1] + " tipo: data property")
         else:
             p_error_usually_inside_paren("Tipo de dado inválido. deve ser integer ou float")
-    else :
-     print("entrou nessa função mas algum if ta errado")
 
 
 def p_usually_others_inside_paren(p):
@@ -252,17 +260,23 @@ def p_nested_descriptions(p):
     else:
         p[0] = f"{p[1]}"
 
+def p_axiom_function(p):
+    '''axiom_function : CLASS_IDENTIFIER
+                      | CLASS_IDENTIFIER OR axiom_function'''
 
 # Classes com axiomas fechados
 def p_statement_closed_axiom_class(p):
-    '''statement_closed_axiom_class : CLASS_IDENTIFIER COMMA other_expression 
-                |  CLASS_IDENTIFIER AND other_expression
-                |  CLASS_IDENTIFIER other_expression'''
-
+    '''statement_closed_axiom_class : CLASS_IDENTIFIER COMMA expression ONLY LEFT_PAREN axiom_function RIGHT_PAREN
+                |  CLASS_IDENTIFIER AND expression ONLY LEFT_PAREN axiom_function RIGHT_PAREN
+                |  CLASS_IDENTIFIER expression ONLY LEFT_PAREN axiom_function RIGHT_PAREN'''
+                
     if (p[-1] == "SubClassOf:"):
         print(f"Classe primaria Primitiva, Classe secundaria fechamento: {p[-2]}")
     else:
         print(f"Classe primaria Definida, Classe secundaria fechamento: {p[-2]}")
+        
+    global vetorAntes
+    print(vetorAntes[0])
     
     
 
