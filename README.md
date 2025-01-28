@@ -290,25 +290,43 @@ O objetivo principal do analisador semântico é validar semanticamente a estrut
   
  Class: Customer
  EquivalentTo:
+ 
  Person
+ 
  and (purchasedPizza some Pizza)
+
  and (hasPhone some xsd:string)
+ 
  Individuals:
+ 
  Customer1,
+ 
  Customer10,
+ 
  Customer2,
+ 
  Customer3,
+ 
  Customer4,
+ 
  Customer5,
+ 
  Customer6,
+ 
  Customer7,
+ 
  Customer8,
+ 
  Customer9
+ 
 
 ### Saída:  
 Iniciando parsing do arquivo...
 
-Propriedade :  purchasedPizza tipo: object property
-propriedade :  hasPhone tipo: data property
-Classe definida normal: Customer
+Propriedade : 
+purchasedPizza tipo: object property
+propriedade :  
+hasPhone tipo: data property
+Classe definida normal: 
+Customer
 
