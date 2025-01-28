@@ -289,6 +289,7 @@ O objetivo principal do analisador semântico é validar semanticamente a estrut
 ### Entrada (input.txt):  
   
  Class: Customer
+ 
  EquivalentTo:
  
  Person
@@ -323,10 +324,12 @@ O objetivo principal do analisador semântico é validar semanticamente a estrut
 ### Saída:  
 Iniciando parsing do arquivo...
 
-Propriedade : 
-purchasedPizza tipo: object property
-propriedade :  
-hasPhone tipo: data property
+Propriedade : purchasedPizza
+
+tipo: object property
+propriedade :  hasPhone tipo: data property
+
 Classe definida normal: 
+
 Customer
 
