@@ -232,3 +232,83 @@ Classe definida normal: InterestingPizza
 
 Classe primaria Definida, Classe secundaria aninhada: SpicyPizza 
 
+# Analisador Semântico com PLY
+Este projeto implementa um analisador semântico para uma linguagem baseada em OWL2 (Web Ontology Language), estendendo o analisador sintático previamente construído. Ele utiliza a biblioteca PLY para análise léxica e sintática, além de implementar técnicas de análise semântica específicas.
+
+
+---
+
+## **Objetivo**
+O objetivo principal do analisador semântico é validar semanticamente a estrutura da linguagem OWL, auxiliando o ontologista a:
+
+- Garantir a ordem correta dos operadores de cabeçalho: As palavras-chave como Class, EquivalentTo, SubClassOf, DisjointClasses e Individuals devem seguir uma ordem específica.
+- Validar tipos e intervalos de data properties: Assegura que os tipos e faixas de valores atribuídos às propriedades sejam corretamente definidos.
+- Classificar propriedades: Diferencia entre data properties e object properties, com base nos termos que sucedem cada propriedade.
+
+## **Como Usar**
+
+1. **Preencha o arquivo `input.txt`**:
+   - Insira o código ou texto a ser analisado dentro do arquivo `input.txt`. O arquivo por padrão vem com o teste enviado junto ao arquivo do trabalho.
+
+2. **Execute o programa**:
+   - No terminal, execute o script:
+     ```bash
+     python main.py
+     ```
+
+   - Ou utilize alguma IDE para rodar o programa.
+
+3. **Interação no Terminal**:
+   - O programa exibirá um resumo das classes sintáticas encontrados.
+
+---
+
+## **Funcionamento do Programa**
+
+### **Etapas Principais**
+
+1. **Análise da Precedência dos Operadores**:
+   - alida a ordem dos cabeçalhos, como Class, EquivalentTo e SubClassOf.
+   - Identifica ocorrências de cabeçalhos fora da ordem esperada e exibe mensagens de erro informativas.
+     
+2. **Verificação Estática de Tipos por Coerção**:
+   - Confere a coerência dos tipos atribuídos a propriedades de dados (data properties).
+   - Valida faixas de valores quando aplicável (e.g., xsd:integer[>=400]).
+
+3. **Verificação Estática de Tipos por Sobrecarga:**:
+   - Classifica propriedades como data properties ou object properties, analisando os termos que sucedem cada propriedade (e.g., hasPhone some xsd:string ou emitsReport some EvaluationReport).
+    
+
+4. **Tratamento de Erros**:
+   - Mensagens claras exibidas para declarações semânticas inválidas, indicando o tipo de erro e sua localização.
+
+---
+
+## Exemplo de Saída
+
+### Entrada (input.txt):  
+  
+ Class: Customer
+ EquivalentTo:
+ Person
+ and (purchasedPizza some Pizza)
+ and (hasPhone some xsd:string)
+ Individuals:
+ Customer1,
+ Customer10,
+ Customer2,
+ Customer3,
+ Customer4,
+ Customer5,
+ Customer6,
+ Customer7,
+ Customer8,
+ Customer9
+
+### Saída:  
+Iniciando parsing do arquivo...
+
+Propriedade :  purchasedPizza tipo: object property
+propriedade :  hasPhone tipo: data property
+Classe definida normal: Customer
+
