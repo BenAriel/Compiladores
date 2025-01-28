@@ -270,24 +270,24 @@ def p_statement_closed_axiom_class(p):
     '''statement_closed_axiom_class : CLASS_IDENTIFIER COMMA expression ONLY LEFT_PAREN axiom_function RIGHT_PAREN
                 |  CLASS_IDENTIFIER AND expression ONLY LEFT_PAREN axiom_function RIGHT_PAREN
                 |  CLASS_IDENTIFIER expression ONLY LEFT_PAREN axiom_function RIGHT_PAREN'''
-                
-    if (p[-1] == "SubClassOf:"):
-        print(f"Classe primaria Primitiva, Classe secundaria fechamento: {p[-2]}")
-    else:
-        print(f"Classe primaria Definida, Classe secundaria fechamento: {p[-2]}")
         
     global vetorAntes
-    print(vetorAntes)
-    print(vetorDepois)
 
-    for elemento in vetorAntes:
+    for elemento in vetorAntes[:]:
         if elemento in vetorDepois:
             vetorDepois.remove(elemento)
+            vetorAntes.remove(elemento)
     
-    if len(vetorDepois) == 0:
-        print("Axioma fechado")
+    if (len(vetorDepois) == 0) and (len(vetorAntes) == 0):
+        if (p[-1] == "SubClassOf:"):
+            print(f"Classe primaria Primitiva, Classe secundaria fechamento: {p[-2]}")
+        else:
+            print(f"Classe primaria Definida, Classe secundaria fechamento: {p[-2]}")
+    else:
+        p_error_closed_axiom("o número de classificadores de identidade declarados não é igual ao número de classificadores de identidade usados no only")
 
-
+def p_error_closed_axiom(p):
+    print("Erro: ", p)
     
 # Classes enumeradas
 def p_statement_enumerated_class(p):
