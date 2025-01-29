@@ -160,6 +160,7 @@ def p_usually_inside_paren(p):
     
     global vetorAntes
 
+    global x
     
     if (len(p) == 4):
         vetorAntes.append(p[3])
