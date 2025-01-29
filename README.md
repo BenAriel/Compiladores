@@ -10,6 +10,7 @@
    5.2. [Etapas Principais](#etapas-principais)  
 6. [Exemplo de Saída](#exemplo-de-saída)
 7. [Analisador Sintático com PLY](#analisador-sintático-com-ply)
+8. [Analisador Semântico com PLY](#analisador-semântico-com-ply)
 
 
 # Analisador Léxico com PLY
